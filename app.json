@@ -1,0 +1,13 @@
+{
+  "name": "appSebo",
+  "displayName": "appSebo",
+  "expo": {
+    "name": "catMaru",
+    "slug": "catMaru",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
+
