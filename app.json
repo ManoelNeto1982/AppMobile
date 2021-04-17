@@ -1,0 +1,12 @@
+{
+  "name": "telaProduto",
+  "displayName": "telaProduto",
+  "expo": {
+    "name": "telaProduto",
+    "slug": "telaProduto",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}

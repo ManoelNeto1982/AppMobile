@@ -1,0 +1,7 @@
+<resources>
+<<<<<<< HEAD
+    <string name="app_name">telaProduto</string>
+=======
+    <string name="app_name">appMobile</string>
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
+</resources>
