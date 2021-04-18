@@ -1,6 +1,17 @@
+<<<<<<< HEAD
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.appmobile">
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+=======
+<<<<<<< HEAD
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.telaproduto">
+  <uses-permission android:name="android.permission.INTERNET"/>
+=======
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.appmobile">
+  <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
+>>>>>>> feature/manoel
   <!-- OPTIONAL PERMISSIONS, REMOVE WHATEVER YOU DO NOT NEED -->
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
   <uses-permission android:name="android.permission.READ_PHONE_STATE"/>

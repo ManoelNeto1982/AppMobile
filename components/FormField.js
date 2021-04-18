@@ -14,10 +14,10 @@ const formField = (props) => {
                 placeholder={props.fieldName}
                 style={styles.input}
                 onChangeText={props.event}
-                autoCorrect={false}//Isso serve para não ativar o autocorretor do celular 
+                autoCorrect={false}
             />
         </View>
-    );
+    )
 }
 export default formField;
 

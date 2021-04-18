@@ -132,7 +132,15 @@ android {
     }
 
     defaultConfig {
+<<<<<<< HEAD
         applicationId "com.appmobile"
+=======
+<<<<<<< HEAD
+        applicationId "com.telaproduto"
+=======
+        applicationId "com.appmobile"
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
+>>>>>>> feature/manoel
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

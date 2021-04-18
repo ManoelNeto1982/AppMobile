@@ -1,13 +1,12 @@
 {
-  "name": "appSebo",
-  "displayName": "appSebo",
+  "name": "telaProduto",
+  "displayName": "telaProduto",
   "expo": {
-    "name": "catMaru",
-    "slug": "catMaru",
+    "name": "telaProduto",
+    "slug": "telaProduto",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
     ]
   }
 }
-

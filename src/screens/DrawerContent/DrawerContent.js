@@ -1,17 +1,10 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import { View, StyleSheet} from 'react-native';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { Avatar, Title, Caption, Paragraph, Drawer} from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-
-
-
-
 export function DrawerContent(props){
-
-
-    
     return(
         <View style={{flex:1}}>
             <DrawerContentScrollView {...props}>
@@ -65,19 +58,7 @@ export function DrawerContent(props){
                             label="Perfil"
                             onPress={() => {props.navigation.navigate('Perfil')}}
                             >
-                        </DrawerItem>
-                        <DrawerItem 
-                            icon={({color, size}) => (
-                                <Icon
-                                name="account-outline"
-                                color={color}
-                                size={size}
-                                />                        
-                            )}
-                            label="Editar Perfil"
-                            onPress={() => {props.navigation.navigate('Editar Perfil')}}
-                            >
-                        </DrawerItem>
+                        </DrawerItem>                
                         <DrawerItem 
                             icon={({color, size}) => (
                                 <Icon
@@ -117,7 +98,7 @@ export function DrawerContent(props){
                             />                        
                         )}
                         label="Sign-out"
-                        onPress={() => {signOut()}}
+                        onPress={() => {}}
                         >
                     </DrawerItem>
 
@@ -135,7 +116,7 @@ const styles = StyleSheet.create({
     },
     title: {
       fontSize: 16,
-      marginTop: 3,
+      marginTop: 3, 
       fontWeight: 'bold',
     },
     caption: {

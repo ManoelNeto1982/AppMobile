@@ -10,26 +10,29 @@ import {DrawerContent} from './src/screens/DrawerContent/DrawerContent'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import ProfileScreen from './src/screens/ProfileScreen/ProfileScreen';
-import HomeScreen from './src/screens/Home/HomeScreen';
+//import HomeScreen from './src/screens/Home/HomeScreen';
 import EditProfileScreen from './src/screens/EditProfileScreen.js/EditProfileScreen'
 import SignInScreen from './src/screens/SignInScreen/SignInScreen'
 import SignUpScreen from './src/screens/SignUpScreen/SignUpScreen'
 // import RootStackScreen from './src/screens/RootStackScreen/RootStackScreen'
 
+import Home from './src/screens/Home/index';
+import Detail from './src/screens/Detail/index';
 
 
 
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const EditProfileStack = createStackNavigator();
-const SignInStack = createStackNavigator();
-const SignUpStack = createStackNavigator();
+// const SignInStack = createStackNavigator();
+// const SignUpStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
+
 
 const HomeStackScreen = ({navigation}) => (
   <HomeStack.Navigator screenOptions={{
     headerStyle:{
-      backgroundColor: '#009387',
+      backgroundColor: '#53a7fd',
     },
     headerTintColor: '#fff',
     headerTitleStyle: {
@@ -37,14 +40,14 @@ const HomeStackScreen = ({navigation}) => (
     }
   }}>
     <HomeStack.Screen name="Home"
-     component={HomeScreen}
+     component={Home}
       options={{
         title: '',
         headerLeft: () => (
             <Icon.Button
              name="ios-menu"
               size={25}
-              backgroundColor="#009387"
+              backgroundColor="#53a7fd"
               onPress={() => navigation.openDrawer()}>                
               </Icon.Button>
         )
@@ -57,7 +60,7 @@ const ProfileStackScreen = ({navigation}) => (
   <ProfileStack.Navigator
    screenOptions={{
     headerStyle:{
-      backgroundColor: '#fff',
+      backgroundColor: '#53a7fd',
     },
     headerTintColor: '#000',
     headerTitleStyle: {
@@ -73,8 +76,8 @@ const ProfileStackScreen = ({navigation}) => (
       <Icon.Button 
         name="ios-menu"
         size={25}
-        backgroundColor="#fff"
-        color="#000"
+        backgroundColor="#53a7fd"
+        color="#fff"
         onPress={() => navigation.openDrawer()}
       />
       ),
@@ -86,7 +89,7 @@ const EditProfileStackScreen = ({navigation}) => (
   <EditProfileStack.Navigator
    screenOptions={{
     headerStyle:{
-      backgroundColor: '#fff',
+      backgroundColor: '#53a7fd',
     },
     headerTintColor: '#000',
     headerTitleStyle: {
@@ -102,8 +105,8 @@ const EditProfileStackScreen = ({navigation}) => (
       <Icon.Button 
         name="ios-menu"
         size={25}
-        backgroundColor="#fff"
-        color="#000"
+        backgroundColor="#53a7fd"
+        color="#fff"
         onPress={() => navigation.openDrawer()}
       />
       ),
@@ -111,24 +114,23 @@ const EditProfileStackScreen = ({navigation}) => (
   </EditProfileStack.Navigator>
 );
 
-const App = () =>{
+const App = () => {
   return (      
     <NavigationContainer>
-       {/* <RootStackScreen/>  */}
-            <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
+          <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
               <Drawer.Screen name="SignInScreen" component={SignInScreen}/>
               <Drawer.Screen name="SignUpScreen" component={SignUpScreen}/>
-              <Drawer.Screen name="Home" component={HomeStackScreen} />
               <Drawer.Screen name="Perfil" component={ProfileStackScreen}  />
-            <Drawer.Screen name="Editar Perfil" component={EditProfileStackScreen}  />
-          </Drawer.Navigator>  
-        ) 
-      </NavigationContainer>
-  
+              <Drawer.Screen name="Editar Perfil" component={EditProfileStackScreen}  />
+              <Drawer.Screen name="HomeScreen" component={HomeStackScreen}/>
+              <Drawer.Screen name="Detail" component={Detail}/>
+          </Drawer.Navigator>                                         
+    </NavigationContainer>    
+ 
   );
 }
 
-export default App
+export default App;
 
 const styles = StyleSheet.create({
   loadingIcon:{

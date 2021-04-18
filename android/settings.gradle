@@ -1,4 +1,12 @@
+<<<<<<< HEAD
 rootProject.name = 'appMobile'
+=======
+<<<<<<< HEAD
+rootProject.name = 'telaProduto'
+=======
+rootProject.name = 'appMobile'
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
+>>>>>>> feature/manoel
 
 apply from: '../node_modules/react-native-unimodules/gradle.groovy'
 includeUnimodulesProjects()
