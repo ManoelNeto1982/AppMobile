@@ -1,17 +1,55 @@
-import React from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity, Platform, Image, TextInput, StatusBar} from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Modal, Button, StyleSheet, TouchableOpacity, Platform, Image, TextInput, StatusBar} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const SignUpScreen = ({navigation}) => {
-  return(
+
+    const initialSignUpState = {
+      email: "",
+      userName: "",
+      password: "",
+    }
+  
+  const verifyItemOnAsyncstorage = async (value) => {
+    try {
+      const isExist = await AsyncStorage.getItem(value.email)
+      if (isExist === null) {
+        //return alert(isExist);
+        storeDataToAsyncStorage(value);
+      } else {
+        console.log(isExist)
+        setUnvaliable(false);
+      }
+    } catch (e) {
+      return alert('Houve uma falha ao carregar os dados, tente novamente');
+    }
+  }
+
+  const storeDataToAsyncStorage = async (value) => {
+    try {
+      const stringValue = JSON.stringify(value);
+      await AsyncStorage.setItem(value.email, stringValue)
+    } catch (e) {
+      return alert('Falha ao salvar tente novamente');
+    }
+  }
+
+  const [rePassword, setRePassword] = useState("");
+  const [valiableEmail, setUnvaliable] = useState(true);
+  const [dataSignUp, setDataSignUp] = useState(initialSignUpState);
+
+  const handleChange = (field, value) => {
+    setDataSignUp({...dataSignUp, [field]: value})
+  }
+
+  return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#35AAFF" barStyle="light-content"></StatusBar>
       <View style={styles.header}>
@@ -31,6 +69,7 @@ const SignUpScreen = ({navigation}) => {
             placeholderTextColor="#666666"
             style={styles.textInput}
             autoCapitalize="none"
+            onChangeText={text => handleChange('email', text)}
           />
         </View>        
         <Text style={[styles.text_footer], {marginTop:8}}>E-mail</Text>
@@ -57,9 +96,10 @@ const SignUpScreen = ({navigation}) => {
             <TextInput
               placeholder="Digite sua senha"
               placeholderTextColor="#666666"
-              secureTextEntry= {true}
+              secureTextEntry={true}
               style={styles.textInput}
               autoCapitalize="none"            
+              onChangeText={text => handleChange('password', text)}
             />         
         </View>
         <Text style={[styles.text_footer], {marginTop:8}}>Confirmar Senha</Text>
@@ -73,10 +113,27 @@ const SignUpScreen = ({navigation}) => {
               placeholderTextColor="#666666"
               secureTextEntry= {true}
               style={styles.textInput}
-              autoCapitalize="none"            
+              autoCapitalize="none"
+              onChangeText={text => setRePassword(text)}
             />         
         </View>
-        <View style={styles.button}>     
+        <View>
+          <TouchableOpacity 
+              style={styles.button}
+              onPress={() => {
+                if (dataSignUp.email && dataSignUp.userName && dataSignUp.password && rePassword) {
+                  if (dataSignUp.password === rePassword) {
+                    verifyItemOnAsyncstorage(dataSignUp);
+                    if (valiableEmail) {
+                      //Aqui tanbém pode entrar algum aviso de tudo ocorreu bem
+                      navigation.navigate('SignInScreen');
+                    }
+                    setUnvaliable(true);
+                    //Aqui tanbém pode entrar algum aviso de email invalido
+                  } else return alert('As senhas não são compativeis');
+                } else return alert('Preencha todos os campos para poder realizar o cadastro');
+              }}
+          >
             <LinearGradient
               colors={['#008bdd', '#6cb7ff']}
               style={styles.signIn}
@@ -84,9 +141,11 @@ const SignUpScreen = ({navigation}) => {
                 color:'#fff'
               }]}>Cadastrar</Text>              
             </LinearGradient>
-            
+            </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => {navigation.navigate('SignInScreen')}}
+              onPress={() => {
+                   navigation.navigate('SignInScreen')
+              }}
               style={[styles.signIn, {
                 borderColor: '#6cb7ff',
                 borderWidth: 1,
@@ -96,10 +155,7 @@ const SignUpScreen = ({navigation}) => {
             </TouchableOpacity>
         </View>
       </View>
-
     </View>
-    
-
   )
 }
 
@@ -178,29 +234,3 @@ const styles = StyleSheet.create({
     marginLeft: 100
   }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

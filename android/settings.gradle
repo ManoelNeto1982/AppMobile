@@ -1,12 +1,21 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 rootProject.name = 'appMobile'
 =======
+=======
+>>>>>>> 0c780aafbd59a3e350853efc41a35ecbe0b02f03
 <<<<<<< HEAD
 rootProject.name = 'telaProduto'
 =======
 rootProject.name = 'appMobile'
 >>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
+<<<<<<< HEAD
 >>>>>>> feature/manoel
+=======
+=======
+rootProject.name = 'appMobile'
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
+>>>>>>> 0c780aafbd59a3e350853efc41a35ecbe0b02f03
 
 apply from: '../node_modules/react-native-unimodules/gradle.groovy'
 includeUnimodulesProjects()

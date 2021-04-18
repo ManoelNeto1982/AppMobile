@@ -5669,6 +5669,7 @@ readable-stream@^2.0.1, readable-stream@^2.2.2, readable-stream@~2.3.6:
     util-deprecate "~1.0.1"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 reanimated-bottom-sheet@^1.0.0-alpha.22:
   version "1.0.0-alpha.22"
@@ -5676,6 +5677,8 @@ reanimated-bottom-sheet@^1.0.0-alpha.22:
   integrity sha512-NxecCn+2iA4YzkFuRK5/b86GHHS2OhZ9VRgiM4q18AC20YE/psRilqxzXCKBEvkOjP5AaAvY0yfE7EkEFBjTvw==
 
 >>>>>>> feature/manoel
+=======
+>>>>>>> 0c780aafbd59a3e350853efc41a35ecbe0b02f03
 regenerate-unicode-properties@^8.2.0:
   version "8.2.0"
   resolved "https://registry.yarnpkg.com/regenerate-unicode-properties/-/regenerate-unicode-properties-8.2.0.tgz#e5de7111d655e7ba60c057dbe9ff37c87e65cdec"

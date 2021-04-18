@@ -5,6 +5,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 platform :ios, '11.0'
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 target 'appMobile' do
 =======
 <<<<<<< HEAD
@@ -13,6 +14,10 @@ target 'telaProduto' do
 target 'appMobile' do
 >>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
 >>>>>>> feature/manoel
+=======
+
+target 'appMobile' do
+>>>>>>> 0c780aafbd59a3e350853efc41a35ecbe0b02f03
   use_unimodules!
   config = use_native_modules!
 

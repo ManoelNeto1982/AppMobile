@@ -36,27 +36,45 @@ android_library(
 android_build_config(
     name = "build_config",
 <<<<<<< HEAD
+<<<<<<< HEAD
     package = "com.appmobile",
 =======
+=======
+>>>>>>> 0c780aafbd59a3e350853efc41a35ecbe0b02f03
 <<<<<<< HEAD
     package = "com.telaproduto",
 =======
     package = "com.appmobile",
 >>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
+<<<<<<< HEAD
 >>>>>>> feature/manoel
+=======
+=======
+    package = "com.appmobile",
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
+>>>>>>> 0c780aafbd59a3e350853efc41a35ecbe0b02f03
 )
 
 android_resource(
     name = "res",
 <<<<<<< HEAD
+<<<<<<< HEAD
     package = "com.appmobile",
 =======
+=======
+>>>>>>> 0c780aafbd59a3e350853efc41a35ecbe0b02f03
 <<<<<<< HEAD
     package = "com.telaproduto",
 =======
     package = "com.appmobile",
 >>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
+<<<<<<< HEAD
 >>>>>>> feature/manoel
+=======
+=======
+    package = "com.appmobile",
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
+>>>>>>> 0c780aafbd59a3e350853efc41a35ecbe0b02f03
     res = "src/main/res",
 )
 
