@@ -4,7 +4,7 @@ import{ useNavigation } from '@react-navigation/native';
 
 import Books from '../../component/Books/index.js';
 
-export default function HomeScreen(){
+const HomeScreen = () => {
     const navigation = useNavigation();
     return(
         <View style={styles.container}>
@@ -24,10 +24,11 @@ export default function HomeScreen(){
 
             </View>
 
-        <View style={styles.line}/>
+          <View style={styles.line}/>
+     
 
             <ScrollView>
-                <Text style={styles.text}>Participe das discussões on line</Text>
+                <Text style={[styles.text], {marginTop: 20, marginLeft:"25%", marginBottom: 10}}>Participe das discussões on-line</Text>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-around'}}>
                     <Books img={require('../../assets/1.jpg')} onClick={()=> navigation.navigate('Detail')}>
@@ -91,6 +92,8 @@ export default function HomeScreen(){
     );
 }
 
+export default HomeScreen;
+
 const styles = StyleSheet.create({
     container:{
         flex :1,
@@ -111,7 +114,7 @@ const styles = StyleSheet.create({
         marginHorizontal: '12%',
     },
     text: {
-        fontFamily: 'Anton_400Regular',
+        // fontFamily: 'Anton_400Regular',
         fontSize: 20,
         marginHorizontal: '1%',
         marginVertical: '1%'

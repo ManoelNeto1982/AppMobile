@@ -4,8 +4,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
+
 
 
 
@@ -18,7 +20,7 @@ const SignUpScreen = ({navigation}) => {
       </View>
 
       <View style={styles.footer}>
-        <Text style={styles.text_footer}>Email</Text>
+        <Text style={styles.text_footer}>Nome de usuário</Text>
         <View style={styles.action}>
           <FontAwesome
             name="user-o"
@@ -26,11 +28,25 @@ const SignUpScreen = ({navigation}) => {
             size={20}
           />
           <TextInput
-            placeholder="Digite seu e-mail"
+            placeholder="Nome do Usuário"
             placeholderTextColor="#666666"
             style={styles.textInput}
             autoCapitalize="none"
           />
+        </View>        
+        <Text style={[styles.text_footer], {marginTop:8}}>E-mail</Text>
+        <View style={styles.action}>          
+            <MaterialCommunityIcons
+            name="email-outline"
+            size={20}
+            color="#05375a"/>
+            <TextInput
+              placeholder="Digite seu E-mail"
+              placeholderTextColor="#666666"
+              secureTextEntry= {true}
+              style={styles.textInput}
+              autoCapitalize="none"            
+            />         
         </View>
         
         <Text style={[styles.text_footer], {marginTop:8}}>Senha</Text>
@@ -69,12 +85,13 @@ const SignUpScreen = ({navigation}) => {
                 color:'#fff'
               }]}>Cadastrar</Text>              
             </LinearGradient>
+            
             <TouchableOpacity
               onPress={() => {navigation.navigate('SignInScreen')}}
               style={[styles.signIn, {
                 borderColor: '#6cb7ff',
                 borderWidth: 1,
-                marginTop: 15
+                marginTop: 10
               }] }              
             ><Text style={[styles.textSign, {color:'#6cb7ff'}]}>Login</Text>
             </TouchableOpacity>

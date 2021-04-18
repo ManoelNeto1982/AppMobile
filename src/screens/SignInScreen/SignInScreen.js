@@ -55,8 +55,8 @@ const SignInScreen = ({navigation}) => {
         <View style={styles.button}>    
              <TouchableOpacity
                   style={styles.signIn}
-                  onPress={() => {navigation.navigate('Home')}}
-                  
+                  onPress={() => {navigation.navigate('HomeScreen')}}
+                 
              /> 
             <LinearGradient
               colors={['#008bdd', '#6cb7ff']}
@@ -66,6 +66,7 @@ const SignInScreen = ({navigation}) => {
                 
               }]}>Entrar</Text>              
             </LinearGradient>
+            
             <TouchableOpacity
               onPress={() => {navigation.navigate('SignUpScreen')}}
               style={[styles.signIn, {

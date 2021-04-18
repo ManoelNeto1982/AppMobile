@@ -8,7 +8,7 @@ export default function Button () {
                 <Text>COMENTAR</Text>
             </TouchableOpacity>
         </View>       
-    );
+    )
 }
 
 const styles = StyleSheet.create({

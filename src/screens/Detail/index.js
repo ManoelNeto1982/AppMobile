@@ -1,8 +1,8 @@
 import React from 'react';
 import{View, Text, Image, ScrollView, TouchableOpacity, StyleSheet} from 'react-native';
-import Button from '../../component/Button/index.js'
+import Button from '../../component/Button/index.js';
 
-export default function Detail ({navigation}){
+const  Detail =  ({navigation}) => {
     navigation.setOptions({
         headerTitle: 'Deixe seu comentario'
     })
@@ -22,8 +22,7 @@ export default function Detail ({navigation}){
             </Text>
           </View>
           <View>
-            <Text style={[styles.title, { fontSize: 20 }]}>
-              {" "}
+            <Text style={[styles.title, { fontSize: 20 }]}>         
               A Regra é não ter regras
             </Text>
           </View>
@@ -43,11 +42,12 @@ export default function Detail ({navigation}){
             </Text>
           </View>
 
-          <Button />
+          <Button/>
         </View>
       </ScrollView>
     );
 }
+export default Detail;
 
 const styles = StyleSheet.create({
   container: {
