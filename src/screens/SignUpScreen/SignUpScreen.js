@@ -69,7 +69,7 @@ const SignUpScreen = ({navigation}) => {
             placeholderTextColor="#666666"
             style={styles.textInput}
             autoCapitalize="none"
-            onChangeText={text => handleChange('email', text)}
+            onChangeText={text => handleChange('userName', text)}
           />
         </View>        
         <Text style={[styles.text_footer], {marginTop:8}}>E-mail</Text>
@@ -84,6 +84,8 @@ const SignUpScreen = ({navigation}) => {
               secureTextEntry= {true}
               style={styles.textInput}
               autoCapitalize="none"            
+              onChangeText={text => handleChange('email', text)}
+              
             />         
         </View>
         
