@@ -22,33 +22,27 @@ const Drawer = createDrawerNavigator();
 const HomeStackScreen = ({navigation}) => (
   <HomeStack.Navigator screenOptions={{
     headerStyle:{
-            backgroundColor: '#009387',
-        
+      backgroundColor: '#009387',
     },
-        headerTintColor: '#fff',
+    headerTintColor: '#fff',
     headerTitleStyle: {
-            fontWeight: 'bold'
-        
+      fontWeight: 'bold'
     }
-      
-    }}>
-        <HomeStack.Screen name="Home"
-               component={Home}
-          options={{
-                    title: '',
-            headerLeft: () => (
-                          <Icon.Button
-                                         name="ios-menu"
-                                          size={25}
-                                          backgroundColor="#009387"
-                                          onPress={() => navigation.openDrawer()}>                
-                                          </Icon.Button>
-                      
-            )
-                    
-          }} />        
-      </HomeStack.Navigator>
-
+  }}>
+    <HomeStack.Screen name="Home"
+     component={HomeScreen}
+      options={{
+        title: '',
+        headerLeft: () => (
+            <Icon.Button
+             name="ios-menu"
+              size={25}
+              backgroundColor="#009387"
+              onPress={() => navigation.openDrawer()}>                
+              </Icon.Button>
+        )
+        }} />        
+  </HomeStack.Navigator>
 );
 
 

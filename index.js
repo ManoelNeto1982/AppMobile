@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import { registerRootComponent } from 'expo';
 
 import App from './App';
@@ -7,7 +7,7 @@ import App from './App';
 // It also ensures that whether you load the app in the Expo client or in a native build,
 // the environment is set up appropriately
 registerRootComponent(App);
-=======
+
 /**
  * @format
  */
@@ -17,4 +17,3 @@ registerRootComponent(App);
  import {name as appName} from './app.json';
  
  AppRegistry.registerComponent(appName, () => App);
->>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94

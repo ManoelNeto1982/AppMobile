@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 import React, { useState } from 'react';
 import { View, Text, Modal, Button, StyleSheet, TouchableOpacity, Platform, Image, TextInput, StatusBar} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+=======
+import React from 'react';
+import { View, Text, Button, StyleSheet, TouchableOpacity, Platform, Image, TextInput, StatusBar} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Feather } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
+<<<<<<< HEAD
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -49,6 +57,13 @@ const SignUpScreen = ({navigation}) => {
   }
 
   return (
+=======
+
+
+
+const SignUpScreen = ({navigation}) => {
+  return(
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
     <View style={styles.container}>
       <StatusBar backgroundColor="#35AAFF" barStyle="light-content"></StatusBar>
       <View style={styles.header}>
@@ -68,7 +83,10 @@ const SignUpScreen = ({navigation}) => {
             placeholderTextColor="#666666"
             style={styles.textInput}
             autoCapitalize="none"
+<<<<<<< HEAD
             onChangeText={text => handleChange('email', text)}
+=======
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
           />
         </View>
         
@@ -81,10 +99,16 @@ const SignUpScreen = ({navigation}) => {
             <TextInput
               placeholder="Digite sua senha"
               placeholderTextColor="#666666"
+<<<<<<< HEAD
               secureTextEntry={true}
               style={styles.textInput}
               autoCapitalize="none"            
               onChangeText={text => handleChange('password', text)}
+=======
+              secureTextEntry= {true}
+              style={styles.textInput}
+              autoCapitalize="none"            
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
             />         
         </View>
         <Text style={[styles.text_footer], {marginTop:8}}>Confirmar Senha</Text>
@@ -98,6 +122,7 @@ const SignUpScreen = ({navigation}) => {
               placeholderTextColor="#666666"
               secureTextEntry= {true}
               style={styles.textInput}
+<<<<<<< HEAD
               autoCapitalize="none"
               onChangeText={text => setRePassword(text)}
             />         
@@ -119,6 +144,12 @@ const SignUpScreen = ({navigation}) => {
                 } else return alert('Preencha todos os campos para poder realizar o cadastro');
               }}
           >
+=======
+              autoCapitalize="none"            
+            />         
+        </View>
+        <View style={styles.button}>     
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
             <LinearGradient
               colors={['#008bdd', '#6cb7ff']}
               style={styles.signIn}
@@ -126,11 +157,16 @@ const SignUpScreen = ({navigation}) => {
                 color:'#fff'
               }]}>Cadastrar</Text>              
             </LinearGradient>
+<<<<<<< HEAD
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
                    navigation.navigate('SignInScreen')
               }}
+=======
+            <TouchableOpacity
+              onPress={() => {navigation.navigate('SignInScreen')}}
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
               style={[styles.signIn, {
                 borderColor: '#6cb7ff',
                 borderWidth: 1,
@@ -222,3 +258,32 @@ const styles = StyleSheet.create({
     marginLeft: 100
   }
 });
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94

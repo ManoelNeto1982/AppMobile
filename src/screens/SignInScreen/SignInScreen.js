@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { useState } from 'react';
+=======
+import React from 'react';
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
 import { View, Text, Button, StyleSheet, TouchableOpacity, Platform, Image, TextInput, StatusBar} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -6,6 +10,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Feather } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
+<<<<<<< HEAD
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignInScreen = ({navigation}) => {
@@ -38,6 +43,13 @@ const SignInScreen = ({navigation}) => {
   const [checkData, setCheckData] = useState(false);
   const [password, setPassword] = useState("");
   const [loginData, setLoginData] = useState(loggedUser);
+=======
+
+
+
+
+const SignInScreen = ({navigation}) => {
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
 
   return(
     <View style={styles.container}>
@@ -59,7 +71,10 @@ const SignInScreen = ({navigation}) => {
             placeholderTextColor="#666666"
             style={styles.textInput}
             autoCapitalize="none"
+<<<<<<< HEAD
             onChangeText={text => handleChange('email', text)}
+=======
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
           />
         </View>
         
@@ -76,7 +91,10 @@ const SignInScreen = ({navigation}) => {
               secureTextEntry= {true}
               style={styles.textInput}
               autoCapitalize="none"            
+<<<<<<< HEAD
               onChangeText={text => setPassword(text)}
+=======
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
             />
          
         </View>
@@ -84,6 +102,7 @@ const SignInScreen = ({navigation}) => {
         <View style={styles.button}>    
              <TouchableOpacity
                   style={styles.signIn}
+<<<<<<< HEAD
                   onPress={() => {
                     if (loginData.email && password) {
                       verifyItemOnAsyncstorage(loginData) 
@@ -94,6 +113,11 @@ const SignInScreen = ({navigation}) => {
                     }
                }}
              > 
+=======
+                  onPress={() => {navigation.navigate('Home')}}
+                  
+             /> 
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
             <LinearGradient
               colors={['#008bdd', '#6cb7ff']}
               style={styles.signIn}
@@ -102,7 +126,10 @@ const SignInScreen = ({navigation}) => {
                 
               }]}>Entrar</Text>              
             </LinearGradient>
+<<<<<<< HEAD
              </TouchableOpacity>
+=======
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
             <TouchableOpacity
               onPress={() => {navigation.navigate('SignUpScreen')}}
               style={[styles.signIn, {
@@ -114,6 +141,10 @@ const SignInScreen = ({navigation}) => {
             </TouchableOpacity>
         </View>
       </View>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
     </View>
     
 
@@ -195,3 +226,33 @@ const styles = StyleSheet.create({
     marginLeft: 100
   }
 });
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94

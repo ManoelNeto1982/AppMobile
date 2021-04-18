@@ -1,6 +1,12 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.telaproduto">
   <uses-permission android:name="android.permission.INTERNET"/>
+=======
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.appmobile">
+  <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
 =======
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.appmobile">
   <uses-permission android:name="android.permission.INTERNET"/>

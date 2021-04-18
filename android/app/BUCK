@@ -36,7 +36,11 @@ android_library(
 android_build_config(
     name = "build_config",
 <<<<<<< HEAD
+<<<<<<< HEAD
     package = "com.telaproduto",
+=======
+    package = "com.appmobile",
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
 =======
     package = "com.appmobile",
 >>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
@@ -45,7 +49,11 @@ android_build_config(
 android_resource(
     name = "res",
 <<<<<<< HEAD
+<<<<<<< HEAD
     package = "com.telaproduto",
+=======
+    package = "com.appmobile",
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
 =======
     package = "com.appmobile",
 >>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94

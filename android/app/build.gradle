@@ -133,7 +133,11 @@ android {
 
     defaultConfig {
 <<<<<<< HEAD
+<<<<<<< HEAD
         applicationId "com.telaproduto"
+=======
+        applicationId "com.appmobile"
+>>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
 =======
         applicationId "com.appmobile"
 >>>>>>> 03ee480f5fda62fbb106bfeb0a9ae0da0b737b94
