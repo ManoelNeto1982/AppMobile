@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity, Platform, Image, TextInput, StatusBar} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -6,11 +6,38 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Feather } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
-
-
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignInScreen = ({navigation}) => {
+
+  const loggedUser = {
+    email: "",
+    userName: "",
+  }
+
+  const verifyItemOnAsyncstorage = async (value) => {
+    try {
+      const isExist = await AsyncStorage.getItem(value.email)
+      if (isExist !== null) {
+        const check = JSON.parse(isExist);
+        if (check.password === password) {
+          setLoginData(check);
+          setCheckData(true);
+        } else return alert('Usuario ou senha invalido');  
+      } else return alert('Usuario ou senha invalido');
+      
+    } catch (e) {
+      return alert('Ocorreu um erro no login');
+    }
+  }
+
+  const handleChange = (field, value) => {
+    setLoginData({...loggedUser, [field]: value})
+  }
+
+  const [checkData, setCheckData] = useState(false);
+  const [password, setPassword] = useState("");
+  const [loginData, setLoginData] = useState(loggedUser);
 
   return(
     <View style={styles.container}>
@@ -32,6 +59,7 @@ const SignInScreen = ({navigation}) => {
             placeholderTextColor="#666666"
             style={styles.textInput}
             autoCapitalize="none"
+            onChangeText={text => handleChange('email', text)}
           />
         </View>
         
@@ -48,6 +76,7 @@ const SignInScreen = ({navigation}) => {
               secureTextEntry= {true}
               style={styles.textInput}
               autoCapitalize="none"            
+              onChangeText={text => setPassword(text)}
             />
          
         </View>
@@ -55,9 +84,16 @@ const SignInScreen = ({navigation}) => {
         <View style={styles.button}>    
              <TouchableOpacity
                   style={styles.signIn}
-                  onPress={() => {navigation.navigate('Home')}}
-                  
-             /> 
+                  onPress={() => {
+                    if (loginData.email && password) {
+                      verifyItemOnAsyncstorage(loginData) 
+                    } else return alert('Você precisa preencher todos os campos');
+                    if (checkData) {
+                      //console.log(loginData);
+                      navigation.navigate('HomeScreen')
+                    }
+               }}
+             > 
             <LinearGradient
               colors={['#008bdd', '#6cb7ff']}
               style={styles.signIn}
@@ -66,6 +102,7 @@ const SignInScreen = ({navigation}) => {
                 
               }]}>Entrar</Text>              
             </LinearGradient>
+             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {navigation.navigate('SignUpScreen')}}
               style={[styles.signIn, {
@@ -77,7 +114,6 @@ const SignInScreen = ({navigation}) => {
             </TouchableOpacity>
         </View>
       </View>
-
     </View>
     
 
@@ -159,30 +195,3 @@ const styles = StyleSheet.create({
     marginLeft: 100
   }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
