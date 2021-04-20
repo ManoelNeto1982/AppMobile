@@ -1,23 +1,34 @@
-import React,{useRef} from 'react';
+import React,{useRef, useState} from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity, ImageBackground, TextInput} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Modalize } from 'react-native-modalize';
 
-const EditProfileScreen = ({navigation}) => {
+const EditProfileScreen = ({ navigation }) => {
     const modalizeRef = useRef(null);
     function OpenModal(){
         modalizeRef.current?.open();
     }
+
+    const takeUserData = async () => {
+        try {
+            const userData = await AsyncStorage.getItem(global.userId);
+            setUser((userData !== null) ? JSON.parse(userData) : null);
+        } catch (e) {
+            return alert('Houve algum problema em carregar os dados do cliente na página de edição')
+        }
+    }
+
+    const [user, setUser] = useState({}); 
+
     return(
         <View style={styles.container}>
-         
+            <Text>{console.log(user)}</Text>
             <View style={{margin: 20}}>
                 <View style={{alignItems: 'center'}}>
-                 
                         <View
                             style={{
                                 height: 100,
@@ -51,7 +62,7 @@ const EditProfileScreen = ({navigation}) => {
                             </ImageBackground>                                
                         </View>
                    
-                    <Text style={{marginTop: 10, fontSize: 18, fontWeight: 'bold'}}>Fábio Duarte</Text>
+                    <Text style={{marginTop: 10, fontSize: 18, fontWeight: 'bold'}}>Meu email é: {global.userId}</Text>
                     <TouchableOpacity>
                         <View style={{
                                 flex: 1,

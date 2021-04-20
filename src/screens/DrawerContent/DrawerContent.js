@@ -1,10 +1,13 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import { View, StyleSheet} from 'react-native';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { Avatar, Title, Caption, Paragraph, Drawer} from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function DrawerContent(props){
+
+
     return(
         <View style={{flex:1}}>
             <DrawerContentScrollView {...props}>
@@ -18,8 +21,8 @@ export function DrawerContent(props){
                                 size={50}
                             />
                             <View style={{marginLeft: 15, flexDirection:'column'}}>
-                                <Title style={styles.title}>Fábio Duarte</Title>
-                                <Caption style={styles.caption}>@user.gmail.com</Caption>
+                                <Title style={styles.title}>{global.userName}</Title>
+                                <Caption style={styles.caption}>{global.userEmail}</Caption>
                             </View>
                         </View>
 

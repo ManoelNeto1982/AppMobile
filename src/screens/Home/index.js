@@ -4,7 +4,7 @@ import{ useNavigation } from '@react-navigation/native';
 
 import Books from '../../component/Books/index.js';
 
-const HomeScreen = () => {
+const HomeScreen = ({route}) => {
     const navigation = useNavigation();
     return(
         <View style={styles.container}>
