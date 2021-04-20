@@ -121,7 +121,7 @@ const SignUpScreen = ({navigation}) => {
         </View>
         <View>
           <TouchableOpacity 
-              style={styles.button}
+              style={[styles.button] , {marginTop: 10}}
               onPress={() => {
                 if (dataSignUp.email && dataSignUp.userName && dataSignUp.password && rePassword) {
                   if (dataSignUp.password === rePassword) {
@@ -140,10 +140,12 @@ const SignUpScreen = ({navigation}) => {
               colors={['#008bdd', '#6cb7ff']}
               style={styles.signIn}
             ><Text style={[styles.textSign, {
-                color:'#fff'
+                color:'#fff',
+                marginTop: 10
               }]}>Cadastrar</Text>              
             </LinearGradient>
             </TouchableOpacity>
+
             <TouchableOpacity
               onPress={() => {
                    navigation.navigate('SignInScreen')

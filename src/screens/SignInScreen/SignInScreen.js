@@ -78,7 +78,6 @@ const SignInScreen = ({navigation}) => {
               autoCapitalize="none"            
               onChangeText={text => setPassword(text)}
             />
-         
         </View>
 
         <View style={styles.button}>    

@@ -67,8 +67,8 @@ export function DrawerContent(props){
                                 size={size}
                                 />                        
                             )}
-                            label="Meus Itens Cadastrados"
-                            onPress={() => {}}
+                            label="Cadastrar Livro"
+                            onPress={() => {props.navigation.navigate('RegisterProductScreen')}}
                             >
                         </DrawerItem>
                         <DrawerItem 

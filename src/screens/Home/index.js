@@ -1,128 +1,108 @@
-import React from 'react';
-import{ View, Text, StyleSheet, ScrollView, Image, TouchableOpacity} from 'react-native';
+import React, {useRef} from 'react';
+import{ View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, ImageBackground, TextInput} from 'react-native';
 import{ useNavigation } from '@react-navigation/native';
-
-import Books from '../../component/Books/index.js';
-
-const HomeScreen = () => {
-    const navigation = useNavigation();
+import Icon from 'react-native-vector-icons/Ionicons';
+import { FontAwesome } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+const HomeScreen = ({navigation}) => {
     return(
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <Image
-                source={require('../../assets/blah.jpg')}
-                style={styles.image}
-                />
-
-                <View style={styles.textContainer}>
-                    <Text style={styles.text}>Meus Comentarios</Text>
-                    <Text style={styles.text}> - </Text>
-                    <Text style={styles.text}>Perfil</Text>
-                    <Text style={styles.text}> - </Text>
-                    <Text style={styles.text}>Sair</Text>                    
-               </View>
-
-            </View>
-
-          <View style={styles.line}/>
-     
-
-            <ScrollView>
-                <Text style={[styles.text], {marginTop: 20, marginLeft:"25%", marginBottom: 10}}>Participe das discussões on-line</Text>
-
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around'}}>
-                    <Books img={require('../../assets/1.jpg')} onClick={()=> navigation.navigate('Detail')}>
-                        A Regra é não ter regras
-                    </Books>
-
-                    <Books img={require('../../assets/2.jpg')} onClick={()=> navigation.navigate('Detail')}>
-                        The Walking Dead - busca e destruição
-                    </Books>
-
-                     <Books img={require('../../assets/3.jpg')} onClick={()=> navigation.navigate('Detail')}>
-                        Clinica Medica
-                    </Books>
+        <ScrollView>
+            <View style={styles.container}>
+                <Text style={styles.title}>Lista de Livros </Text>              
+                    <View style={{flexDirection:'row'}}>
+                        <Image
+                        source={require('../../assets/1.jpg')}
+                        style={{height: 110, width: 80, marginTop: 2}}
+                        // imageStyle={{borderRadius: 25}}
+                        />
+                    <View style={styles.clienteListContainer}>    
+                                <Text style={styles.name}>Título: Harry Potter</Text>
+                                <Text style={styles.listItem}>Autor: J.K.Rowlling</Text>                        
+                                <Text style={styles.listItem}>Descrição: Harry Potter (Daniel Radcliffe) é um garoto órfão de 10 anos que vive infeliz com seus tios, os Dursley.
+                            .</Text>
+                            <View style={{flexDirection: 'row', marginLeft:'68%'}}>
+                            <View > 
+                                <TouchableOpacity>
+                                    <Icon name="trash" size={35} color="red" style={{
+                                    opacity: 0.7,
+                                    marginRight: 5,       
+                                    borderWidth: 1,
+                                    borderColor: '#fff',
+                                    borderRadius: 10,
+                                }}/>
+                                </TouchableOpacity>                            
+                            </View>
+                            <View > 
+                            <TouchableOpacity onPress={() => {navigation.navigate("EditProductScreen")}}>
+                                    <FontAwesome name="pencil-square-o" size={35} color="red" style={{
+                                    opacity: 0.7, 
+                                    borderWidth: 1,
+                                    marginTop: 3,
+                                    borderColor: '#fff',
+                                    borderRadius: 10,
+                                }}/>
+                            </TouchableOpacity>   
+                            </View>                 
+                            </View>
+                         </View>
+                    </View>
                 </View>
+       </ScrollView>
 
-                 <View style={{ flexDirection: 'row', justifyContent: 'space-around'}}>
-                    <Books img={require('../../assets/4.jpg')} onClick={()=> navigation.navigate('Detail')}>
-                        The Walking Dead - o caminho para woodbury
-                    </Books>
-
-                    <Books img={require('../../assets/5.jpg')} onClick={()=> navigation.navigate('Detail')}>
-                        Salmos
-                    </Books>
-
-                     <Books img={require('../../assets/6.jpg')} onClick={()=> navigation.navigate('Detail')}>
-                        Linux Bible
-                    </Books>
-                </View>
-
-                 <View style={{ flexDirection: 'row', justifyContent: 'space-around'}}>
-                    <Books img={require('../../assets/7.jpg')} onClick={()=> navigation.navigate('Detail')}>
-                        BlackHack Linux
-                    </Books>
-
-                    <Books img={require('../../assets/8.jpg')} onClick={()=> navigation.navigate('Detail')}>
-                        Os Sermões de Charles Spurgeon
-                    </Books>
-
-                     <Books img={require('../../assets/9.jpg')} onClick={()=> navigation.navigate('Detail')}>
-                        Louco Amor
-                    </Books>
-                </View>
-
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around'}}>
-                    <Books img={require('../../assets/10.jpg')} onClick={()=> navigation.navigate('Detail')}>
-                        BlackBook
-                    </Books>
-
-                    <Books img={require('../../assets/11.jpg')} onClick={()=> navigation.navigate('Detail')}>
-                        O cristão Em Uma Sociedade não Cristã
-                    </Books>
-
-                     <Books img={require('../../assets/12.jpg')} onClick={()=> navigation.navigate('Detail')}>
-                        Linux Redes e Servidores
-                    </Books>
-                </View>                
-
-            </ScrollView>
-        </View>
-        
+       
     );
 }
 
 export default HomeScreen;
 
 const styles = StyleSheet.create({
-    container:{
-        flex :1,
-        width: '100%',
-        backgroundColor: '#FFF'
+    container: {
+      paddingHorizontal: 20,
+      width: '80%',
+      
     },
-    header: {
-        marginBottom: -90
-        
+    buttonContainer: {
+      marginTop: 10,
+      flexDirection: "row",
+      alignItems: "center"
     },
-    image: {
-        width: '100%',
-        height: '50%',        
-    },
-    textContainer: {
-        flexDirection: 'row',
-        marginVertical: '4%',
-        marginHorizontal: '12%',
-    },
-    text: {
-        // fontFamily: 'Anton_400Regular',
+      button: {
+        borderRadius: 5,
+        marginVertical: 20,
+        alignSelf: 'flex-start',
+        backgroundColor: "gray",
+      },
+      buttonText: {
+          color: "white",
+          paddingVertical: 6,
+          paddingHorizontal: 10,
+          fontSize: 16
+      },
+      title:{
+        fontWeight: "bold",
         fontSize: 20,
-        marginHorizontal: '1%',
-        marginVertical: '1%'
-    },
-    line:{
-        borderBottomColor: '#D8d8d8',
-        borderBottomWidth: 15,
-        marginTop: -15
-        
-   }
-});
+        marginBottom: 20,
+        marginTop: 20,
+        marginLeft: '35%'
+      },
+      name: {
+        fontWeight: "bold",
+        fontSize: 16
+      },
+      section: {
+        fontSize: 16
+      },
+      clienteListContainer: {
+        marginBottom: 25,
+        elevation: 4,
+        backgroundColor: "white",
+        padding: 10,
+        borderRadius: 6,
+        borderTopWidth: 1,
+        borderColor: "rgba(0,0,0,0.1)",
+        width: '100%',
+        marginLeft: 5,
+        marginBottom: 2
+      },      
+    });

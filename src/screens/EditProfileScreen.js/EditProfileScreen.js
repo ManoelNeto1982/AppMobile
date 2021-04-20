@@ -17,7 +17,7 @@ const EditProfileScreen = ({navigation}) => {
          
             <View style={{margin: 20}}>
                 <View style={{alignItems: 'center'}}>
-                 
+                    <TouchableOpacity onPress={OpenModal}>
                         <View
                             style={{
                                 height: 100,
@@ -34,7 +34,7 @@ const EditProfileScreen = ({navigation}) => {
                                 style={{height: 100, width: 100}}
                                 imageStyle={{borderRadius: 15}}
                             >
-                                {/* <View style={{
+                                <View style={{
                                     flex: 1,
                                     justifyContent: 'center',
                                     alignItems: 'center',
@@ -47,39 +47,13 @@ const EditProfileScreen = ({navigation}) => {
                                         borderColor: '#fff',
                                         borderRadius: 10,
                                     }}/>
-                                </View> */}
+                                </View>
                             </ImageBackground>                                
                         </View>
+                    </TouchableOpacity>
                    
                     <Text style={{marginTop: 10, fontSize: 18, fontWeight: 'bold'}}>Fábio Duarte</Text>
-                    <TouchableOpacity>
-                        <View style={{
-                                flex: 1,
-                                flexDirection:'row',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}>
-                                <Icon name="trash" size={25} color="red" style={{
-                                    opacity: 0.7,
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    borderWidth: 1,
-                                    borderColor: '#fff',
-                                    borderRadius: 10,
-                                }}/>
-                                <TouchableOpacity onPress={OpenModal}>
-                                    <MaterialCommunityIcons name="image-edit" size={25} color="#000" style={{
-                                    opacity: 0.7,
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    borderWidth: 1,
-                                    borderColor: '#fff',
-                                    borderRadius: 10,
-                                    marginLeft: 10,
-                                }}/>
-                                </TouchableOpacity>
-                            </View>
-                    </TouchableOpacity>
+                   
                 </View>
 
                 <View style={styles.action}>
@@ -118,7 +92,6 @@ const EditProfileScreen = ({navigation}) => {
 
             <Modalize ref={modalizeRef} snapPoint={360} modalHeight={360}>
                 <View style={styles.panel}>
-
                     <View style={{alignItems:'center'}}>
                         <Text style={styles.panelTitle}>Alterar Foto</Text>
                         <Text style={styles.panelSubtitle}>Escolha sua foto de perfil</Text>
@@ -129,8 +102,10 @@ const EditProfileScreen = ({navigation}) => {
                     <TouchableOpacity style={styles.panelButton}>
                         <Text style={styles.panelButtonTitle}>Usar foto do Álbum</Text>
                     </TouchableOpacity>
-                </View>                                    
-
+                    <TouchableOpacity style={styles.panelButton}>
+                        <Text style={styles.panelButtonTitle}>Excluir Foto</Text>
+                    </TouchableOpacity>
+                </View> 
             </Modalize>
         
         </View>
