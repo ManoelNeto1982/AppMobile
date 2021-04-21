@@ -1,32 +1,27 @@
 import 'react-native-gesture-handler';
-import React, { useEffect, useState } from 'react';  
-import { View, Text, Button, StyleSheet, ActivityIndicator } from 'react-native';
+import React, { useState } from 'react';  
+import { StyleSheet, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-//import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {DrawerContent} from './src/screens/DrawerContent/DrawerContent'
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-
 import ProfileScreen from './src/screens/ProfileScreen/ProfileScreen';
-//import HomeScreen from './src/screens/Home/HomeScreen';
 import EditProfileScreen from './src/screens/EditProfileScreen.js/EditProfileScreen'
 import SignInScreen from './src/screens/SignInScreen/SignInScreen'
 import SignUpScreen from './src/screens/SignUpScreen/SignUpScreen'
-// import RootStackScreen from './src/screens/RootStackScreen/RootStackScreen'
-
+import EditProductScreen from './src/screens/EditBookScreen/EditBookScreen'
 import Home from './src/screens/Home/index';
-import Detail from './src/screens/Detail/index';
+import RegisterProductScreen from './src/screens/RegisterProductScreen/RegisterProductScreen';
 import AppContext from './components/GlobalContext';
-
 
 
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const EditProfileStack = createStackNavigator();
-// const SignInStack = createStackNavigator();
-// const SignUpStack = createStackNavigator();
+const RegisterProductStack = createStackNavigator();
+const EditProductStack = createStackNavigator();
+
 const Drawer = createDrawerNavigator();
 
 
@@ -114,6 +109,65 @@ const EditProfileStackScreen = ({navigation}) => (
       }} /> 
   </EditProfileStack.Navigator>
 );
+const EditProductStackScreen = ({navigation}) => (
+  <EditProductStack.Navigator
+   screenOptions={{
+    headerStyle:{
+      backgroundColor: '#53a7fd',
+    },
+    headerTintColor: '#000',
+    headerTitleStyle: {
+      fontWeight: 'bold'
+    }
+  }}>
+  <EditProductStack.Screen 
+      name="EditProductScreen"
+      component={EditProductScreen}
+      options={{
+        title: '',
+      headerLeft: () => (
+      <Icon.Button 
+        name="ios-menu"
+        size={25}
+        backgroundColor="#53a7fd"
+        color="#fff"
+        onPress={() => navigation.openDrawer()}
+      />
+      ),
+      }} /> 
+  </EditProductStack.Navigator>
+);
+
+
+
+const RegisterProductStackScreen = ({navigation}) => (
+  <RegisterProductStack.Navigator
+   screenOptions={{
+    headerStyle:{
+      backgroundColor: '#53a7fd',
+    },
+    headerTintColor: '#000',
+    headerTitleStyle: {
+      fontWeight: 'bold'
+    }
+  }}>
+  <RegisterProductStack.Screen 
+      name="RegisterProduct"
+      component={RegisterProductScreen}
+      options={{
+        title: '',
+      headerLeft: () => (
+      <Icon.Button 
+        name="ios-menu"
+        size={25}
+        backgroundColor="#53a7fd"
+        color="#fff"
+        onPress={() => navigation.openDrawer()}
+      />
+      ),
+      }} /> 
+  </RegisterProductStack.Navigator>
+);
 
 const App = () => {
 
@@ -137,7 +191,9 @@ const App = () => {
               <Drawer.Screen name="SignUpScreen" component={SignUpScreen}/>
               <Drawer.Screen name="Editar Perfil" component={EditProfileStackScreen}  />
               <Drawer.Screen name="HomeScreen" component={HomeStackScreen}/>
-              <Drawer.Screen name="Detail" component={Detail}/>
+              <Drawer.Screen name="RegisterProductScreen" component={RegisterProductStackScreen}/>
+              <Drawer.Screen name="EditProductScreen" component={EditProductStackScreen}/>
+              {/* <Drawer.Screen name="Detail" component={Detail}/> */}
               <Drawer.Screen name="Perfil" component={ProfileStackScreen}  />
           </Drawer.Navigator>                                         
       </NavigationContainer>    

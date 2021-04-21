@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Modalize } from 'react-native-modalize';
 import AppContext from '../../../components/GlobalContext';
 
+
 const EditProfileScreen = ({ navigation }) => {
     const modalizeRef = useRef(null);
     function OpenModal(){
@@ -28,6 +29,15 @@ const EditProfileScreen = ({ navigation }) => {
         image: ""
       }]
     }
+    
+    const updateDataFromAsyncStorage = async () => {
+        try {
+            await AsyncStorage.mergeItem(myContext.userEmail, JSON.stringify(currentData))
+            alert('Dados alterados com sucesso');
+        } catch (e) {
+            return alert('Erro ao atualizar dados');
+        } 
+    };
 
     useEffect(() => {
         const takeUserData = async () => {
@@ -52,6 +62,7 @@ const EditProfileScreen = ({ navigation }) => {
     const [currentData, setCurrentData] = useState(initialCurrentData); 
     const [newData, setNewData] = useState(initialCurrentData);
 
+    const [currentPassword, setCurrentPassword] = useState("");
     const handleChange = (field, value) => {
         setNewData({...newData, [field]: value})
     }
@@ -60,40 +71,41 @@ const EditProfileScreen = ({ navigation }) => {
         <View style={styles.container}>
             <View style={{margin: 20}}>
                 <View style={{alignItems: 'center'}}>
-                    <View
-                        style={{
-                            height: 100,
-                            width: 100,
-                            borderRadius: 15,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <ImageBackground
-                            source={{
-                                uri:'https://scontent.fssa2-1.fna.fbcdn.net/v/t1.6435-1/p160x160/91588976_3412154335481357_848580981005746176_n.jpg?_nc_cat=108&ccb=1-3&_nc_sid=7206a8&_nc_ohc=DpGmMOWcfpkAX_3gYRI&_nc_ht=scontent.fssa2-1.fna&tp=6&oh=460904a6dfce27d1fea41c4f2f0d3af6&oe=60976151'
-                            }}
-                            style={{height: 100, width: 100}}
-                            imageStyle={{borderRadius: 15}}
-                        >
-                            <View style={{
-                                flex: 1,
+                    <TouchableOpacity>
+                        <View
+                            style={{
+                                height: 100,
+                                width: 100,
+                                borderRadius: 15,
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                            }}>
-                                <Icon name="camera" size={35} color="#fff" style={{
-                                    opacity: 0.7,
-                                    alignItems: 'center',
+                            }}    
+                        >
+                            <ImageBackground
+                                source={{
+                                    uri:'https://scontent.fssa2-1.fna.fbcdn.net/v/t1.6435-1/p160x160/91588976_3412154335481357_848580981005746176_n.jpg?_nc_cat=108&ccb=1-3&_nc_sid=7206a8&_nc_ohc=DpGmMOWcfpkAX_3gYRI&_nc_ht=scontent.fssa2-1.fna&tp=6&oh=460904a6dfce27d1fea41c4f2f0d3af6&oe=60976151' 
+                                }}
+                                style={{height: 100, width: 100}}
+                                imageStyle={{borderRadius: 15}}
+                                 >
+                                <View style={{
+                                    flex: 1,
                                     justifyContent: 'center',
-                                    borderWidth: 1,
-                                    borderColor: '#fff',
-                                    borderRadius: 10,
-                                }}/>
-                            </View>
-                        </ImageBackground>                                
-                    </View>
-
-                    <Text style={{marginTop: 10, fontSize: 18, fontWeight: 'bold'}}>{myContext.userName}</Text>
+                                    alignItems: 'center',
+                                }}>
+                                    <Icon name="camera" size={35} color="#fff" style={{
+                                        opacity: 0.7,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        borderWidth: 1,
+                                        borderColor: '#fff',
+                                        borderRadius: 10,
+                                    }}/>
+                                </View>
+                            </ImageBackground>                                
+                        </View>
+                        </TouchableOpacity>                   
+                    <Text style={{marginTop: 10, fontSize: 18, fontWeight: 'bold'}}>Meu email é: {global.userId}</Text>                  
                 </View>
 
                 <View style={styles.action}>
@@ -101,8 +113,10 @@ const EditProfileScreen = ({ navigation }) => {
                     <TextInput
                         placeholder='Alterar Nome'
                         placeholderTextColor="#666666"
-                        autoCorrect={false}                                               style={styles.textInput}
+                        autoCorrect={false}
                         onChangeText={text => handleChange('name', text)}
+                        autoCorrect={false}  
+                        style={styles.textInput}                                            
                     />
                 </View>                                    
                 {/* <View style={styles.action}>
@@ -125,8 +139,7 @@ const EditProfileScreen = ({ navigation }) => {
                         onChangeText={text => handleChange('password', text) }
                         style={styles.textInput}/>
                 </View>
-                <TouchableOpacity
-                    onPress={() => { OpenModal }} style={styles.commandButton}>
+                <TouchableOpacity onPress={OpenModal} style={styles.commandButton}>
                     <Text style={styles.panelButtonTitle}>Alterar Dados</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {navigation.goBack()}} style={styles.commandButton}>
@@ -137,16 +150,32 @@ const EditProfileScreen = ({ navigation }) => {
             <Modalize ref={modalizeRef} snapPoint={360} modalHeight={360}>
                 <View style={styles.panel}>
 
-                    <View style={{alignItems:'center'}}>
-                        <Text style={styles.panelTitle}>Alterar Foto</Text>
-                        <Text style={styles.panelSubtitle}>Escolha sua foto de perfil</Text>
+                    <View style={{alignItems:'center', marginTop:"25%"}}>
+                        <Text style={{margiTop:10, fontWeight: 'bold', fontSize: 18, marginBottom:5 }}>Para continuar, digite sua senha atual</Text>
+                        <TextInput secureTextEntry= {true}
+                            style={styles.confirmUpdate}
+                            autoCapitalize="none"
+                            onChangeText={text => setCurrentPassword(text)}
+                            />                        
                     </View>
-                    <TouchableOpacity style={styles.panelButton}>
-                        <Text style={styles.panelButtonTitle}>Tirar foto</Text>
+                    <TouchableOpacity 
+                        onPress={() => {
+                            if (currentPassword === currentData.password) {
+                                if (newData.name) {
+                                    currentData.name = newData.name;
+                                    myContext.setUserName(currentData.name);
+                                }
+                                if (newData.password) {
+                                    currentData.password = newData.password;
+                                }
+                                updateDataFromAsyncStorage();
+                                navigation.navigate('Perfil');
+                            } else alert('A senha fornecida não é compativel com a cadastrada');
+                        }}
+                        style={styles.panelButton}>
+                        <Text style={styles.panelButtonTitle}>Salvar</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.panelButton}>
-                        <Text style={styles.panelButtonTitle}>Usar foto do Álbum</Text>
-                    </TouchableOpacity>
+                    
                 </View>                                    
 
             </Modalize>
@@ -239,5 +268,13 @@ const styles = StyleSheet.create({
         marginTop: -12,
         paddingLeft: 10,
         color:"#05375a"
+    },
+    confirmUpdate: {
+        borderWidth: 1,
+        width:'100%',
+        borderRadius: 5,
+        borderColor: "#1E90FF",
+        height: 30,
+        secureTextEntry: true,
     }
 })

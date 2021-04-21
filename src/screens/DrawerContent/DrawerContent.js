@@ -13,6 +13,8 @@ export function DrawerContent(props){
     const signOut = () => {
         myContext.setUserName("");
         myContext.setUserEmail("");
+        console.log(myContext.userName);
+        console.log(myContext.userEmail);
         props.navigation.navigate('SignInScreen');
     }
 
@@ -79,8 +81,8 @@ export function DrawerContent(props){
                                 size={size}
                                 />                        
                             )}
-                            label="Meus Itens Cadastrados"
-                            onPress={() => {}}
+                            label="Cadastrar Livro"
+                            onPress={() => {props.navigation.navigate('RegisterProductScreen')}}
                             >
                         </DrawerItem>
                         <DrawerItem 

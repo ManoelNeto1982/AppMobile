@@ -83,7 +83,6 @@ const myContext = useContext(AppContext);
               autoCapitalize="none"            
               onChangeText={text => setPassword(text)}
             />
-         
         </View>
 
         <View style={styles.button}>    
