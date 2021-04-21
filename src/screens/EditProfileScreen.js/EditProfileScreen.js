@@ -55,7 +55,7 @@ const EditProfileScreen = ({ navigation }) => {
         <View style={styles.container}>
             <View style={{margin: 20}}>
                 <View style={{alignItems: 'center'}}>
-                    <TouchableOpacity>
+                    {/* <TouchableOpacity>
                         <View
                             style={{
                                 height: 100,
@@ -88,8 +88,8 @@ const EditProfileScreen = ({ navigation }) => {
                                 </View>
                             </ImageBackground>                                
                         </View>
-                        </TouchableOpacity>                   
-                    <Text style={{marginTop: 10, fontSize: 18, fontWeight: 'bold'}}>Meu email é: {global.userId}</Text>                  
+                        </TouchableOpacity>                    */}
+                    {/* <Text style={{marginTop: 10, fontSize: 18, fontWeight: 'bold'}}>Meu email é: {global.userId}</Text>                   */}
                 </View>
 
                 <View style={styles.action}>
@@ -128,11 +128,12 @@ const EditProfileScreen = ({ navigation }) => {
                 </TouchableOpacity>
             </View>
 
+            
             <Modalize ref={modalizeRef} snapPoint={360} modalHeight={360}>
                 <View style={styles.panel}>
 
                     <View style={{alignItems:'center', marginTop:"25%"}}>
-                        <Text style={{margiTop:10, fontWeight: 'bold', fontSize: 18, marginBottom:5 }}>Para continuar, digite sua senha atual</Text>
+                        <Text style={{marginTop:10, fontWeight: 'bold', fontSize: 18, marginBottom:5 }}>Para continuar, digite sua senha atual</Text>
                         <TextInput secureTextEntry= {true}
                             style={styles.confirmUpdate}
                             autoCapitalize="none"
@@ -141,10 +142,10 @@ const EditProfileScreen = ({ navigation }) => {
                     <TouchableOpacity style={styles.panelButton}>
                         <Text style={styles.panelButtonTitle}>Salvar</Text>
                     </TouchableOpacity>
-                    
                 </View>                                    
 
             </Modalize>
+
         
         </View>
     );
@@ -241,6 +242,6 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         borderColor: "#1E90FF",
         height: 30,
-        secureTextEntry: true,
+        
     }
 })

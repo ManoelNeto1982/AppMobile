@@ -30,14 +30,14 @@ const ProfileScreen = ({navigation}) => {
         <SafeAreaView style={styles.container}>
             <View style={styles.userInfoSection}>
                 <View style={{flexDirection: 'row', marginTop: 15}}>
-                    <Avatar.Image
+                    {/* <Avatar.Image
                         source={{
                             uri:'https://scontent.fssa2-1.fna.fbcdn.net/v/t1.6435-1/p160x160/91588976_3412154335481357_848580981005746176_n.jpg?_nc_cat=108&ccb=1-3&_nc_sid=7206a8&_nc_ohc=DpGmMOWcfpkAX_3gYRI&_nc_ht=scontent.fssa2-1.fna&tp=6&oh=460904a6dfce27d1fea41c4f2f0d3af6&oe=60976151'
                         }}
                         size={80}
                         marginTop={20}
-                    />
-                    <View style={{marginLeft: 10, marginTop:30}}>
+                    /> */}
+                    <View style={{ marginTop:30}}>
                         <Title style={styles.title}>{myContext.userName}</Title>
                     </View>
                 </View>

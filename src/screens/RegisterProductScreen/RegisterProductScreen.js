@@ -19,7 +19,7 @@ const RegisterProductScreen = ({navigation}) => {
         <View style={styles.container}>         
             <View style={{margin: 20}}>
                 <View style={{alignItems: 'center'}}>
-                    <TouchableOpacity onPress={OpenModal}>
+                    {/* <TouchableOpacity onPress={OpenModal}>
                         <View
                             style={{
                                 height: 100,
@@ -50,7 +50,7 @@ const RegisterProductScreen = ({navigation}) => {
                                 </View>
                             </ImageBackground>                                
                         </View>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
 
                 <View style={styles.action}>
@@ -77,8 +77,8 @@ const RegisterProductScreen = ({navigation}) => {
                         placeholderTextColor="#666666"                        
                         autoCorrect={false}
                         multiline={true}
-                        numberOfLines={4}                       
-                        style={[styles.textInput], {height: 120, width:'90%', backgroundColor: '#CACACA', paddingBottom: 125, paddingLeft: 10, marginLeft: 5}}                     
+                        numberOfLines={1}                       
+                        style={[styles.textInput], { width:'90%', backgroundColor: '#CACACA', paddingBottom: 125, paddingLeft: 10, marginLeft: 5}}                     
                         
                         />
                                             
