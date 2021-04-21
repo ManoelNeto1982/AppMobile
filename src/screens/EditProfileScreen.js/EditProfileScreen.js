@@ -1,15 +1,13 @@
-import React, {useRef, useState, useEffect} from 'react'
+import React,{useRef, useState, useEffect, useContext} from 'react';
+import { View, Text, Button, StyleSheet, TouchableOpacity, ImageBackground, TextInput} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Modalize } from 'react-native-modalize';
-import {StyleSheet, View, Text, TouchableOpacity, ImageBackground, TextInput } from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons';
-import { Platform } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
-import Constants  from 'expo-constants'
+import AppContext from '../../../components/GlobalContext';
 
-import * as ImagePicker from 'expo-image-picker';
 
 const EditProfileScreen = ({ navigation }) => {
     const modalizeRef = useRef(null);
@@ -17,24 +15,47 @@ const EditProfileScreen = ({ navigation }) => {
         modalizeRef.current?.open();
     }
 
-    const takeUserData = async () => {
-        try {
-            const userData = await AsyncStorage.getItem(global.userId);
-            setUser((userData !== null) ? JSON.parse(userData) : null);
-        } catch (e) {
-            return alert('Houve algum problema em carregar os dados do cliente na página de edição')
-        }
+    const myContext = useContext(AppContext);
+
+    const initialCurrentData = {
+      email: "",
+      name: "",
+      password: "",
+      profileImage: "",
+      registerBooks: [{
+        bookName: "",
+        author: "",
+        description: "",
+        image: ""
+      }]
     }
 
-    const [user, setUser] = useState({}); 
+    useEffect(() => {
+        const takeUserData = async () => {
+            try {
+                const userData = await AsyncStorage.getItem(myContext.userEmail);
+                if (userData !== null) {
+                    const current = JSON.parse(userData); 
+                    setCurrentData(current);
+                    setNewData(current);
+                } else {
+                    alert('Erro ao carregar os dados');
+                }
+            } catch (e) {
+                return alert('Houve algum problema em carregar os dados do cliente na página de edição')
+            }
+        }
 
-    
+        takeUserData();
+    }, []);
+
+    const [currentData, setCurrentData] = useState(initialCurrentData); 
+    const [newData, setNewData] = useState(initialCurrentData);
     return(
         <View style={styles.container}>
-            <Text>{console.log(user)}</Text>
             <View style={{margin: 20}}>
                 <View style={{alignItems: 'center'}}>
-                    <TouchableOpacity >
+                    <TouchableOpacity>
                         <View
                             style={{
                                 height: 100,
@@ -42,7 +63,7 @@ const EditProfileScreen = ({ navigation }) => {
                                 borderRadius: 15,
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                            }}
+                            }}    
                         >
                             <ImageBackground
                                 source={{
@@ -50,7 +71,7 @@ const EditProfileScreen = ({ navigation }) => {
                                 }}
                                 style={{height: 100, width: 100}}
                                 imageStyle={{borderRadius: 15}}
-                            >
+                                 >
                                 <View style={{
                                     flex: 1,
                                     justifyContent: 'center',
@@ -67,8 +88,7 @@ const EditProfileScreen = ({ navigation }) => {
                                 </View>
                             </ImageBackground>                                
                         </View>
-                        </TouchableOpacity>
-                   
+                        </TouchableOpacity>                   
                     <Text style={{marginTop: 10, fontSize: 18, fontWeight: 'bold'}}>Meu email é: {global.userId}</Text>                  
                 </View>
 
@@ -77,18 +97,20 @@ const EditProfileScreen = ({ navigation }) => {
                     <TextInput
                         placeholder='Alterar Nome'
                         placeholderTextColor="#666666"
-                        autoCorrect={false}                        
-                        style={styles.textInput}/>
+                        autoCorrect={false}  
+                        style={styles.textInput}                                            
+                    />
                 </View>                                    
-                <View style={styles.action}>
+                {/* <View style={styles.action}>
                     <Feather name="lock" size={20}/>
                     <TextInput
                         placeholder='Digite a senha atual'
                         placeholderTextColor="#666666"
                         autoCorrect={false}
                         secureTextEntry= {true}
-                        style={styles.textInput}/>
-                </View>
+                        style={styles.textInput}
+                    />
+                </View> */}
                 <View style={styles.action}>
                     <Feather name="lock" size={20}/>
                     <TextInput

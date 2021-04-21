@@ -32,7 +32,6 @@ const SignUpScreen = ({navigation}) => {
         storeDataToAsyncStorage(value);
       } else {
         //console.log(isExist)
-        setValiableEmail(false);
         alert('Email já registrado por favor escolha outro email');
       }
     } catch (e) {
@@ -44,18 +43,15 @@ const SignUpScreen = ({navigation}) => {
     try {
       const stringValue = JSON.stringify(value);
       await AsyncStorage.setItem(value.email, stringValue)
-      console.log(value);
-      setValiableEmail(true);
+      //console.log(value);
       alert('Conta criada com sucesso');
       navigation.navigate('SignInScreen');
     } catch (e) {
-        setValiableEmail(false);
         return alert('Falha ao salvar tente novamente');
     }
   }
 
   const [rePassword, setRePassword] = useState("");
-  const [valiableEmail, setValiableEmail] = useState(false);
   const [dataSignUp, setDataSignUp] = useState(initialSignUpState);
 
   const handleChange = (field, value) => {
@@ -137,9 +133,6 @@ const SignUpScreen = ({navigation}) => {
                 if (dataSignUp.email && dataSignUp.name && dataSignUp.password && rePassword) {
                   if (dataSignUp.password === rePassword) {
                     verifyItemOnAsyncstorage(dataSignUp);
-                    if (valiableEmail === true) {
-                      navigation.navigate('SignInScreen');
-                    } 
                   } else return alert('As senhas não são compativeis');
                 } else return alert('Preencha todos os campos para poder realizar o cadastro');
               }}

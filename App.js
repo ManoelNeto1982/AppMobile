@@ -1,27 +1,19 @@
 import 'react-native-gesture-handler';
-import React, { useEffect } from 'react';  
-import { View, Text, Button, StyleSheet, ActivityIndicator } from 'react-native';
+import React, { useState } from 'react';  
+import { StyleSheet, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-//import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {DrawerContent} from './src/screens/DrawerContent/DrawerContent'
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-
 import ProfileScreen from './src/screens/ProfileScreen/ProfileScreen';
-//import HomeScreen from './src/screens/Home/HomeScreen';
 import EditProfileScreen from './src/screens/EditProfileScreen.js/EditProfileScreen'
 import SignInScreen from './src/screens/SignInScreen/SignInScreen'
 import SignUpScreen from './src/screens/SignUpScreen/SignUpScreen'
 import EditProductScreen from './src/screens/EditBookScreen/EditBookScreen'
-
-// import RootStackScreen from './src/screens/RootStackScreen/RootStackScreen'
-
 import Home from './src/screens/Home/index';
-import Detail from './src/screens/Detail/index';
 import RegisterProductScreen from './src/screens/RegisterProductScreen/RegisterProductScreen';
-
+import AppContext from './components/GlobalContext';
 
 
 const HomeStack = createStackNavigator();
@@ -178,19 +170,36 @@ const RegisterProductStackScreen = ({navigation}) => (
 );
 
 const App = () => {
+
+  const [email, setUserEmail] = useState("");
+  const [name, setUserName] = useState("");
+
+  const anotherUserData = {
+    userEmail: email,
+    userName: name,
+    setUserEmail,
+    setUserName,
+  }
+
   return (      
-    <NavigationContainer>
+    <>
+      <AppContext.Provider value={anotherUserData}>
+    <>
+      <NavigationContainer>
           <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
               <Drawer.Screen name="SignInScreen" component={SignInScreen}/>
               <Drawer.Screen name="SignUpScreen" component={SignUpScreen}/>
-              <Drawer.Screen name="Perfil" component={ProfileStackScreen}  />
               <Drawer.Screen name="Editar Perfil" component={EditProfileStackScreen}  />
               <Drawer.Screen name="HomeScreen" component={HomeStackScreen}/>
               <Drawer.Screen name="RegisterProductScreen" component={RegisterProductStackScreen}/>
               <Drawer.Screen name="EditProductScreen" component={EditProductStackScreen}/>
+              {/* <Drawer.Screen name="Detail" component={Detail}/> */}
+              <Drawer.Screen name="Perfil" component={ProfileStackScreen}  />
           </Drawer.Navigator>                                         
-    </NavigationContainer>    
- 
+      </NavigationContainer>    
+    </>
+      </AppContext.Provider>
+    </>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View,  SafeAreaView, Button, StyleSheet, KeyboardAvoidingView } from 'react-native';
 import {Avatar, Title, Caption, Text, TouchableRipple} from 'react-native-paper'
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -8,16 +8,19 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppContext from '../../../components/GlobalContext';
 
 const ProfileScreen = ({navigation}) => {
+    
+    const myContext = useContext(AppContext);
 
     const removeAccount = async () => {
         try {
-            await AsyncStorage.removeItem(global.userEmail);        
-            global.userEmail = "";
-            global.userName = "";
+            await AsyncStorage.removeItem(myContext.userEmail);
+            myContext.userEmail = "";
+            myContext.userName = "";
             alert('Conta apagada com sucesso');
-           
+            navigation.navigate('SignInScreen');
         } catch (e) {
             return alert('Problema na remoção');
         }
@@ -35,7 +38,7 @@ const ProfileScreen = ({navigation}) => {
                         marginTop={20}
                     />
                     <View style={{marginLeft: 10, marginTop:30}}>
-                        <Title style={styles.title}>{global.userName}</Title>
+                        <Title style={styles.title}>{myContext.userName}</Title>
                     </View>
                 </View>
             </View>
@@ -51,7 +54,7 @@ const ProfileScreen = ({navigation}) => {
                 </View>
                 <View style={styles.row}>
                     <Entypo name='email' color='#777777' size={20}/>
-                    <Text style={{color:'#777777', marginLeft: 20}}>{global.userEmail}</Text>
+                    <Text style={{color:'#777777', marginLeft: 20}}>{myContext.userEmail}</Text>
                 </View>                
             </View>
 
@@ -71,7 +74,6 @@ const ProfileScreen = ({navigation}) => {
                 </TouchableRipple>                         
                 <TouchableRipple onPress={() => { 
                         removeAccount();
-                        navigation.navigate('SignInScreen');
                     }
                     }>
                     <View style={styles.menuItem}>

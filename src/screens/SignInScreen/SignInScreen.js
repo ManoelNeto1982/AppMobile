@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity, Platform, Image, TextInput, StatusBar} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -7,9 +7,13 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Feather } from '@expo/vector-icons';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppContext from '../../../components/GlobalContext';
+
 
 const SignInScreen = ({navigation}) => {
   
+const myContext = useContext(AppContext);
+
   const userData = {
     email: "",
     name: "",
@@ -21,11 +25,11 @@ const SignInScreen = ({navigation}) => {
       if (isExist !== null) {
         const check = JSON.parse(isExist);
         if (check.password === password) {
-          setLoginData(check);
-          global.userEmail = check.email;
-          global.userName = check.name;
-          console.log(check);
-          navigation.navigate('HomeScreen')          
+          myContext.setUserEmail(check.email);
+          myContext.setUserName(check.name);
+          //console.log(myContext.userEmail);
+          //console.log(check);
+          navigation.navigate('HomeScreen');
         } else return alert('Usuario ou senha invalido');  
       } else return alert('Usuario ou senha invalido');
     } catch (e) {
@@ -37,7 +41,6 @@ const SignInScreen = ({navigation}) => {
     setLoginData({...userData, [field]: value})
   }
 
-  const [checkData, setCheckData] = useState(true);
   const [password, setPassword] = useState("");
   const [loginData, setLoginData] = useState(userData);
 
@@ -89,7 +92,7 @@ const SignInScreen = ({navigation}) => {
                     if (loginData.email && password) {
                       verifyItemOnAsyncstorage(loginData) 
                     } else return alert('Você precisa preencher todos os campos');
-                   
+                      //console.log(loginData.email);
                }}
              >            
             <LinearGradient
