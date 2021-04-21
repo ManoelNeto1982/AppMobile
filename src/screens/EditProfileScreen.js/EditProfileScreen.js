@@ -1,4 +1,4 @@
-import React,{useRef, useState} from 'react';
+import React,{useRef, useState, useEffect, useContext} from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity, ImageBackground, TextInput} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -6,6 +6,7 @@ import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Modalize } from 'react-native-modalize';
+import AppContext from '../../../components/GlobalContext';
 
 const EditProfileScreen = ({ navigation }) => {
     const modalizeRef = useRef(null);
@@ -13,64 +14,69 @@ const EditProfileScreen = ({ navigation }) => {
         modalizeRef.current?.open();
     }
 
-    const takeUserData = async () => {
-        try {
-            const userData = await AsyncStorage.getItem(global.userId);
-            setUser((userData !== null) ? JSON.parse(userData) : null);
-        } catch (e) {
-            return alert('Houve algum problema em carregar os dados do cliente na página de edição')
-        }
+    const myContext = useContext(AppContext);
+
+    const initialCurrentData = {
+      email: "",
+      name: "",
+      password: "",
+      profileImage: "",
+      registerBooks: [{
+        bookName: "",
+        author: "",
+        description: "",
+        image: ""
+      }]
     }
 
-    const [user, setUser] = useState({}); 
+    useEffect(() => {
+        const takeUserData = async () => {
+            try {
+                const userData = await AsyncStorage.getItem(myContext.userEmail);
+                if (userData !== null) {
+                    const current = JSON.parse(userData); 
+                    setCurrentData(current);
+                    setNewData(current);
+                } else {
+                    alert('Erro ao carregar os dados');
+                }
+            } catch (e) {
+                return alert('Houve algum problema em carregar os dados do cliente na página de edição')
+            }
+        }
+
+        takeUserData();
+    }, []);
+
+    const [currentData, setCurrentData] = useState(initialCurrentData); 
+    const [newData, setNewData] = useState(initialCurrentData);
 
     return(
         <View style={styles.container}>
-            <Text>{console.log(user)}</Text>
             <View style={{margin: 20}}>
                 <View style={{alignItems: 'center'}}>
-                        <View
-                            style={{
-                                height: 100,
-                                width: 100,
-                                borderRadius: 15,
-                                justifyContent: 'center',
-                                alignItems: 'center',
+                    <View
+                        style={{
+                            height: 100,
+                            width: 100,
+                            borderRadius: 15,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <ImageBackground
+                            source={{
+                                uri:'https://scontent.fssa2-1.fna.fbcdn.net/v/t1.6435-1/p160x160/91588976_3412154335481357_848580981005746176_n.jpg?_nc_cat=108&ccb=1-3&_nc_sid=7206a8&_nc_ohc=DpGmMOWcfpkAX_3gYRI&_nc_ht=scontent.fssa2-1.fna&tp=6&oh=460904a6dfce27d1fea41c4f2f0d3af6&oe=60976151'
                             }}
+                            style={{height: 100, width: 100}}
+                            imageStyle={{borderRadius: 15}}
                         >
-                            <ImageBackground
-                                source={{
-                                    uri:'https://scontent.fssa2-1.fna.fbcdn.net/v/t1.6435-1/p160x160/91588976_3412154335481357_848580981005746176_n.jpg?_nc_cat=108&ccb=1-3&_nc_sid=7206a8&_nc_ohc=DpGmMOWcfpkAX_3gYRI&_nc_ht=scontent.fssa2-1.fna&tp=6&oh=460904a6dfce27d1fea41c4f2f0d3af6&oe=60976151'
-                                }}
-                                style={{height: 100, width: 100}}
-                                imageStyle={{borderRadius: 15}}
-                            >
-                                {/* <View style={{
-                                    flex: 1,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                }}>
-                                    <Icon name="camera" size={35} color="#fff" style={{
-                                        opacity: 0.7,
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        borderWidth: 1,
-                                        borderColor: '#fff',
-                                        borderRadius: 10,
-                                    }}/>
-                                </View> */}
-                            </ImageBackground>                                
-                        </View>
-                   
-                    <Text style={{marginTop: 10, fontSize: 18, fontWeight: 'bold'}}>Meu email é: {global.userId}</Text>
-                    <TouchableOpacity>
-                        <View style={{
+                            <View style={{
                                 flex: 1,
-                                flexDirection:'row',
                                 justifyContent: 'center',
                                 alignItems: 'center',
                             }}>
-                                <Icon name="trash" size={25} color="red" style={{
+                                <Icon name="camera" size={35} color="#fff" style={{
                                     opacity: 0.7,
                                     alignItems: 'center',
                                     justifyContent: 'center',
@@ -78,19 +84,11 @@ const EditProfileScreen = ({ navigation }) => {
                                     borderColor: '#fff',
                                     borderRadius: 10,
                                 }}/>
-                                <TouchableOpacity onPress={OpenModal}>
-                                    <MaterialCommunityIcons name="image-edit" size={25} color="#000" style={{
-                                    opacity: 0.7,
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    borderWidth: 1,
-                                    borderColor: '#fff',
-                                    borderRadius: 10,
-                                    marginLeft: 10,
-                                }}/>
-                                </TouchableOpacity>
                             </View>
-                    </TouchableOpacity>
+                        </ImageBackground>                                
+                    </View>
+
+                    <Text style={{marginTop: 10, fontSize: 18, fontWeight: 'bold'}}>{myContext.userName}</Text>
                 </View>
 
                 <View style={styles.action}>
@@ -98,18 +96,19 @@ const EditProfileScreen = ({ navigation }) => {
                     <TextInput
                         placeholder='Alterar Nome'
                         placeholderTextColor="#666666"
-                        autoCorrect={false}                        
-                        style={styles.textInput}/>
+                        autoCorrect={false}                                               style={styles.textInput}
+                    />
                 </View>                                    
-                <View style={styles.action}>
+                {/* <View style={styles.action}>
                     <Feather name="lock" size={20}/>
                     <TextInput
                         placeholder='Digite a senha atual'
                         placeholderTextColor="#666666"
                         autoCorrect={false}
                         secureTextEntry= {true}
-                        style={styles.textInput}/>
-                </View>
+                        style={styles.textInput}
+                    />
+                </View> */}
                 <View style={styles.action}>
                     <Feather name="lock" size={20}/>
                     <TextInput
@@ -119,7 +118,8 @@ const EditProfileScreen = ({ navigation }) => {
                         autoCorrect={false}
                         style={styles.textInput}/>
                 </View>
-                <TouchableOpacity onPress={() => {}} style={styles.commandButton}>
+                <TouchableOpacity
+                    onPress={() => { OpenModal }} style={styles.commandButton}>
                     <Text style={styles.panelButtonTitle}>Alterar Dados</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {navigation.goBack()}} style={styles.commandButton}>

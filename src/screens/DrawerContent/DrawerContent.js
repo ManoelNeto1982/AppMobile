@@ -1,11 +1,20 @@
-import React, {useRef, useState, useEffect} from 'react';
-import { View, StyleSheet} from 'react-native';
+import React, {useRef, useState, useEffect, useContext} from 'react';
+import { View, Text, StyleSheet} from 'react-native';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { Avatar, Title, Caption, Paragraph, Drawer} from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppContext from '../../../components/GlobalContext';
 
 export function DrawerContent(props){
+
+    const myContext = useContext(AppContext);
+
+    const signOut = () => {
+        myContext.setUserName("");
+        myContext.setUserEmail("");
+        props.navigation.navigate('SignInScreen');
+    }
 
 
     return(
@@ -21,8 +30,8 @@ export function DrawerContent(props){
                                 size={50}
                             />
                             <View style={{marginLeft: 15, flexDirection:'column'}}>
-                                <Title style={styles.title}>{global.userName}</Title>
-                                <Caption style={styles.caption}>{global.userEmail}</Caption>
+                                <Title style={styles.title}>{myContext.userName}</Title>
+                                <Caption style={styles.caption}>{myContext.userEmail}</Caption>
                             </View>
                         </View>
 
@@ -101,7 +110,7 @@ export function DrawerContent(props){
                             />                        
                         )}
                         label="Sign-out"
-                        onPress={() => {}}
+                        onPress={() => { signOut() }}
                         >
                     </DrawerItem>
 
