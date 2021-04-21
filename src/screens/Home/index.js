@@ -85,7 +85,7 @@ const HomeScreen = ({navigation}) => {
                                         borderRadius: 10,
                                     }}/>
                                </TouchableOpacity>
-                               <TouchableOpacity onPress={() => {}}>
+                               <TouchableOpacity onPress={() => {navigation.navigate('EditCommentScreen')}}>
                                         <FontAwesome name="pencil-square-o" size={22} color="red" style={{
                                         opacity: 0.7,
                                         marginTop: 12,

@@ -12,6 +12,7 @@ import SignInScreen from './src/screens/SignInScreen/SignInScreen'
 import SignUpScreen from './src/screens/SignUpScreen/SignUpScreen'
 import EditProductScreen from './src/screens/EditBookScreen/EditBookScreen'
 import CommentScreen from './src/screens/CommentScreen/CommentScreen'
+import EditCommentScreen from './src/screens/EditCommentScreen/EditCommentScreen'
 import Home from './src/screens/Home/index';
 import RegisterProductScreen from './src/screens/RegisterProductScreen/RegisterProductScreen';
 import AppContext from './components/GlobalContext';
@@ -23,6 +24,7 @@ const EditProfileStack = createStackNavigator();
 const RegisterProductStack = createStackNavigator();
 const EditProductStack = createStackNavigator();
 const CommentStack = createStackNavigator();
+const EditCommentStack = createStackNavigator();
 
 const Drawer = createDrawerNavigator();
 
@@ -200,7 +202,34 @@ const CommentStackScreen = ({navigation}) => (
       }} /> 
   </CommentStack.Navigator>
 );
-
+const EditCommentStackScreen = ({navigation}) => (
+  <EditCommentStack.Navigator
+   screenOptions={{
+    headerStyle:{
+      backgroundColor: '#53a7fd',
+    },
+    headerTintColor: '#000',
+    headerTitleStyle: {
+      fontWeight: 'bold'
+    }
+  }}>
+  <EditCommentStack.Screen 
+      name="EditCommentScreen"
+      component={EditCommentScreen}
+      options={{
+        title: '',
+      headerLeft: () => (
+      <Icon.Button 
+        name="ios-menu"
+        size={25}
+        backgroundColor="#53a7fd"
+        color="#fff"
+        onPress={() => navigation.openDrawer()}
+      />
+      ),
+      }} /> 
+  </EditCommentStack.Navigator>
+);
 const App = () => {
 
   const [email, setUserEmail] = useState("");
@@ -226,7 +255,7 @@ const App = () => {
               <Drawer.Screen name="RegisterProductScreen" component={RegisterProductStackScreen}/>
               <Drawer.Screen name="EditProductScreen" component={EditProductStackScreen}/>
               <Drawer.Screen name="CommentScreen" component={CommentStackScreen}/>
-              {/* <Drawer.Screen name="Detail" component={Detail}/> */}
+              <Drawer.Screen name="EditCommentScreen" component={EditCommentStackScreen}/>           
               <Drawer.Screen name="Perfil" component={ProfileStackScreen}  />
           </Drawer.Navigator>                                         
       </NavigationContainer>    
