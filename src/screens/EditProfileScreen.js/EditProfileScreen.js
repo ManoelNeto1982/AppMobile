@@ -48,8 +48,13 @@ const EditProfileScreen = ({ navigation }) => {
         takeUserData();
     }, []);
 
+
     const [currentData, setCurrentData] = useState(initialCurrentData); 
     const [newData, setNewData] = useState(initialCurrentData);
+
+    const handleChange = (field, value) => {
+        setNewData({...newData, [field]: value})
+    }
 
     return(
         <View style={styles.container}>
@@ -97,6 +102,7 @@ const EditProfileScreen = ({ navigation }) => {
                         placeholder='Alterar Nome'
                         placeholderTextColor="#666666"
                         autoCorrect={false}                                               style={styles.textInput}
+                        onChangeText={text => handleChange('name', text)}
                     />
                 </View>                                    
                 {/* <View style={styles.action}>
@@ -116,6 +122,7 @@ const EditProfileScreen = ({ navigation }) => {
                         placeholderTextColor="#666666"
                         secureTextEntry= {true}
                         autoCorrect={false}
+                        onChangeText={text => handleChange('password', text) }
                         style={styles.textInput}/>
                 </View>
                 <TouchableOpacity

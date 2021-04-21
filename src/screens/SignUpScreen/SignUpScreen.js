@@ -55,7 +55,7 @@ const SignUpScreen = ({navigation}) => {
   const [dataSignUp, setDataSignUp] = useState(initialSignUpState);
 
   const handleChange = (field, value) => {
-    setDataSignUp({...dataSignUp, [field]: value})
+    setDataSignUp({...dataSignUp, [field]: value});
   }
 
   return (
