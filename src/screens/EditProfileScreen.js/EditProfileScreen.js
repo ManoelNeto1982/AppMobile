@@ -29,6 +29,15 @@ const EditProfileScreen = ({ navigation }) => {
         image: ""
       }]
     }
+    
+    const updateDataFromAsyncStorage = async () => {
+        try {
+            await AsyncStorage.mergeItem(myContext.userEmail, JSON.stringify(currentData))
+            alert('Dados alterados com sucesso');
+        } catch (e) {
+            return alert('Erro ao atualizar dados');
+        } 
+    };
 
     useEffect(() => {
         const takeUserData = async () => {
@@ -49,8 +58,15 @@ const EditProfileScreen = ({ navigation }) => {
         takeUserData();
     }, []);
 
+
     const [currentData, setCurrentData] = useState(initialCurrentData); 
     const [newData, setNewData] = useState(initialCurrentData);
+
+    const [currentPassword, setCurrentPassword] = useState("");
+    const handleChange = (field, value) => {
+        setNewData({...newData, [field]: value})
+    }
+
     return(
         <View style={styles.container}>
             <View style={{margin: 20}}>
@@ -97,6 +113,8 @@ const EditProfileScreen = ({ navigation }) => {
                     <TextInput
                         placeholder='Alterar Nome'
                         placeholderTextColor="#666666"
+                        autoCorrect={false}
+                        onChangeText={text => handleChange('name', text)}
                         autoCorrect={false}  
                         style={styles.textInput}                                            
                     />
@@ -118,6 +136,7 @@ const EditProfileScreen = ({ navigation }) => {
                         placeholderTextColor="#666666"
                         secureTextEntry= {true}
                         autoCorrect={false}
+                        onChangeText={text => handleChange('password', text) }
                         style={styles.textInput}/>
                 </View>
                 <TouchableOpacity onPress={OpenModal} style={styles.commandButton}>
@@ -137,9 +156,24 @@ const EditProfileScreen = ({ navigation }) => {
                         <TextInput secureTextEntry= {true}
                             style={styles.confirmUpdate}
                             autoCapitalize="none"
+                            onChangeText={text => setCurrentPassword(text)}
                             />                        
                     </View>
-                    <TouchableOpacity style={styles.panelButton}>
+                    <TouchableOpacity 
+                        onPress={() => {
+                            if (currentPassword === currentData.password) {
+                                if (newData.name) {
+                                    currentData.name = newData.name;
+                                    myContext.setUserName(currentData.name);
+                                }
+                                if (newData.password) {
+                                    currentData.password = newData.password;
+                                }
+                                updateDataFromAsyncStorage();
+                                navigation.navigate('Perfil');
+                            } else alert('A senha fornecida não é compativel com a cadastrada');
+                        }}
+                        style={styles.panelButton}>
                         <Text style={styles.panelButtonTitle}>Salvar</Text>
                     </TouchableOpacity>
                 </View>                                    

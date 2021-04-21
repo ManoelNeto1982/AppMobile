@@ -13,6 +13,8 @@ export function DrawerContent(props){
     const signOut = () => {
         myContext.setUserName("");
         myContext.setUserEmail("");
+        console.log(myContext.userName);
+        console.log(myContext.userEmail);
         props.navigation.navigate('SignInScreen');
     }
 
