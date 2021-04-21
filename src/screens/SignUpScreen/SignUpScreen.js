@@ -15,13 +15,7 @@ const SignUpScreen = ({navigation}) => {
       email: "",
       name: "",
       password: "",
-      profileImage: "",
-      registerBooks: [{
-        bookName: "",
-        author: "",
-        description: "",
-        image: ""
-      }]
+      registerBooks: []
     }
   
   const verifyItemOnAsyncstorage = async (value) => {
@@ -43,7 +37,7 @@ const SignUpScreen = ({navigation}) => {
     try {
       const stringValue = JSON.stringify(value);
       await AsyncStorage.setItem(value.email, stringValue)
-      //console.log(value);
+      console.log(value);
       alert('Conta criada com sucesso');
       navigation.navigate('SignInScreen');
     } catch (e) {

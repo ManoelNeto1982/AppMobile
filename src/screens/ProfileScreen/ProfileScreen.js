@@ -16,7 +16,8 @@ const ProfileScreen = ({navigation}) => {
 
     const removeAccount = async () => {
         try {
-            await AsyncStorage.removeItem(myContext.userEmail);
+            //await AsyncStorage.removeItem(myContext.userEmail);
+            await AsyncStorage.clear();
             myContext.userEmail = "";
             myContext.userName = "";
             alert('Conta apagada com sucesso');

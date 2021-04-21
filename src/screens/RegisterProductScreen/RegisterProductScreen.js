@@ -1,19 +1,72 @@
-import React,{useRef} from 'react';
+import React,{useRef, useState, useContext, useEffect} from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity, ImageBackground, TextInput, ScrollView} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-
-
-
+import AppContext from '../../../components/GlobalContext';
 import { Modalize } from 'react-native-modalize';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RegisterProductScreen = ({navigation}) => {
     const modalizeRef = useRef(null);
     function OpenModal(){
         modalizeRef.current?.open();
     }
+
+    const myContext = useContext(AppContext);
+
+    const initialData = {
+      email: "",
+      name: "",
+      password: "",
+      registerBooks: []
+    }
+
+    const initialBook = {
+        title: "",
+        author: "",
+        sinopse: "",
+        comments: []
+    }
+
+    useEffect(() => {
+        const getUserData = async () => {
+            try {
+                const userData = await AsyncStorage.getItem(myContext.userEmail);
+                if (userData !== null) {
+                    const aux = JSON.parse(userData);
+                    setUserData(aux);
+                } else {
+                    return alert('Não conceguimos obter os dados do cliente corretamente tente novamente mais tarde');
+                }
+                //await AsyncStorage.mergeItem(myContext, userData)
+            } catch (e) {
+                return alert('Erro na indentificação de usuario');
+            }
+        };
+
+        getUserData();
+     }, [])
+
+    const registerNewBook = async () => {
+        userData.registerBooks.push(bookData);
+        try {
+            await AsyncStorage.mergeItem(myContext.userEmail, JSON.stringify(userData));
+            //console.log(userData);
+            navigation.navigate('HomeScreen');
+        } catch (e) {
+            return alert('Erro ao inserir dados do livro');
+        }
+    };
+
+    const handleChange = (field, value) => {
+        setBookData({...bookData, [field]: value}); 
+    };
+
+    const [userData, setUserData] = useState(initialData);
+    const [bookData, setBookData] = useState(initialBook);
+
     return(
 
         <View style={styles.container}>         
@@ -58,7 +111,8 @@ const RegisterProductScreen = ({navigation}) => {
                     <TextInput
                         placeholder='Título do Livro'
                         placeholderTextColor="#666666"
-                        autoCorrect={false}                        
+                        autoCorrect={false}
+                        onChangeText={text => handleChange('title', text)}
                         style={styles.textInput}/>
                 </View>                                    
                 <View style={styles.action}>
@@ -67,23 +121,28 @@ const RegisterProductScreen = ({navigation}) => {
                         placeholder='Nome do autor'
                         placeholderTextColor="#666666"
                         autoCorrect={false}
-                     
+                        onChangeText={text => handleChange('author', text)}
                         style={styles.textInput}/>
                 </View>
                 <View style={styles.action}>
                     <FontAwesome name="pencil-square-o" size={20}/>
                     <TextInput
-                        placeholder='Sinopse'                       
-                        placeholderTextColor="#666666"                        
+                        placeholder='Sinopse'
+                        placeholderTextColor="#666666"
                         autoCorrect={false}
                         multiline={true}
                         numberOfLines={4}                       
+                        onChangeText={text => handleChange('sinopse', text)}
                         style={[styles.textInput], {height: 120, width:'90%', backgroundColor: '#CACACA', paddingBottom: 125, paddingLeft: 10, marginLeft: 5}}                     
                         
                         />
                                             
                 </View>
-                <TouchableOpacity onPress={() => {}} style={styles.commandButton}>
+                <TouchableOpacity onPress={() => {
+                    if (bookData.title && bookData.sinopse && bookData.author) {
+                         registerNewBook();
+                    }
+                    }} style={styles.commandButton}>
                     <Text style={styles.panelButtonTitle}>Cadstrar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {navigation.goBack()}} style={styles.commandButton}>

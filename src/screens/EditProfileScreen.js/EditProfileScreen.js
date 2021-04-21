@@ -21,13 +21,6 @@ const EditProfileScreen = ({ navigation }) => {
       email: "",
       name: "",
       password: "",
-      profileImage: "",
-      registerBooks: [{
-        bookName: "",
-        author: "",
-        description: "",
-        image: ""
-      }]
     }
     
     const updateDataFromAsyncStorage = async () => {
