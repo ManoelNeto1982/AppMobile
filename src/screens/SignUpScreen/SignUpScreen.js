@@ -13,8 +13,15 @@ const SignUpScreen = ({navigation}) => {
 
     const initialSignUpState = {
       email: "",
-      userName: "",
+      name: "",
       password: "",
+      profileImage: "",
+      registerBooks: [{
+        bookName: "",
+        author: "",
+        description: "",
+        image: ""
+      }]
     }
   
   const verifyItemOnAsyncstorage = async (value) => {
@@ -24,11 +31,12 @@ const SignUpScreen = ({navigation}) => {
         //return alert(isExist);
         storeDataToAsyncStorage(value);
       } else {
-        console.log(isExist)
-        setUnvaliable(false);
+        //console.log(isExist)
+        setValiableEmail(false);
+        alert('Email já registrado por favor escolha outro email');
       }
     } catch (e) {
-      return alert('Houve uma falha ao carregar os dados, tente novamente');
+      alert('Houve uma falha ao carregar os dados, tente novamente');
     }
   }
 
@@ -36,13 +44,18 @@ const SignUpScreen = ({navigation}) => {
     try {
       const stringValue = JSON.stringify(value);
       await AsyncStorage.setItem(value.email, stringValue)
+      console.log(value);
+      setValiableEmail(true);
+      alert('Conta criada com sucesso');
+      navigation.navigate('SignInScreen');
     } catch (e) {
-      return alert('Falha ao salvar tente novamente');
+        setValiableEmail(false);
+        return alert('Falha ao salvar tente novamente');
     }
   }
 
   const [rePassword, setRePassword] = useState("");
-  const [valiableEmail, setUnvaliable] = useState(true);
+  const [valiableEmail, setValiableEmail] = useState(false);
   const [dataSignUp, setDataSignUp] = useState(initialSignUpState);
 
   const handleChange = (field, value) => {
@@ -69,7 +82,7 @@ const SignUpScreen = ({navigation}) => {
             placeholderTextColor="#666666"
             style={styles.textInput}
             autoCapitalize="none"
-            onChangeText={text => handleChange('userName', text)}
+            onChangeText={text => handleChange('name', text)}
           />
         </View>        
         <Text style={[styles.text_footer], {marginTop:8}}>E-mail</Text>
@@ -81,11 +94,9 @@ const SignUpScreen = ({navigation}) => {
             <TextInput
               placeholder="Digite seu E-mail"
               placeholderTextColor="#666666"
-              secureTextEntry= {true}
               style={styles.textInput}
               autoCapitalize="none"            
               onChangeText={text => handleChange('email', text)}
-              
             />         
         </View>
         
@@ -123,15 +134,12 @@ const SignUpScreen = ({navigation}) => {
           <TouchableOpacity 
               style={[styles.button] , {marginTop: 10}}
               onPress={() => {
-                if (dataSignUp.email && dataSignUp.userName && dataSignUp.password && rePassword) {
+                if (dataSignUp.email && dataSignUp.name && dataSignUp.password && rePassword) {
                   if (dataSignUp.password === rePassword) {
                     verifyItemOnAsyncstorage(dataSignUp);
-                    if (valiableEmail) {
-                      //Aqui tanbém pode entrar algum aviso de tudo ocorreu bem
+                    if (valiableEmail === true) {
                       navigation.navigate('SignInScreen');
-                    }
-                    setUnvaliable(true);
-                    //Aqui tanbém pode entrar algum aviso de email invalido
+                    } 
                   } else return alert('As senhas não são compativeis');
                 } else return alert('Preencha todos os campos para poder realizar o cadastro');
               }}

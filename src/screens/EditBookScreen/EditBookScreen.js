@@ -1,40 +1,22 @@
-import React, {useRef, useState, useEffect} from 'react'
+import React,{useRef} from 'react';
+import { View, Text, Button, StyleSheet, TouchableOpacity, ImageBackground, TextInput, ScrollView} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Modalize } from 'react-native-modalize';
-import {StyleSheet, View, Text, TouchableOpacity, ImageBackground, TextInput } from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons';
-import { Platform } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
-import Constants  from 'expo-constants'
 
-import * as ImagePicker from 'expo-image-picker';
-
-const EditProfileScreen = ({ navigation }) => {
+const EditProductScreen = ({navigation}) => {
     const modalizeRef = useRef(null);
-    function OpenModal(){
+    function OpenModal2(){
         modalizeRef.current?.open();
     }
-
-    const takeUserData = async () => {
-        try {
-            const userData = await AsyncStorage.getItem(global.userId);
-            setUser((userData !== null) ? JSON.parse(userData) : null);
-        } catch (e) {
-            return alert('Houve algum problema em carregar os dados do cliente na página de edição')
-        }
-    }
-
-    const [user, setUser] = useState({}); 
-
-    
     return(
-        <View style={styles.container}>
-            <Text>{console.log(user)}</Text>
+
+        <View style={styles.container}>         
             <View style={{margin: 20}}>
                 <View style={{alignItems: 'center'}}>
-                    <TouchableOpacity >
+                    <TouchableOpacity onPress={OpenModal2}>
                         <View
                             style={{
                                 height: 100,
@@ -45,9 +27,7 @@ const EditProfileScreen = ({ navigation }) => {
                             }}
                         >
                             <ImageBackground
-                                source={{
-                                    uri:'https://scontent.fssa2-1.fna.fbcdn.net/v/t1.6435-1/p160x160/91588976_3412154335481357_848580981005746176_n.jpg?_nc_cat=108&ccb=1-3&_nc_sid=7206a8&_nc_ohc=DpGmMOWcfpkAX_3gYRI&_nc_ht=scontent.fssa2-1.fna&tp=6&oh=460904a6dfce27d1fea41c4f2f0d3af6&oe=60976151' 
-                                }}
+                                source={require('../../assets/1.jpg')}
                                 style={{height: 100, width: 100}}
                                 imageStyle={{borderRadius: 15}}
                             >
@@ -67,39 +47,41 @@ const EditProfileScreen = ({ navigation }) => {
                                 </View>
                             </ImageBackground>                                
                         </View>
-                        </TouchableOpacity>
-                   
-                    <Text style={{marginTop: 10, fontSize: 18, fontWeight: 'bold'}}>Meu email é: {global.userId}</Text>                  
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.action}>
-                    <Feather name="user" size={20}/>
+                    <Feather name="book" size={20}/>
                     <TextInput
-                        placeholder='Alterar Nome'
+                        placeholder='Título do Livro'
                         placeholderTextColor="#666666"
                         autoCorrect={false}                        
                         style={styles.textInput}/>
                 </View>                                    
                 <View style={styles.action}>
-                    <Feather name="lock" size={20}/>
+                    <Feather name="user" size={20}/>
                     <TextInput
-                        placeholder='Digite a senha atual'
+                        placeholder='Nome do autor'
                         placeholderTextColor="#666666"
                         autoCorrect={false}
-                        secureTextEntry= {true}
+                     
                         style={styles.textInput}/>
                 </View>
                 <View style={styles.action}>
-                    <Feather name="lock" size={20}/>
+                    <FontAwesome name="pencil-square-o" size={20}/>
                     <TextInput
-                        placeholder='Digite a nova senha'
-                        placeholderTextColor="#666666"
-                        secureTextEntry= {true}
+                        placeholder='Sinopse'                       
+                        placeholderTextColor="#666666"                        
                         autoCorrect={false}
-                        style={styles.textInput}/>
+                        multiline={true}
+                        numberOfLines={4}                       
+                        style={[styles.textInput], {height: 120, width:'90%', backgroundColor: '#CACACA', paddingBottom: 125, paddingLeft: 10, marginLeft: 5}}                     
+                        
+                        />
+                                            
                 </View>
-                <TouchableOpacity onPress={OpenModal} style={styles.commandButton}>
-                    <Text style={styles.panelButtonTitle}>Alterar Dados</Text>
+                <TouchableOpacity onPress={() => {}} style={styles.commandButton}>
+                    <Text style={styles.panelButtonTitle}>Cadstrar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {navigation.goBack()}} style={styles.commandButton}>
                     <Text style={styles.panelButtonTitle}>Voltar</Text>
@@ -108,27 +90,26 @@ const EditProfileScreen = ({ navigation }) => {
 
             <Modalize ref={modalizeRef} snapPoint={360} modalHeight={360}>
                 <View style={styles.panel}>
-
-                    <View style={{alignItems:'center', marginTop:"25%"}}>
-                        <Text style={{margiTop:10, fontWeight: 'bold', fontSize: 18, marginBottom:5 }}>Para continuar, digite sua senha atual</Text>
-                        <TextInput secureTextEntry= {true}
-                            style={styles.confirmUpdate}
-                            autoCapitalize="none"
-                            />                        
+                    <View style={{alignItems:'center'}}>
+                        <Text style={styles.panelTitle}>Escolher Capa do Livro</Text>
+                        <Text style={styles.panelSubtitle}>Escolha sua capa</Text>
                     </View>
                     <TouchableOpacity style={styles.panelButton}>
-                        <Text style={styles.panelButtonTitle}>Salvar</Text>
+                        <Text style={styles.panelButtonTitle}>Tirar foto</Text>
                     </TouchableOpacity>
-                    
-                </View>                                    
-
+                    <TouchableOpacity style={styles.panelButton}>
+                        <Text style={styles.panelButtonTitle}>Usar foto do Álbum</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.panelButton}>
+                        <Text style={styles.panelButtonTitle}>Excluir Foto</Text>
+                    </TouchableOpacity>
+                </View> 
             </Modalize>
-        
         </View>
     );
 };
 
-export default EditProfileScreen;
+export default EditProductScreen;
 
 const styles = StyleSheet.create({
     container: {
@@ -212,13 +193,5 @@ const styles = StyleSheet.create({
         marginTop: -12,
         paddingLeft: 10,
         color:"#05375a"
-    },
-    confirmUpdate: {
-        borderWidth: 1,
-        width:'100%',
-        borderRadius: 5,
-        borderColor: "#1E90FF",
-        height: 30,
-        secureTextEntry: true,
     }
 })

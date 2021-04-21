@@ -5,14 +5,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Feather } from '@expo/vector-icons';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignInScreen = ({navigation}) => {
-
-  const loggedUser = {
+  
+  const userData = {
     email: "",
-    userName: "",
+    name: "",
   }
 
   const verifyItemOnAsyncstorage = async (value) => {
@@ -22,24 +22,26 @@ const SignInScreen = ({navigation}) => {
         const check = JSON.parse(isExist);
         if (check.password === password) {
           setLoginData(check);
-          setCheckData(true);
+          global.userEmail = check.email;
+          global.userName = check.name;
+          console.log(check);
+          navigation.navigate('HomeScreen')          
         } else return alert('Usuario ou senha invalido');  
       } else return alert('Usuario ou senha invalido');
-      
     } catch (e) {
       return alert('Ocorreu um erro no login');
     }
   }
 
   const handleChange = (field, value) => {
-    setLoginData({...loggedUser, [field]: value})
+    setLoginData({...userData, [field]: value})
   }
 
-  const [checkData, setCheckData] = useState(false);
+  const [checkData, setCheckData] = useState(true);
   const [password, setPassword] = useState("");
-  const [loginData, setLoginData] = useState(loggedUser);
+  const [loginData, setLoginData] = useState(userData);
 
-  return(
+  return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#35AAFF" barStyle="light-content"></StatusBar>
       <View style={styles.header}>
@@ -87,10 +89,7 @@ const SignInScreen = ({navigation}) => {
                     if (loginData.email && password) {
                       verifyItemOnAsyncstorage(loginData) 
                     } else return alert('Você precisa preencher todos os campos');
-                    if (checkData) {
-                      //console.log(loginData);
-                      navigation.navigate('HomeScreen')
-                    }
+                   
                }}
              >            
             <LinearGradient
@@ -120,8 +119,6 @@ const SignInScreen = ({navigation}) => {
 }
 
 export default SignInScreen;
-
-
 
 const styles = StyleSheet.create({
   container: {
