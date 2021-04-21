@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, { useEffect } from 'react';  
+import React, { useEffect, useState } from 'react';  
 import { View, Text, Button, StyleSheet, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 //import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -18,6 +18,7 @@ import SignUpScreen from './src/screens/SignUpScreen/SignUpScreen'
 
 import Home from './src/screens/Home/index';
 import Detail from './src/screens/Detail/index';
+import AppContext from './components/GlobalContext';
 
 
 
@@ -115,18 +116,34 @@ const EditProfileStackScreen = ({navigation}) => (
 );
 
 const App = () => {
+
+  const [email, setUserEmail] = useState("");
+  const [name, setUserName] = useState("");
+
+  const anotherUserData = {
+    userEmail: email,
+    userName: name,
+    setUserEmail,
+    setUserName,
+  }
+
   return (      
-    <NavigationContainer>
+    <>
+      <AppContext.Provider value={anotherUserData}>
+    <>
+      <NavigationContainer>
           <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
               <Drawer.Screen name="SignInScreen" component={SignInScreen}/>
               <Drawer.Screen name="SignUpScreen" component={SignUpScreen}/>
-              <Drawer.Screen name="Perfil" component={ProfileStackScreen}  />
               <Drawer.Screen name="Editar Perfil" component={EditProfileStackScreen}  />
               <Drawer.Screen name="HomeScreen" component={HomeStackScreen}/>
               <Drawer.Screen name="Detail" component={Detail}/>
+              <Drawer.Screen name="Perfil" component={ProfileStackScreen}  />
           </Drawer.Navigator>                                         
-    </NavigationContainer>    
- 
+      </NavigationContainer>    
+    </>
+      </AppContext.Provider>
+    </>
   );
 }
 
