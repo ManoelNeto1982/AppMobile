@@ -1,53 +1,138 @@
-import React, {useRef} from 'react';
+import React, {useRef, useEffect, useState, useContext} from 'react';
 import{ View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, ImageBackground, TextInput} from 'react-native';
 import{ useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Modalize } from 'react-native-modalize';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppContext from '../../../components/GlobalContext';
+
 const HomeScreen = ({navigation}) => {
+
+  const comment = useRef(null);
+  function OpenModalComment(){
+      comment.current?.open();
+  }
+
+  const myContext = useContext(AppContext);
+
+  useEffect(() => {
+    const getAllKeysFromAsyncStorage = async () => {
+      try {
+        const keys = await AsyncStorage.getAllKeys();
+        getAllUserDataFromAsyncStorage(keys);
+      } catch (e) {
+        return alert('Erro na leitura das chaves');
+      }
+  }
+    const getAllUserDataFromAsyncStorage = async (keys) => {
+      try {
+        const users = await AsyncStorage.multiGet(keys);
+        users.forEach(element => {
+          if (JSON.parse(element[1]).registerBooks.length !== 0) {
+              JSON.parse(element[1]).registerBooks.forEach(elem => {
+                  allBooksData.push(elem)
+                })
+           }
+        })
+      } catch (e) {
+        return alert('Erro ao pegar os dados dos usuarios para exibir os seus livros postados');
+      }
+    }
+
+    getAllKeysFromAsyncStorage();
+  }, []);
+
+  const [allBooksData, setAllBooksData] = useState([]);
+  console.log(allBooksData)
+
     return(
         <ScrollView>
             <View style={styles.container}>
                 <Text style={styles.title}>Lista de Livros </Text>              
-                    <View style={{flexDirection:'row'}}>
-                        <Image
-                        source={require('../../assets/1.jpg')}
-                        style={{height: 110, width: 80, marginTop: 2}}
-                        // imageStyle={{borderRadius: 25}}
-                        />
-                    <View style={styles.clienteListContainer}>    
-                                <Text style={styles.name}>Título: Harry Potter</Text>
-                                <Text style={styles.listItem}>Autor: J.K.Rowlling</Text>                        
-                                <Text style={styles.listItem}>Descrição: Harry Potter (Daniel Radcliffe) é um garoto órfão de 10 anos que vive infeliz com seus tios, os Dursley.
-                            .</Text>
-                            <View style={{flexDirection: 'row', marginLeft:'68%'}}>
+              { allBooksData.map(book => { return (<View style={{flexDirection:'row'}}>
+                       <View style={{justifyContent:'center'}}>
+
+                        <View style={styles.clienteListContainer}>    
+                          <Text style={styles.name}>{console.log(allBooksData)}</Text>
+                          <Text style={styles.listItem}>Autor: {book.author}</Text>                        
+                          <Text style={styles.listItem}>Descrição: {book.sinopse}</Text>
+
+                          <View style={{flexDirection: 'row', marginLeft:'60%'}}>
                             <View > 
-                                <TouchableOpacity>
-                                    <Icon name="trash" size={35} color="red" style={{
-                                    opacity: 0.7,
-                                    marginRight: 5,       
-                                    borderWidth: 1,
-                                    borderColor: '#fff',
-                                    borderRadius: 10,
+                              <TouchableOpacity onPress={() => {navigation.navigate("CommentScreen")}}>
+                                <FontAwesome name="comment-o" size={35} color="red" style={{
+                                  opacity: 0.7,
+                                  marginRight: 5,       
+                                  borderWidth: 1,
+                                  borderColor: '#fff',
+                                  borderRadius: 10,
                                 }}/>
-                                </TouchableOpacity>                            
+                              </TouchableOpacity>                            
                             </View>
                             <View > 
-                            <TouchableOpacity onPress={() => {navigation.navigate("EditProductScreen")}}>
-                                    <FontAwesome name="pencil-square-o" size={35} color="red" style={{
-                                    opacity: 0.7, 
-                                    borderWidth: 1,
-                                    marginTop: 3,
-                                    borderColor: '#fff',
-                                    borderRadius: 10,
+                              <TouchableOpacity>
+                                <Icon name="trash" size={35} color="red" style={{
+                                  opacity: 0.7,
+                                  marginRight: 5,       
+                                  borderWidth: 1,
+                                  borderColor: '#fff',
+                                  borderRadius: 10,
                                 }}/>
-                            </TouchableOpacity>   
+                              </TouchableOpacity>                            
+                            </View>
+                            <View > 
+                              <TouchableOpacity onPress={() => {navigation.navigate("EditProductScreen")}}>
+                                <FontAwesome name="pencil-square-o" size={35} color="red" style={{
+                                  opacity: 0.7, 
+                                  borderWidth: 1,
+                                  marginTop: 5,
+                                  borderColor: '#fff',
+                                  borderRadius: 10,
+                                }}/>
+                              </TouchableOpacity>   
                             </View>                 
                             </View>
+
+                              <View > 
+                              <TextInput style={styles.comments}
+                                multiline={true}
+                                numberOfLines={1} 
+                            
+                              ></TextInput>
+                              <View style={{flexDirection:'row', marginLeft:250}}>
+                              <TouchableOpacity onPress={() => {}}>
+                                        <Icon name="trash"  size={22} color="red" style={{
+                                        opacity: 0.7,
+                                        marginTop: 10,
+                                         marginRight:  5,       
+                                        borderWidth: 1,
+                                        borderColor: '#fff',
+                                        borderRadius: 10,
+                                    }}/>
+                               </TouchableOpacity>
+                               <TouchableOpacity onPress={() => {navigation.navigate('EditCommentScreen')}}>
+                                        <FontAwesome name="pencil-square-o" size={22} color="red" style={{
+                                        opacity: 0.7,
+                                        marginTop: 12,
+                                        // marginRight:  50,       
+                                        borderWidth: 1,
+                                        borderColor: '#fff',
+                                        borderRadius: 10,
+                                    }}/>
+                               </TouchableOpacity>
+                               </View>
+                              </View>
                          </View>
-                    </View>
+                    </View> 
+                    </View>) }) }
                 </View>
+
+                
+
+                
        </ScrollView>
 
        
@@ -101,8 +186,50 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         borderTopWidth: 1,
         borderColor: "rgba(0,0,0,0.1)",
-        width: '100%',
+        width: 320,
         marginLeft: 5,
-        marginBottom: 2
+        marginBottom: 2,       
       },      
+      panel: {
+        padding: 20,
+        backgroundColor: "#FFFFFF",
+        padding: 20,
+        // borderTopLeftRadius: 20,
+        // borderTopRightRadius: 20,
+        // shadowColor: "#000000",
+        // shadowOffset: {width: 0, height: 0},
+        // shadowRadius: 2,
+        // shadowOpacity: 0.4,
+    },
+    panelButton: {
+      padding: 13,
+      borderRadius: 10,
+      backgroundColor: "#FF6347",
+      alignItems: 'center',
+      marginVertical: 7,
+    },
+    panelButtonTitle: {
+      fontSize: 17,
+      fontWeight: 'bold',
+      color: 'white',
+      },
+        confirmUpdate: {
+          borderWidth: 1,
+          width:'100%',
+          borderRadius: 5,
+          borderColor: "#1E90FF",
+          // height:"350",
+        
+      },
+      comments: {
+        borderWidth: 1,
+        width: '100%',
+        marginTop: 5,
+        height: 50,
+        borderRadius: 5,
+      
+
+
+      }
+
     });

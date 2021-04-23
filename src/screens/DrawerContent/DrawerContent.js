@@ -13,8 +13,8 @@ export function DrawerContent(props){
     const signOut = () => {
         myContext.setUserName("");
         myContext.setUserEmail("");
-        console.log(myContext.userName);
-        console.log(myContext.userEmail);
+        //console.log(myContext.userName);
+        //console.log(myContext.userEmail);
         props.navigation.navigate('SignInScreen');
     }
 
@@ -25,13 +25,13 @@ export function DrawerContent(props){
                 <View style={styles.drawerContent}>
                     <View style={styles.userInfoSection}>
                         <View style={{flexDirection:'row', marginTop: 15}}>
-                            <Avatar.Image
+                            {/* <Avatar.Image
                                  source={{
                                     uri:'https://scontent.fssa2-1.fna.fbcdn.net/v/t1.6435-1/p160x160/91588976_3412154335481357_848580981005746176_n.jpg?_nc_cat=108&ccb=1-3&_nc_sid=7206a8&_nc_ohc=DpGmMOWcfpkAX_3gYRI&_nc_ht=scontent.fssa2-1.fna&tp=6&oh=460904a6dfce27d1fea41c4f2f0d3af6&oe=60976151',
                                 }}
                                 size={50}
-                            />
-                            <View style={{marginLeft: 15, flexDirection:'column'}}>
+                            /> */}
+                            <View style={{ flexDirection:'column'}}>
                                 <Title style={styles.title}>{myContext.userName}</Title>
                                 <Caption style={styles.caption}>{myContext.userEmail}</Caption>
                             </View>

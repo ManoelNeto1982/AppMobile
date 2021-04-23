@@ -40,7 +40,6 @@ const RegisterProductScreen = ({navigation}) => {
                 } else {
                     return alert('Não conceguimos obter os dados do cliente corretamente tente novamente mais tarde');
                 }
-                //await AsyncStorage.mergeItem(myContext, userData)
             } catch (e) {
                 return alert('Erro na indentificação de usuario');
             }
@@ -72,7 +71,7 @@ const RegisterProductScreen = ({navigation}) => {
         <View style={styles.container}>         
             <View style={{margin: 20}}>
                 <View style={{alignItems: 'center'}}>
-                    <TouchableOpacity onPress={OpenModal}>
+                    {/* <TouchableOpacity onPress={OpenModal}>
                         <View
                             style={{
                                 height: 100,
@@ -103,7 +102,7 @@ const RegisterProductScreen = ({navigation}) => {
                                 </View>
                             </ImageBackground>                                
                         </View>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
 
                 <View style={styles.action}>
@@ -134,7 +133,6 @@ const RegisterProductScreen = ({navigation}) => {
                         numberOfLines={4}                       
                         onChangeText={text => handleChange('sinopse', text)}
                         style={[styles.textInput], {height: 120, width:'90%', backgroundColor: '#CACACA', paddingBottom: 125, paddingLeft: 10, marginLeft: 5}}                     
-                        
                         />
                                             
                 </View>

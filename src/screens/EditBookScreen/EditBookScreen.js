@@ -16,7 +16,7 @@ const EditProductScreen = ({navigation}) => {
         <View style={styles.container}>         
             <View style={{margin: 20}}>
                 <View style={{alignItems: 'center'}}>
-                    <TouchableOpacity onPress={OpenModal2}>
+                    {/* <TouchableOpacity onPress={OpenModal2}>
                         <View
                             style={{
                                 height: 100,
@@ -47,13 +47,13 @@ const EditProductScreen = ({navigation}) => {
                                 </View>
                             </ImageBackground>                                
                         </View>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
 
                 <View style={styles.action}>
                     <Feather name="book" size={20}/>
                     <TextInput
-                        placeholder='Título do Livro'
+                        placeholder='Alterar título do Livro'
                         placeholderTextColor="#666666"
                         autoCorrect={false}                        
                         style={styles.textInput}/>
@@ -61,7 +61,7 @@ const EditProductScreen = ({navigation}) => {
                 <View style={styles.action}>
                     <Feather name="user" size={20}/>
                     <TextInput
-                        placeholder='Nome do autor'
+                        placeholder='Alterar Nome do autor'
                         placeholderTextColor="#666666"
                         autoCorrect={false}
                      
@@ -70,18 +70,18 @@ const EditProductScreen = ({navigation}) => {
                 <View style={styles.action}>
                     <FontAwesome name="pencil-square-o" size={20}/>
                     <TextInput
-                        placeholder='Sinopse'                       
+                        placeholder='Alterar Sinopse'                       
                         placeholderTextColor="#666666"                        
                         autoCorrect={false}
                         multiline={true}
-                        numberOfLines={4}                       
-                        style={[styles.textInput], {height: 120, width:'90%', backgroundColor: '#CACACA', paddingBottom: 125, paddingLeft: 10, marginLeft: 5}}                     
+                        numberOfLines={1}                       
+                        style={[styles.textInput], { width:'90%', backgroundColor: '#CACACA', paddingBottom: 125, paddingLeft: 10, marginLeft: 5}}                     
                         
                         />
                                             
                 </View>
                 <TouchableOpacity onPress={() => {}} style={styles.commandButton}>
-                    <Text style={styles.panelButtonTitle}>Cadstrar</Text>
+                    <Text style={styles.panelButtonTitle}>Salvar Mudanças </Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {navigation.goBack()}} style={styles.commandButton}>
                     <Text style={styles.panelButtonTitle}>Voltar</Text>
