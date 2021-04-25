@@ -1,22 +1,22 @@
-import 'react-native-gesture-handler';
-import React, { useState } from 'react';  
-import { StyleSheet, ActivityIndicator } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import Icon from 'react-native-vector-icons/Ionicons';
-import {DrawerContent} from './src/screens/DrawerContent/DrawerContent'
-import ProfileScreen from './src/screens/ProfileScreen/ProfileScreen';
-import EditProfileScreen from './src/screens/EditProfileScreen.js/EditProfileScreen'
-import SignInScreen from './src/screens/SignInScreen/SignInScreen'
-import SignUpScreen from './src/screens/SignUpScreen/SignUpScreen'
-import EditProductScreen from './src/screens/EditBookScreen/EditBookScreen'
-import CommentScreen from './src/screens/CommentScreen/CommentScreen'
-import EditCommentScreen from './src/screens/EditCommentScreen/EditCommentScreen'
-import Home from './src/screens/Home/index';
-import RegisterProductScreen from './src/screens/RegisterProductScreen/RegisterProductScreen';
-import AppContext from './components/GlobalContext';
-
+import "react-native-gesture-handler";
+import React, { useState } from "react";
+import { StyleSheet, ActivityIndicator } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import Icon from "react-native-vector-icons/Ionicons";
+import { DrawerContent } from "./src/screens/DrawerContent/DrawerContent";
+import ProfileScreen from "./src/screens/ProfileScreen/ProfileScreen";
+import EditProfileScreen from "./src/screens/EditProfileScreen.js/EditProfileScreen";
+import SignInScreen from "./src/screens/SignInScreen/SignInScreen";
+import SignUpScreen from "./src/screens/SignUpScreen/SignUpScreen";
+import EditProductScreen from "./src/screens/EditBookScreen/EditBookScreen";
+import CommentScreen from "./src/screens/CommentScreen/CommentScreen";
+import EditCommentScreen from "./src/screens/EditCommentScreen/EditCommentScreen";
+import Home from "./src/screens/Home/index";
+import RegisterProductScreen from "./src/screens/RegisterProductScreen/RegisterProductScreen";
+import AppGlobalProvider from "./components/GlobalContext";
+import BookMarkScreen from "./src/screens/BookMarkScreen/BookMarkScreen";
 
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -25,252 +25,295 @@ const RegisterProductStack = createStackNavigator();
 const EditProductStack = createStackNavigator();
 const CommentStack = createStackNavigator();
 const EditCommentStack = createStackNavigator();
+const BookMarkStack = createStackNavigator();
 
 const Drawer = createDrawerNavigator();
 
-
-const HomeStackScreen = ({navigation}) => (
-  <HomeStack.Navigator screenOptions={{
-    headerStyle:{
-      backgroundColor: '#53a7fd',
-    },
-    headerTintColor: '#fff',
-    headerTitleStyle: {
-      fontWeight: 'bold'
-    }
-  }}>
-    <HomeStack.Screen name="Home"
-     component={Home}
+const HomeStackScreen = ({ navigation }) => (
+  <HomeStack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: "#53a7fd",
+      },
+      headerTintColor: "#fff",
+      headerTitleStyle: {
+        fontWeight: "bold",
+      },
+    }}
+  >
+    <HomeStack.Screen
+      name="Home"
+      component={Home}
       options={{
-        title: '',
+        title: "",
         headerLeft: () => (
-            <Icon.Button
-             name="ios-menu"
-              size={25}
-              backgroundColor="#53a7fd"
-              onPress={() => navigation.openDrawer()}>                
-              </Icon.Button>
-        )
-        }} />        
+          <Icon.Button
+            name="ios-menu"
+            size={25}
+            backgroundColor="#53a7fd"
+            onPress={() => navigation.openDrawer()}
+          ></Icon.Button>
+        ),
+      }}
+    />
   </HomeStack.Navigator>
 );
 
-
-const ProfileStackScreen = ({navigation}) => (
+const ProfileStackScreen = ({ navigation }) => (
   <ProfileStack.Navigator
-   screenOptions={{
-    headerStyle:{
-      backgroundColor: '#53a7fd',
-    },
-    headerTintColor: '#000',
-    headerTitleStyle: {
-      fontWeight: 'bold'
-    }
-  }}>
-  <ProfileStack.Screen 
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: "#53a7fd",
+      },
+      headerTintColor: "#000",
+      headerTitleStyle: {
+        fontWeight: "bold",
+      },
+    }}
+  >
+    <ProfileStack.Screen
       name="Profile"
       component={ProfileScreen}
       options={{
-        title: '',
-      headerLeft: () => (
-      <Icon.Button 
-        name="ios-menu"
-        size={25}
-        backgroundColor="#53a7fd"
-        color="#fff"
-        onPress={() => navigation.openDrawer()}
-      />
-      ),
-      }} /> 
+        title: "",
+        headerLeft: () => (
+          <Icon.Button
+            name="ios-menu"
+            size={25}
+            backgroundColor="#53a7fd"
+            color="#fff"
+            onPress={() => navigation.openDrawer()}
+          />
+        ),
+      }}
+    />
   </ProfileStack.Navigator>
 );
 
-const EditProfileStackScreen = ({navigation}) => (
+const EditProfileStackScreen = ({ navigation }) => (
   <EditProfileStack.Navigator
-   screenOptions={{
-    headerStyle:{
-      backgroundColor: '#53a7fd',
-    },
-    headerTintColor: '#000',
-    headerTitleStyle: {
-      fontWeight: 'bold'
-    }
-  }}>
-  <EditProfileStack.Screen 
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: "#53a7fd",
+      },
+      headerTintColor: "#000",
+      headerTitleStyle: {
+        fontWeight: "bold",
+      },
+    }}
+  >
+    <EditProfileStack.Screen
       name="EditProfile"
       component={EditProfileScreen}
       options={{
-        title: '',
-      headerLeft: () => (
-      <Icon.Button 
-        name="ios-menu"
-        size={25}
-        backgroundColor="#53a7fd"
-        color="#fff"
-        onPress={() => navigation.openDrawer()}
-      />
-      ),
-      }} /> 
+        title: "",
+        headerLeft: () => (
+          <Icon.Button
+            name="ios-menu"
+            size={25}
+            backgroundColor="#53a7fd"
+            color="#fff"
+            onPress={() => navigation.openDrawer()}
+          />
+        ),
+      }}
+    />
   </EditProfileStack.Navigator>
 );
 
-const EditProductStackScreen = ({navigation}) => (
+const EditProductStackScreen = ({ navigation }) => (
   <EditProductStack.Navigator
-   screenOptions={{
-    headerStyle:{
-      backgroundColor: '#53a7fd',
-    },
-    headerTintColor: '#000',
-    headerTitleStyle: {
-      fontWeight: 'bold'
-    }
-  }}>
-  <EditProductStack.Screen 
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: "#53a7fd",
+      },
+      headerTintColor: "#000",
+      headerTitleStyle: {
+        fontWeight: "bold",
+      },
+    }}
+  >
+    <EditProductStack.Screen
       name="EditProductScreen"
       component={EditProductScreen}
       options={{
-        title: '',
-      headerLeft: () => (
-      <Icon.Button 
-        name="ios-menu"
-        size={25}
-        backgroundColor="#53a7fd"
-        color="#fff"
-        onPress={() => navigation.openDrawer()}
-      />
-      ),
-      }} /> 
+        title: "",
+        headerLeft: () => (
+          <Icon.Button
+            name="ios-menu"
+            size={25}
+            backgroundColor="#53a7fd"
+            color="#fff"
+            onPress={() => navigation.openDrawer()}
+          />
+        ),
+      }}
+    />
   </EditProductStack.Navigator>
 );
 
-
-
-const RegisterProductStackScreen = ({navigation}) => (
+const RegisterProductStackScreen = ({ navigation }) => (
   <RegisterProductStack.Navigator
-   screenOptions={{
-    headerStyle:{
-      backgroundColor: '#53a7fd',
-    },
-    headerTintColor: '#000',
-    headerTitleStyle: {
-      fontWeight: 'bold'
-    }
-  }}>
-  <RegisterProductStack.Screen 
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: "#53a7fd",
+      },
+      headerTintColor: "#000",
+      headerTitleStyle: {
+        fontWeight: "bold",
+      },
+    }}
+  >
+    <RegisterProductStack.Screen
       name="RegisterProduct"
       component={RegisterProductScreen}
       options={{
-        title: '',
-      headerLeft: () => (
-      <Icon.Button 
-        name="ios-menu"
-        size={25}
-        backgroundColor="#53a7fd"
-        color="#fff"
-        onPress={() => navigation.openDrawer()}
-      />
-      ),
-      }} /> 
+        title: "",
+        headerLeft: () => (
+          <Icon.Button
+            name="ios-menu"
+            size={25}
+            backgroundColor="#53a7fd"
+            color="#fff"
+            onPress={() => navigation.openDrawer()}
+          />
+        ),
+      }}
+    />
   </RegisterProductStack.Navigator>
 );
 
-const CommentStackScreen = ({navigation}) => (
+const CommentStackScreen = ({ navigation }) => (
   <CommentStack.Navigator
-   screenOptions={{
-    headerStyle:{
-      backgroundColor: '#53a7fd',
-    },
-    headerTintColor: '#000',
-    headerTitleStyle: {
-      fontWeight: 'bold'
-    }
-  }}>
-  <CommentStack.Screen 
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: "#53a7fd",
+      },
+      headerTintColor: "#000",
+      headerTitleStyle: {
+        fontWeight: "bold",
+      },
+    }}
+  >
+    <CommentStack.Screen
       name="CommentScreen"
       component={CommentScreen}
       options={{
-        title: '',
-      headerLeft: () => (
-      <Icon.Button 
-        name="ios-menu"
-        size={25}
-        backgroundColor="#53a7fd"
-        color="#fff"
-        onPress={() => navigation.openDrawer()}
-      />
-      ),
-      }} /> 
+        title: "",
+        headerLeft: () => (
+          <Icon.Button
+            name="ios-menu"
+            size={25}
+            backgroundColor="#53a7fd"
+            color="#fff"
+            onPress={() => navigation.openDrawer()}
+          />
+        ),
+      }}
+    />
   </CommentStack.Navigator>
 );
-const EditCommentStackScreen = ({navigation}) => (
+const EditCommentStackScreen = ({ navigation }) => (
   <EditCommentStack.Navigator
-   screenOptions={{
-    headerStyle:{
-      backgroundColor: '#53a7fd',
-    },
-    headerTintColor: '#000',
-    headerTitleStyle: {
-      fontWeight: 'bold'
-    }
-  }}>
-  <EditCommentStack.Screen 
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: "#53a7fd",
+      },
+      headerTintColor: "#000",
+      headerTitleStyle: {
+        fontWeight: "bold",
+      },
+    }}
+  >
+    <EditCommentStack.Screen
       name="EditCommentScreen"
       component={EditCommentScreen}
       options={{
-        title: '',
-      headerLeft: () => (
-      <Icon.Button 
-        name="ios-menu"
-        size={25}
-        backgroundColor="#53a7fd"
-        color="#fff"
-        onPress={() => navigation.openDrawer()}
-      />
-      ),
-      }} /> 
+        title: "",
+        headerLeft: () => (
+          <Icon.Button
+            name="ios-menu"
+            size={25}
+            backgroundColor="#53a7fd"
+            color="#fff"
+            onPress={() => navigation.openDrawer()}
+          />
+        ),
+      }}
+    />
   </EditCommentStack.Navigator>
 );
+
+const BookMarkStackScreen = ({navigation}) => (
+    <BookMarkStack.Navigator
+      screenOptions={{
+        headerStyle:{
+        backgroundColor: '#53a7fd',
+        },
+          headerTintColor: '#000',
+          headerTitleStyle: {
+          fontWeight: 'bold'
+        }
+      }}>
+        <BookMarkStack.Screen 
+          name="BookMarkScreen"
+          component={BookMarkScreen}
+          options={{
+            title: '',
+            headerLeft: () => (
+                    <Icon.Button 
+                              name="ios-menu"
+                              size={25}
+                              backgroundColor="#53a7fd"
+                              color="#fff"
+                              onPress={() => navigation.openDrawer()}
+                            />
+            ),
+                      }} /> 
+    </BookMarkStack.Navigator>
+);
+
 const App = () => {
-
-  const [email, setUserEmail] = useState("");
-  const [name, setUserName] = useState("");
-
-  const anotherUserData = {
-    userEmail: email,
-    userName: name,
-    setUserEmail,
-    setUserName,
-  }
-
-  return (      
-    <>
-      <AppContext.Provider value={anotherUserData}>
-    <>
+  return (
+    <AppGlobalProvider>
       <NavigationContainer>
-          <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
-              <Drawer.Screen name="SignInScreen" component={SignInScreen}/>
-              <Drawer.Screen name="SignUpScreen" component={SignUpScreen}/>
-              <Drawer.Screen name="Editar Perfil" component={EditProfileStackScreen}  />
-              <Drawer.Screen name="HomeScreen" component={HomeStackScreen}/>
-              <Drawer.Screen name="RegisterProductScreen" component={RegisterProductStackScreen}/>
-              <Drawer.Screen name="EditProductScreen" component={EditProductStackScreen}/>
-              <Drawer.Screen name="CommentScreen" component={CommentStackScreen}/>
-              <Drawer.Screen name="EditCommentScreen" component={EditCommentStackScreen}/>           
-              <Drawer.Screen name="Perfil" component={ProfileStackScreen}  />
-          </Drawer.Navigator>                                         
-      </NavigationContainer>    
-    </>
-      </AppContext.Provider>
-    </>
+        <Drawer.Navigator
+          drawerContent={(props) => <DrawerContent {...props} />}
+        >
+          <Drawer.Screen name="SignInScreen" component={SignInScreen} />
+          <Drawer.Screen name="SignUpScreen" component={SignUpScreen} />
+          <Drawer.Screen
+            name="Editar Perfil"
+            component={EditProfileStackScreen}
+          />
+          <Drawer.Screen name="HomeScreen" component={HomeStackScreen} />
+          <Drawer.Screen
+            name="RegisterProductScreen"
+            component={RegisterProductStackScreen}
+          />
+          <Drawer.Screen
+            name="EditProductScreen"
+            component={EditProductStackScreen}
+          />
+          <Drawer.Screen name="CommentScreen" component={CommentStackScreen} />
+          <Drawer.Screen
+            name="EditCommentScreen"
+            component={EditCommentStackScreen}
+          />
+          <Drawer.Screen name="Perfil" component={ProfileStackScreen} />
+          <Drawer.Screen name="BookMarkScreen" component={BookMarkStackScreen} />
+        </Drawer.Navigator>
+      </NavigationContainer>
+    </AppGlobalProvider>
   );
-}
+};
 
 export default App;
 
 const styles = StyleSheet.create({
-  loadingIcon:{
-    flex:1,
-    justifyContent:'center',
-    alignItems:'center'
-  }
-})
+  loadingIcon: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
