@@ -5,10 +5,12 @@ import { Avatar, Title, Caption, Paragraph, Drawer} from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppContext from '../../../components/GlobalContext';
+import { Feather } from '@expo/vector-icons';
+import { useGlobal } from "../../../components/GlobalContext";
 
 export function DrawerContent(props){
 
-    const myContext = useContext(AppContext);
+    const myContext = useGlobal();
 
     const signOut = () => {
         myContext.setUserName("");
@@ -87,14 +89,14 @@ export function DrawerContent(props){
                         </DrawerItem>
                         <DrawerItem 
                             icon={({color, size}) => (
-                                <Icon
-                                name="account-check-outline"
+                                <Feather
+                                name="bookmark"
                                 color={color}
                                 size={size}
                                 />                        
                             )}
-                            label="Suporte"
-                            onPress={() => {}}
+                            label="Meus Lembretes "
+                            onPress={() => {props.navigation.navigate('BookMarkScreen')}}
                             >
                         </DrawerItem>
                 </Drawer.Section>
