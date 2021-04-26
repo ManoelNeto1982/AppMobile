@@ -95,7 +95,7 @@ export function DrawerContent(props){
                                 size={size}
                                 />                        
                             )}
-                            label="Meus Lembretes "
+                            label="Meus Marcadores "
                             onPress={() => {props.navigation.navigate('BookMarkScreen')}}
                             >
                         </DrawerItem>

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   StatusBar,
+  CheckBox,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -13,6 +14,8 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Feather } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useGlobal } from "../../../components/GlobalContext";
+
+
 
 const SignInScreen = ({ navigation }) => {
   const userData = {
@@ -22,6 +25,7 @@ const SignInScreen = ({ navigation }) => {
   const myContext = useGlobal();
   const [password, setPassword] = useState("");
   const [loginData, setLoginData] = useState(userData);
+  const [isSelected, setSelected] = useState(false);
 
   const verifyItemOnAsyncstorage = useCallback(
     async ({ email, password }) => {
@@ -37,7 +41,7 @@ const SignInScreen = ({ navigation }) => {
         return alert("Ocorreu um erro no login");
       }
     },
-    [password]
+    [password],   
   );
 
   const handleChange = (field, value) => {
@@ -65,18 +69,28 @@ const SignInScreen = ({ navigation }) => {
         </View>
 
         <Text style={([styles.text_footer], { marginTop: 30 })}>Senha</Text>
-        <View style={styles.action}>
-          <Feather name="lock" size={20} color="#05375a" />
-          <TextInput
-            placeholder="Digite sua senha"
-            placeholderTextColor="#666666"
-            secureTextEntry={true}
-            style={styles.textInput}
-            autoCapitalize="none"
-            onChangeText={(text) => setPassword(text)}
-          />
+        <View>
+          <View style={styles.action}>
+            <Feather name="lock" size={20} color="#05375a" />
+            <TextInput
+              placeholder="Digite sua senha"
+              placeholderTextColor="#666666"
+              secureTextEntry={true}
+              style={styles.textInput}
+              autoCapitalize="none"
+              onChangeText={(text) => setPassword(text)}
+            />
+          </View>
+          <View style={{flexDirection:'row'}}>
+            <CheckBox               
+              value={isSelected}
+              onValueChange={() => setSelected(!isSelected)}
+              style={{marginTop: 15, marginRight: 5, marginLeft:5, with:15, height:14}} 
+              />   
+              <Text style={{marginTop:14, color:'blue', fontSize:13}}>Lembrar minha senha</Text>
+            </View>
         </View>
-
+      
         <View style={styles.button}>
           <TouchableOpacity
             style={styles.signIn}

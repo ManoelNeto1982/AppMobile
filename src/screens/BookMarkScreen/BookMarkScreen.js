@@ -1,58 +1,83 @@
 import React,{useState, useRef} from 'react'
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, FlatList, TextInput, CheckBox, Button, Moda, ScrollView} from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, CheckBox, ScrollView} from 'react-native'
 import { FontAwesome } from '@expo/vector-icons';
-import { Modalize } from 'react-native-modalize';
-
+import CustomButton from '../../component/CustomButton/CustomButton';
 
 const BookMarkScreen = ({navigation}) => {
   const [isSelected, setSelected] = useState(false);
-  const modalizeRef = useRef(null);
-  function OpenModal(){
-      modalizeRef.current?.open();
+  const [mark, setMark] = useState('');
+  const [markList, setMarkList] = useState([]);
+  const [edditingMark, setEdditingMark] = useState(0);
+
+  const addMark = () => {
+    setMarkList([...markList, 
+    {key:Math.random().toString() , data:mark }]);
+    setMark('')
+  }
+
+  const editMark = (item) => {
+    setMark(item.data)
+    setEdditingMark(item.key)
+  }
+
+  const upadateMark = () => {
+    setMarkList(list => markList.map(item => item.key === edditingMark  ? { key:item.key, data: mark} : item ))
+    setMark('')
+    setEdditingMark(0)
+  }
+
+  const removeMark = (itemKey) => {
+    let list = markList.filter(item => item.key !== itemKey)
+    setMarkList(list)
+    console.log(list)
   }
    return(    
-
-
-     <ScrollView>
-     
-        <Text style={styles.title}>Meus lembretes</Text>
+     <ScrollView>     
+        <Text style={styles.title}>Meus Marcadores</Text>
         <View style={styles.container}> 
-        <View style={styles.form}>
-          <TextInput
-            style={styles.field}            
-            onChangeText={()=>{}}
-          />
-          <TouchableOpacity onPress={()=>{}}>
-            <View style={styles.button}>
-              <Text style={styles.buttonText} >+</Text>
-            </View>
-          </TouchableOpacity>
+          <View style={styles.form}>
+              <TextInput
+                style={styles.field}  
+                placeholder={'Adicione um marcador'}          
+                onChangeText={text=> setMark(text)}
+                value={mark}
+              />
+            <CustomButton
+              text={edditingMark === 0 ? "+" : "Up"}
+              textSize={20}
+              padding={20}
+              textColor="white"
+              onPressEvent={edditingMark === 0 ? addMark : upadateMark}
+              disabled={mark.length <= 0}
+            /> 
+          </View>
         </View>
-        </View>
-       
-        <View style={{width: 325, marginLeft:20, marginRight: 50, marginBottom:10, backgroundColor:  "white",    borderRadius: 6, borderColor: "rgba(0,0,0,0.1)"}}>       
-          <View style={styles.form2}>
+    
+        {markList.map((item ) => {
+          return (
+        <View style={{width: 325, marginLeft:20, marginRight: 50, marginBottom:10, backgroundColor:  "white", borderRadius: 6, borderColor: "rgba(0,0,0,0.1)"}} key={item.key} >       
+          <View style={styles.form2} >
             <CheckBox   
             value={isSelected}
-              onValueChange={() => setSelected(!isSelected)}
-            style={{marginTop: 5, marginRight: 5}}
+            onValueChange={() => setSelected(!isSelected)}
+            style={{marginTop: 5, marginRight: 5, marginLeft:5}} 
             />      
-            <Text style={{marginRight: 35, width: 190, paddingTop:8, fontSize:16, fontWeight: 'bold', paddingRight:10}}> Ler 12  páginas</Text>
+            <Text style={{marginRight: 35, width: 190, paddingTop:1, fontSize:16, fontWeight: 'bold', paddingRight:10}}>{item.data}</Text>
             <View>
-              <TouchableOpacity onPress={() => {}}>
-                  <FontAwesome name="trash" size={30} color="red" style={{
+              <TouchableOpacity onPress={() => {removeMark(item.key)}}>
+                  <FontAwesome name="trash" size={30} color= "red" style={{
                     opacity: 0.7,
                     marginRight: 5,       
                     borderWidth: 1,
                     borderColor: '#fff',
                     borderRadius: 10,
-                    marginTop: 4
+                    marginTop: 4,                                      
                   }}/>
               </TouchableOpacity>  
             </View>
              <View>    
-              <TouchableOpacity  onPress={OpenModal}>
-                  <FontAwesome name="pencil-square-o" size={30} color="red" style={{
+              <TouchableOpacity  onPress={() => editMark(item)}>
+                  <FontAwesome name="pencil-square-o" size={30} color="green" style={{
                     opacity: 0.7,
                     marginRight: 5,       
                     borderWidth: 1,
@@ -64,22 +89,8 @@ const BookMarkScreen = ({navigation}) => {
             </View>
           </View>          
         </View>
-               
-        <Modalize ref={modalizeRef} snapPoint={90} modalHeight={300}>
-          <View style={styles.panel}>
-              <View style={{alignItems:'center', marginTop:"25%"}}>                      
-                  <TextInput style={styles.confirmUpdate} autoCapitalize="none"/>                                            
-              </View>
-              <TouchableOpacity 
-                  onPress={() => {
-                      
-                  }}
-              >
-                  <Text style={{width: "50%", backgroundColor: "#00cc99", marginLeft:'25%' ,marginVertical: 7, padding: 10, color:'white',alignItems:'center',  fontWeight: 'bold', marginTop:10, borderRadius: 5, textAlign:'center'}}>Salvar Alterações</Text>
-              </TouchableOpacity>
-          </View> 
-        </Modalize>
-     
+          )
+        })}
       </ScrollView>
    )
 }
@@ -119,7 +130,7 @@ const styles = StyleSheet.create({
     color: '#333',
     borderRadius: 5,
     flex: 1,
-    marginRight: 10,
+    marginRight: 15,
   },
   field2: {
     borderWidth: 1,
@@ -155,7 +166,8 @@ const styles = StyleSheet.create({
     borderRadius: 3,   
   },
   form:{
-    flexDirection: 'row'
+    flexDirection: 'row',
+   
   },
   form2:{
     flexDirection: 'row',
