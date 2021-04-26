@@ -25,50 +25,40 @@ const EditProfileScreen = ({ navigation }) => {
   const myContext = useGlobal();
 
   const initialCurrentData = {
-    email: "",
     name: "",
     password: "",
   };
 
-  const updateDataFromAsyncStorage = async () => {
+  const [newData, setNewData] = useState(initialCurrentData);
+
+  const updateDataFromAsyncStorage = async ({name, password}) => {
     try {
-      await AsyncStorage.mergeItem(
-        myContext.userEmail,
-        JSON.stringify(currentData)
-      );
-      alert("Dados alterados com sucesso");
+      const userList = JSON.parse(await AsyncStorage.getItem("users"));
+      const userToChangeData = userList?.find?.((user) => user?.email === myContext?.userEmail);
+      userToChangeData.name = (name) ? name : userToChangeData.name;
+      userToChangeData.password = (password) ? password : userToChangeData.password;
+      const newUserList = userList?.filter?.((user) => user.email !== myContext?.userEmail);
+      await changeDataFromAsyncStorage({ users: newUserList, newUser: userToChangeData });
     } catch (e) {
+      //console.log(e);
       return alert("Erro ao atualizar dados");
     }
   };
 
-  useEffect(() => {
-    const takeUserData = async () => {
-      try {
-        const userData = await AsyncStorage.getItem(myContext.userEmail);
-        if (userData !== null) {
-          const current = JSON.parse(userData);
-          setCurrentData(current);
-          setNewData(current);
-        } else {
-          alert("Erro ao carregar os dados");
-        }
-      } catch (e) {
-        return alert(
-          "Houve algum problema em carregar os dados do cliente na página de edição"
-        );
-      }
-    };
+  const changeDataFromAsyncStorage = async ({ users, newUser }) => {
+    try {
+      await AsyncStorage.setItem("users", JSON.stringify([...users, newUser]));
+      alert("Dados alterados com sucesso");
+      myContext.setUserName(newUser.name);
+      navigation.navigate("Perfil");
+    } catch (e){
+      //console.log(e);
+      alert("Erro ao salvar os dados após as alterações");
+    }
+  }
 
-    takeUserData();
-  }, []);
-
-  const [currentData, setCurrentData] = useState(initialCurrentData);
-  const [newData, setNewData] = useState(initialCurrentData);
-
-  const [currentPassword, setCurrentPassword] = useState("");
   const handleChange = (field, value) => {
-    setNewData({ ...newData, [field]: value });
+    setNewData({...newData, [field]: value });
   };
 
   return (
@@ -144,7 +134,9 @@ const EditProfileScreen = ({ navigation }) => {
             style={styles.textInput}
           />
         </View>
-        <TouchableOpacity onPress={OpenModal} style={styles.commandButton}>
+        <TouchableOpacity 
+          onPress={() => updateDataFromAsyncStorage({name: newData.name, password: newData.password})}
+          style={styles.commandButton}>
           <Text style={styles.panelButtonTitle}>Alterar Dados</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -179,19 +171,8 @@ const EditProfileScreen = ({ navigation }) => {
           </View>
           <TouchableOpacity
             onPress={() => {
-              if (currentPassword === currentData.password) {
-                if (newData.name) {
-                  currentData.name = newData.name;
-                  myContext.setUserName(currentData.name);
                 }
-                if (newData.password) {
-                  currentData.password = newData.password;
-                }
-                updateDataFromAsyncStorage();
-                navigation.navigate("Perfil");
-              } else
-                alert("A senha fornecida não é compativel com a cadastrada");
-            }}
+            }
             style={styles.panelButton}
           >
             <Text style={styles.panelButtonTitle}>Salvar</Text>

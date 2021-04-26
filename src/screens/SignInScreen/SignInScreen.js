@@ -15,11 +15,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useGlobal } from "../../../components/GlobalContext";
 
 const SignInScreen = ({ navigation }) => {
+
   const userData = {
     email: "",
     name: "",
   };
-  const myContext = useGlobal();
+
+const myContext = useGlobal();
+
   const [password, setPassword] = useState("");
   const [loginData, setLoginData] = useState(userData);
 
@@ -27,10 +30,11 @@ const SignInScreen = ({ navigation }) => {
     async ({ email, password }) => {
       try {
         const userList = JSON.parse(await AsyncStorage.getItem("users"));
-        const currentUser = userList?.find?.((user) => user.email == email);
+        const currentUser = userList?.find?.((user) => user?.email == email);
         if (currentUser?.password === password) {
-          myContext.setUserEmail(currentUser.email);
-          myContext.setUserName(currentUser.name);
+          await AsyncStorage.setItem("currentUser", JSON.stringify(currentUser));
+          myContext.setUserEmail(currentUser?.email);
+          myContext.setUserName(currentUser?.name);
           navigation.navigate("HomeScreen");
         } else return alert("Usuario ou senha invalido");
       } catch (e) {

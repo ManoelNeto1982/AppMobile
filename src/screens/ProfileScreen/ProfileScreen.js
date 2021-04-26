@@ -8,13 +8,25 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useGlobal } from "../../../components/GlobalContext";
 
 const ProfileScreen = ({ navigation }) => {
+
   const myContext = useGlobal();
 
   const removeAccount = async () => {
     try {
-      await AsyncStorage.clear();
-      myContext.userEmail = "";
-      myContext.userName = "";
+      const userList = JSON.parse(await AsyncStorage.getItem("users"));
+      const bookList = JSON.parse(await AsyncStorage.getItem("books"));
+      const currentUser = JSON.parse(await AsyncStorage.getItem("currentUser"));
+      if(userList?.length) {
+        await AsyncStorage.setItem("users", JSON.stringify(userList?.filter?.((user) =>
+          user?.email !== currentUser?.email)));
+        await AsyncStorage.setItem("books", JSON.stringify(bookList?.filter?.((book) =>
+          book?.owner !== currentUser?.email)));
+      } else {
+        alert("Problema no sitema aparentemente o úsuario não está logado").
+        navigation.navigate("SignInScreen");
+      }
+      //myContext.userEmail = "";
+      //myContext.userName = "";
       alert("Conta apagada com sucesso");
       navigation.navigate("SignInScreen");
     } catch (e) {

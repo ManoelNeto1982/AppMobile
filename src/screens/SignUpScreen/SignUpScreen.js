@@ -13,17 +13,15 @@ const SignUpScreen = ({ navigation }) => {
     email: "",
     name: "",
     password: "",
-    registerBooks: [],
   };
 
   const verifyItemOnAsyncstorage = async (value) => {
     try {
-      const userList = await AsyncStorage.getItem("users");
+      const userList = JSON.parse(await AsyncStorage.getItem("users"));
 
-      if (!userList?.find?.((user) => user?.email == value?.email)) {
+      if (!userList?.find?.((user) => user?.email === value?.email)) {
         await storeDataToAsyncStorage(value);
       } else {
-        //console.log(isExist)
         alert("Email já registrado por favor escolha outro email");
       }
     } catch (e) {
@@ -40,7 +38,7 @@ const SignUpScreen = ({ navigation }) => {
       } else {
         await AsyncStorage.setItem("users", JSON.stringify([value]));
       }
-      await AsyncStorage.setItem("user", JSON.stringify(value));
+      //await AsyncStorage.setItem("user", JSON.stringify(value));
       alert("Conta criada com sucesso");
       navigation.navigate("SignInScreen");
     } catch (e) {

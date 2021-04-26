@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  TextInput,
-} from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { FontAwesome } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -22,16 +15,17 @@ const HomeScreen = (props) => {
 
       const fetchBooks = async () => {
         try {
-          const booksList = await AsyncStorage.getItem("books");
-          const books = booksList != null ? JSON.parse(booksList) : [];
-
+          const booksList = JSON.parse(await AsyncStorage.getItem("books"));
+          const currentUser = JSON.parse(await AsyncStorage.getItem("currentUser"));
+          const books = booksList?.filter?.((book) => currentUser?.email === book?.owner);
           if (books?.length && isActive) {
             setAllBooksData([...books]);
+          } else {
+            setAllBooksData([]);
           }
         } catch (e) {
-          return alert(
-            "Erro ao pegar os dados dos usuarios para exibir os seus livros postados"
-          );
+          console.log(e);
+          return alert("Erro ao pegar os dados dos usuarios para exibir os seus livros postados");
         }
       };
 
@@ -40,7 +34,7 @@ const HomeScreen = (props) => {
       return () => {
         isActive = false;
       };
-    }, [])
+    }, [navigation])
   );
 
   return (
@@ -52,11 +46,9 @@ const HomeScreen = (props) => {
             <View style={{ flexDirection: "row" }}>
               <View style={{ justifyContent: "center" }}>
                 <View style={styles.clienteListContainer}>
-                  <Text style={styles.name}>{}</Text>
+                  <Text style={styles.name}>{`Titulo: ${book.title}`}</Text>
                   <Text style={styles.listItem}>{`Autor: ${book.author}`}</Text>
-                  <Text
-                    style={styles.listItem}
-                  >{`Descrição: ${book.sinopse}`}</Text>
+                  <Text style={styles.listItem}>{`Descrição: ${book.sinopse}`}</Text>
 
                   <View style={{ flexDirection: "row", marginLeft: "60%" }}>
                     <View>

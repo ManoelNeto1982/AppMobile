@@ -27,18 +27,11 @@ const RegisterProductScreen = (props) => {
 
   const navigation = useNavigation();
 
-  const initialData = {
-    email: "",
-    name: "",
-    password: "",
-    registerBooks: [],
-  };
-
   const initialBook = {
     title: "",
     author: "",
     sinopse: "",
-    comments: [],
+    owner: "",
   };
 
   const [bookData, setBookData] = useState(initialBook);
@@ -46,13 +39,11 @@ const RegisterProductScreen = (props) => {
   const registerNewBook = useCallback(
     async ({ title, author, sinopse }) => {
       try {
-        const user = JSON.parse(await AsyncStorage.getItem("user"));
+        const currentUser = JSON.parse(await AsyncStorage.getItem("currentUser"));
         const booksList = await AsyncStorage.getItem("books");
         const books = booksList != null ? JSON.parse(booksList) : [];
-        const newBook = { title, author, sinopse, owner: user?.email };
-        await AsyncStorage.setItem(
-          "books",
-          JSON.stringify([...books, newBook])
+        const newBook = { title, author, sinopse, owner: currentUser?.email };
+        await AsyncStorage.setItem("books", JSON.stringify([...books, newBook])
         );
       } catch (e) {
         return alert("Erro ao inserir dados do livro");
@@ -61,8 +52,7 @@ const RegisterProductScreen = (props) => {
     [navigation]
   );
 
-  const handleChange = useCallback(
-    (field, value) => {
+  const handleChange = useCallback((field, value) => {
       setBookData({ ...bookData, [field]: value });
     },
     [bookData, setBookData]
@@ -72,40 +62,7 @@ const RegisterProductScreen = (props) => {
     <View style={styles.container}>
       <View style={{ margin: 20 }}>
         <View style={{ alignItems: "center" }}>
-          {/* <TouchableOpacity onPress={OpenModal}>
-                        <View
-                            style={{
-                                height: 100,
-                                width: 100,
-                                borderRadius: 15,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <ImageBackground
-                                source={require('../../assets/1.jpg')}
-                                style={{height: 100, width: 100}}
-                                imageStyle={{borderRadius: 15}}
-                            >
-                                <View style={{
-                                    flex: 1,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                }}>
-                                    <Icon name="camera" size={35} color="#fff" style={{
-                                        opacity: 0.7,
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        borderWidth: 1,
-                                        borderColor: '#fff',
-                                        borderRadius: 10,
-                                    }}/>
-                                </View>
-                            </ImageBackground>                                
-                        </View>
-                    </TouchableOpacity> */}
         </View>
-
         <View style={styles.action}>
           <Feather name="book" size={20} />
           <TextInput

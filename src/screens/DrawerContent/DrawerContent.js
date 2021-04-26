@@ -34,8 +34,8 @@ export function DrawerContent(props){
                                 size={50}
                             /> */}
                             <View style={{ flexDirection:'column'}}>
-                                <Title style={styles.title}>{myContext.userName}</Title>
-                                <Caption style={styles.caption}>{myContext.userEmail}</Caption>
+                                <Title style={styles.title}>{`Usuário: ${myContext.userName}`}</Title>
+                                <Caption style={styles.caption}>{`Email: ${myContext.userEmail}`}</Caption>
                             </View>
                         </View>
 
