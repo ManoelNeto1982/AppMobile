@@ -46,30 +46,11 @@ const HomeScreen = (props) => {
             <View style={{ flexDirection: "row" }}>
               <View style={{ justifyContent: "center" }}>
                 <View style={styles.clienteListContainer}>
-                  <Text style={styles.name}>{`Titulo: ${book.title}`}</Text>
+                  <Text style={styles.name}>{`Título: ${book.title}`}</Text>
                   <Text style={styles.listItem}>{`Autor: ${book.author}`}</Text>
                   <Text style={styles.listItem}>{`Descrição: ${book.sinopse}`}</Text>
-
-                  <View style={{ flexDirection: "row", marginLeft: "60%" }}>
-                    <View>
-                      <TouchableOpacity
-                        onPress={() => {
-                          navigation.navigate("CommentScreen");
-                        }}
-                      >
-                        <FontAwesome
-                          name="comment-o"
-                          size={35}
-                          color="red"
-                          style={{
-                            opacity: 0.7,
-                            marginRight: 5,
-                            borderWidth: 1,
-                            borderColor: "#fff",
-                            borderRadius: 10,
-                          }}
-                        />
-                      </TouchableOpacity>
+                  <View style={{ flexDirection: "row", marginLeft: "75%" }}>
+                    <View>                    
                     </View>
                     <View>
                       <TouchableOpacity>
@@ -96,7 +77,7 @@ const HomeScreen = (props) => {
                         <FontAwesome
                           name="pencil-square-o"
                           size={35}
-                          color="red"
+                          color="green"
                           style={{
                             opacity: 0.7,
                             borderWidth: 1,
@@ -107,52 +88,7 @@ const HomeScreen = (props) => {
                         />
                       </TouchableOpacity>
                     </View>
-                  </View>
-
-                  <View>
-                    <TextInput
-                      style={styles.comments}
-                      multiline={true}
-                      numberOfLines={1}
-                    ></TextInput>
-                    <View style={{ flexDirection: "row", marginLeft: 250 }}>
-                      <TouchableOpacity onPress={() => {}}>
-                        <Icon
-                          name="trash"
-                          size={22}
-                          color="red"
-                          style={{
-                            opacity: 0.7,
-                            marginTop: 10,
-                            marginRight: 5,
-                            borderWidth: 1,
-                            borderColor: "#fff",
-                            borderRadius: 10,
-                          }}
-                          book
-                        />
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() => {
-                          navigation.navigate("EditCommentScreen");
-                        }}
-                      >
-                        <FontAwesome
-                          name="pencil-square-o"
-                          size={22}
-                          color="red"
-                          style={{
-                            opacity: 0.7,
-                            marginTop: 12,
-                            // marginRight:  50,
-                            borderWidth: 1,
-                            borderColor: "#fff",
-                            borderRadius: 10,
-                          }}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
+                  </View>               
                 </View>
               </View>
             </View>

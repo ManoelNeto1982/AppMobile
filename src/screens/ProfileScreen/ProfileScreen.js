@@ -1,13 +1,24 @@
-import React from "react";
-import { View, SafeAreaView, StyleSheet } from "react-native";
+import React, {useRef} from "react";
+import { View, SafeAreaView, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { Title, Caption, Text, TouchableRipple } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Modalize } from "react-native-modalize";
 import { useGlobal } from "../../../components/GlobalContext";
 
 const ProfileScreen = ({ navigation }) => {
+
+  const modalizeRef = useRef(null);
+
+  function OpenModal() {
+    modalizeRef.current?.open();
+  }
+
+  function closeModal() {
+    modalizeRef.current?.close();
+  }
 
   const myContext = useGlobal();
 
@@ -46,7 +57,7 @@ const ProfileScreen = ({ navigation }) => {
                         marginTop={20}
                     /> */}
           <View style={{ marginTop: 30 }}>
-            <Title style={styles.title}>{myContext.userName}</Title>
+            <Title style={styles.title}>{`${myContext.userName}`}</Title>
           </View>
         </View>
       </View>
@@ -63,7 +74,7 @@ const ProfileScreen = ({ navigation }) => {
         <View style={styles.row}>
           <Entypo name="email" color="#777777" size={20} />
           <Text style={{ color: "#777777", marginLeft: 20 }}>
-            {myContext.userEmail}
+            {`${myContext.userEmail}`}
           </Text>
         </View>
       </View>
@@ -91,17 +102,51 @@ const ProfileScreen = ({ navigation }) => {
           </View>
         </TouchableRipple>
         <TouchableRipple
-          onPress={() => {
-            removeAccount();
-          }}
+          onPress={OpenModal}
         >
           <View style={styles.menuItem}>
             <AntDesign name="delete" color="#FF6347" size={25} />
             <Text style={styles.menuItemText}>Excluir Conta</Text>
           </View>
         </TouchableRipple>
-      </View>
+      </View>      
+
+      
+      <Modalize ref={modalizeRef} snapPoint={360} modalHeight={360}>
+        <View style={styles.panel}>
+          <View style={{ alignItems: "center", marginTop: "25%" }}>
+            <Text
+              style={{
+                marginTop: 10,
+                fontWeight: "bold",
+                fontSize: 18,
+                marginBottom: 5,
+              }}
+            >
+              Deseja excluir sua conta?
+            </Text>
+          </View>
+          <View style={{flexDirection:'row', alignSelf: "center"}}>
+            <TouchableOpacity
+              onPress={() => {
+                removeAccount();
+                closeModal();
+              }}
+              style={styles.panelButtonYes}
+            >
+              <Text style={styles.panelButtonTitle}>Sim</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {closeModal()}}
+              style={styles.panelButton}
+            >
+              <Text style={styles.panelButtonTitle}>Não</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modalize>
     </SafeAreaView>
+    
   );
 };
 
@@ -155,5 +200,29 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 16,
     lineHeight: 26,
+  },
+  panelButton: {
+    padding: 13,
+    borderRadius: 10,
+    backgroundColor: "#35AAFF",
+    alignItems: "center",
+    marginVertical: 7,
+    width: 100,
+    marginHorizontal:5,
+
+
+  },
+  panelButtonYes:{
+    padding: 13,
+    borderRadius: 10,
+    backgroundColor: "red",
+    alignItems: "center",
+    marginVertical: 7,
+    width: 100
+  },
+  panelButtonTitle: {
+    fontSize: 17,
+    fontWeight: "bold",
+    color: "white",
   },
 });
