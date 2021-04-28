@@ -137,6 +137,7 @@ const ProfileScreen = ({ navigation }) => {
               onPress={() => {
                 removeAccount();
                 closeModal();
+                window.location.reload();
               }}
               style={styles.panelButtonYes}
             >

@@ -105,7 +105,7 @@ export function DrawerContent(props){
                             />                        
                         )}
                         label="Sign-out"
-                        onPress={() => { signOut() }}
+                        onPress={() => { signOut(), window.location.reload()}}
                         >
                     </DrawerItem>
 
