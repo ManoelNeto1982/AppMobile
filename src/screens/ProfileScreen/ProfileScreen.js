@@ -30,10 +30,15 @@ const ProfileScreen = ({ navigation }) => {
       if(userList?.length) {
         await AsyncStorage.setItem("users", JSON.stringify(userList?.filter?.((user) =>
           user?.email !== currentUser?.email)));
-        await AsyncStorage.setItem("books", JSON.stringify(bookList?.filter?.((book) =>
-          book?.owner !== currentUser?.email)));
+        if (bookList?.legth) {
+          await AsyncStorage.setItem("books", JSON.stringify(bookList?.filter?.((book) =>
+            book?.owner !== currentUser?.email )));
+        } else {
+          await AsyncStorage.setItem("books", JSON.stringify([]));
+        }
       } else {
-        alert("Problema no sitema aparentemente o úsuario não está logado").
+        await AsyncStorage.setItem("users", JSON.stringify([]));
+        return alert("Problema no sitema aparentemente o úsuario não está logado").
         navigation.navigate("SignInScreen");
       }
       //myContext.userEmail = "";
@@ -41,6 +46,7 @@ const ProfileScreen = ({ navigation }) => {
       alert("Conta apagada com sucesso");
       navigation.navigate("SignInScreen");
     } catch (e) {
+      console.log(e);
       return alert("Problema na remoção");
     }
   };
