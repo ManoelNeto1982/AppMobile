@@ -52,19 +52,20 @@ const RegisterProductScreen = (props) => {
       } catch (e) {
         //console.log(e);
         return alert("Erro ao inserir dados do livro");
-      }
-    },
-    [navigation]
+      }     
+    },    
+    [navigation]    
   );
-
+   
   const handleChange = useCallback((field, value) => {
       setBookData({ ...bookData, [field]: value });
     },
-    [bookData, setBookData]
+    [bookData, setBookData],
   );
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Cadastrar Livro</Text>
       <View style={{ margin: 20 }}>
         <View style={{ alignItems: "center" }}>
         </View>
@@ -95,7 +96,7 @@ const RegisterProductScreen = (props) => {
             placeholderTextColor="#666666"
             autoCorrect={false}
             multiline={true}
-            numberOfLines={4}
+            numberOfLines={1}
             onChangeText={(text) => handleChange("sinopse", text)}
             style={
               ([styles.textInput],
@@ -169,21 +170,14 @@ const styles = StyleSheet.create({
   panel: {
     padding: 20,
     backgroundColor: "#FFFFFF",
-    padding: 20,
-    // borderTopLeftRadius: 20,
-    // borderTopRightRadius: 20,
-    // shadowColor: "#000000",
-    // shadowOffset: {width: 0, height: 0},
-    // shadowRadius: 2,
-    // shadowOpacity: 0.4,
+    padding: 20, 
   },
   header: {
     backgroundColor: "#FFFFFF",
     shadowColor: "#333333",
     shadowOffset: { width: -1, height: -3 },
     shadowRadius: 2,
-    shadowOpacity: 0.4,
-    // elevation: 5,
+    shadowOpacity: 0.4,  
     paddingTop: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -237,5 +231,12 @@ const styles = StyleSheet.create({
     marginTop: -12,
     paddingLeft: 10,
     color: "#05375a",
+  },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 25,
+    marginBottom: 20,
+    marginTop: 12,
+    paddingLeft:'25%'
   },
 });

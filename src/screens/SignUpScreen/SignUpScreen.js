@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import { View, Text, Modal, Button, StyleSheet, TouchableOpacity, Platform, Image, TextInput, StatusBar, } from "react-native";
+import { View, Text, Modal, Button, StyleSheet, TouchableOpacity, Platform, Image, TextInput, StatusBar, CheckBox} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
-import { NavigationContainer } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SignUpScreen = ({ navigation }) => {
+  const [isSelected, setSelected] = useState(false);
   const initialSignUpState = {
     email: "",
     name: "",
@@ -116,6 +115,14 @@ const SignUpScreen = ({ navigation }) => {
             onChangeText={(text) => setRePassword(text)}
           />
         </View>
+        <View style={{flexDirection:'row'}}>
+        <CheckBox               
+              value={isSelected}
+              onValueChange={() => setSelected(!isSelected)}
+              style={{marginTop: 15, with:15, height:14, marginRigth: 2}} 
+              />   
+              <Text style={{marginTop:14, color:'blue', fontSize:13, paddingLeft: 5}}>Aceito os termos de uso</Text>
+        </View>
         <View>
           <TouchableOpacity
             style={([styles.button], { marginTop: 10 })}
@@ -180,6 +187,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#35AAFF",
+  
   },
   header: {
     flex: 1,
@@ -188,12 +196,14 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
   },
   footer: {
-    flex: 3,
+    flex: 5,
     backgroundColor: "#fff",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingHorizontal: 20,
-    paddingVertical: 30,
+    paddingVertical: 10,
+    paddingBottom: 10
+    
   },
   text_header: {
     color: "#fff",
@@ -210,24 +220,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#f2f2f2",
     paddingBottom: 5,
-  },
-  actionError: {
-    flexDirection: "row",
-    marginTop: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#FF0000",
-    paddingBottom: 5,
-  },
+  },  
   textInput: {
     flex: 1,
     marginTop: -12,
     paddingLeft: 10,
     color: "#05375a",
-  },
-  errorMsg: {
-    color: "#FF0000",
-    fontSize: 14,
-  },
+  }, 
   button: {
     alignItems: "center",
     marginTop: 50,
@@ -242,8 +241,5 @@ const styles = StyleSheet.create({
   textSign: {
     fontSize: 18,
     fontWeight: "bold",
-  },
-  iconEye: {
-    marginLeft: 100,
-  },
+  }, 
 });
