@@ -93,8 +93,8 @@ const myContext = useGlobal();
             onPress={() => {
               if (loginData?.email && password) {
                 verifyItemOnAsyncstorage({ email: loginData.email, password });
-              } else return alert("Você precisa preencher todos os campos");
-              //console.log(loginData.email);
+              } else {return alert("Você precisa preencher todos os campos");}
+                //console.log(loginData.email);
             }}
           >
             <LinearGradient
