@@ -40,12 +40,17 @@ const RegisterProductScreen = (props) => {
     async ({ title, author, sinopse }) => {
       try {
         const currentUser = JSON.parse(await AsyncStorage.getItem("currentUser"));
-        const booksList = await AsyncStorage.getItem("books");
-        const books = booksList != null ? JSON.parse(booksList) : [];
-        const newBook = { title, author, sinopse, owner: currentUser?.email };
-        await AsyncStorage.setItem("books", JSON.stringify([...books, newBook])
-        );
+        const booksList = JSON.parse(await AsyncStorage.getItem("books"));
+        const books = booksList != null ? booksList : [];
+        if (books?.find?.((book) => book?.title === title && book?.owner === currentUser?.email)) {
+          alert("Já existe um livro com o titulo inserido, escolha outro titulo ou edite o já existente");
+        } else {
+          const newBook = { title, author, sinopse, owner: currentUser?.email };
+          await AsyncStorage.setItem("books", JSON.stringify([...books, newBook]));
+          navigation.navigate("HomeScreen");
+        }
       } catch (e) {
+        //console.log(e);
         return alert("Erro ao inserir dados do livro");
       }
     },
@@ -109,7 +114,8 @@ const RegisterProductScreen = (props) => {
           onPress={async () => {
             if (bookData.title && bookData.sinopse && bookData.author) {
               await registerNewBook(bookData);
-              navigation.navigate("HomeScreen");
+            } else {
+              alert("Preencha todos os campos!");
             }
           }}
           style={styles.commandButton}

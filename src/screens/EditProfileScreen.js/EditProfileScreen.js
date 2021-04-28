@@ -12,6 +12,7 @@ const EditProfileScreen = ({ navigation }) => {
   const myContext = useGlobal();
 
   const initialCurrentData = {
+    //email: "",
     name: "",
     password: "",
   };
@@ -68,7 +69,7 @@ const EditProfileScreen = ({ navigation }) => {
             placeholder="Alterar E-mail"
             placeholderTextColor="#666666"
             autoCorrect={false}
-            onChangeText={(text) => handleChange("name", text)}
+            onChangeText={(text) => handleChange("email", text)}
             autoCorrect={false}
             style={styles.textInput}
           />

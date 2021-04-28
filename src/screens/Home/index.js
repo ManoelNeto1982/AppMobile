@@ -1,16 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { FontAwesome } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation, CommonActions } from "@react-navigation/native";
 
 const HomeScreen = (props) => {
+
   const navigation = useNavigation();
+
   const [allBooksData, setAllBooksData] = useState([]);
 
+  const removeBookFromAsyncStorage = useCallback (
+    async ({ title }) => {
+      try {
+        const booksList = JSON.parse(await AsyncStorage.getItem("books"));
+        const newBooksList = booksList?.filter?.((book) => book?.title !== title);
+        await AsyncStorage.setItem("books", JSON.stringify(newBooksList));
+        navigation.dispatch(CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'HomeScreen'}], 
+          }));
+      } catch (e) {
+        //console.log(e);
+        alert("Não foi possivél remover o livro");
+      }
+    });
+
+  const bookToEdit = async ({ title }) => {
+    await AsyncStorage.setItem("bookToEdit", JSON.stringify(title));
+    navigation.navigate("EditProductScreen");
+  }
+
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       let isActive = true;
 
       const fetchBooks = async () => {
@@ -24,10 +47,11 @@ const HomeScreen = (props) => {
             setAllBooksData([]);
           }
         } catch (e) {
-          console.log(e);
+          //console.log(e);
           return alert("Erro ao pegar os dados dos usuarios para exibir os seus livros postados");
         }
       };
+
 
       fetchBooks();
 
@@ -36,6 +60,7 @@ const HomeScreen = (props) => {
       };
     }, [navigation])
   );
+
 
   return (
     <ScrollView>
@@ -53,7 +78,9 @@ const HomeScreen = (props) => {
                     <View>                    
                     </View>
                     <View>
-                      <TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => {removeBookFromAsyncStorage({title: book.title}); }} 
+                      >
                         <Icon
                           name="trash"
                           size={35}
@@ -71,7 +98,7 @@ const HomeScreen = (props) => {
                     <View>
                       <TouchableOpacity
                         onPress={() => {
-                          navigation.navigate("EditProductScreen");
+                          bookToEdit({title: book.title});
                         }}
                       >
                         <FontAwesome

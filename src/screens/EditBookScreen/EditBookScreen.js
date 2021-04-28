@@ -1,61 +1,76 @@
-import React,{useRef} from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity, ImageBackground, TextInput, ScrollView} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Modalize } from 'react-native-modalize';
+import {  useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useGlobal } from "../../../components/GlobalContext";
 
-const EditProductScreen = ({navigation}) => {
+const EditProductScreen = (props) => {
+
+    const navigation = useNavigation();
+
+    const myContext = useGlobal();
+
     const modalizeRef = useRef(null);
     function OpenModal2(){
         modalizeRef.current?.open();
     }
-    return(
 
+    const initialNewBookState = {
+        title: "", 
+        author: "",
+        sinopse: "",
+        owner: myContext.userEmail
+    }
+
+    const [bookData, setBookData] = useState(initialNewBookState);
+
+    const saveNewBookOnAsyncStorage = async () => {
+        const bookList = JSON.parse(await AsyncStorage.getItem("books"));
+        const bookToEdit = JSON.parse(await AsyncStorage.getItem("bookToEdit"));
+        const newBooksList = bookList?.filter?.((book) => bookToEdit !== book?.title);
+        if (newBooksList?.length) {
+            await AsyncStorage.setItem("books", JSON.stringify([...newBooksList, bookData]));
+        } else {
+            await AsyncStorage.setItem("books", JSON.stringify([bookData]));
+        }
+        navigation.navigate("HomeScreen");
+    }
+
+    const handleChange = (field, value) => {
+        setBookData({...bookData, [field]: value})
+    }
+
+    useEffect(() => {
+        const getBookDataToEditFromAsyncStorage = async () => {
+            const bookTitle = JSON.parse(await AsyncStorage.getItem("bookToEdit"));
+            const bookList = JSON.parse(await AsyncStorage.getItem("books"));
+            const book = bookList?.find?.((book) => bookTitle === book?.title);
+            setBookData(book);
+            console.log(book);
+        }
+
+        getBookDataToEditFromAsyncStorage();
+    }, []);
+
+
+    return (
         <View style={styles.container}>         
             <View style={{margin: 20}}>
                 <View style={{alignItems: 'center'}}>
-                    {/* <TouchableOpacity onPress={OpenModal2}>
-                        <View
-                            style={{
-                                height: 100,
-                                width: 100,
-                                borderRadius: 15,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <ImageBackground
-                                source={require('../../assets/1.jpg')}
-                                style={{height: 100, width: 100}}
-                                imageStyle={{borderRadius: 15}}
-                            >
-                                <View style={{
-                                    flex: 1,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                }}>
-                                    <Icon name="camera" size={35} color="#fff" style={{
-                                        opacity: 0.7,
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        borderWidth: 1,
-                                        borderColor: '#fff',
-                                        borderRadius: 10,
-                                    }}/>
-                                </View>
-                            </ImageBackground>                                
-                        </View>
-                    </TouchableOpacity> */}
                 </View>
-
                 <View style={styles.action}>
                     <Feather name="book" size={20}/>
                     <TextInput
                         placeholder='Alterar título do Livro'
                         placeholderTextColor="#666666"
+                        value={`${bookData.title}`}
                         autoCorrect={false}                        
+                        onChangeText={(text) => handleChange('title', text)}
                         style={styles.textInput}/>
                 </View>                                    
                 <View style={styles.action}>
@@ -63,7 +78,9 @@ const EditProductScreen = ({navigation}) => {
                     <TextInput
                         placeholder='Alterar Nome do autor'
                         placeholderTextColor="#666666"
+                        value={`${bookData.author}`}
                         autoCorrect={false}
+                        onChangeText={(text) => handleChange('author', text)}
                      
                         style={styles.textInput}/>
                 </View>
@@ -72,15 +89,24 @@ const EditProductScreen = ({navigation}) => {
                     <TextInput
                         placeholder='Alterar Sinopse'                       
                         placeholderTextColor="#666666"                        
+                        value={`${bookData.sinopse}`}
                         autoCorrect={false}
                         multiline={true}
                         numberOfLines={1}                       
+                        onChangeText={(text) => handleChange('sinopse', text)}
                         style={[styles.textInput], { width:'90%', backgroundColor: '#CACACA', paddingBottom: 125, paddingLeft: 10, marginLeft: 5}}                     
-                        
                         />
                                             
                 </View>
-                <TouchableOpacity onPress={() => {}} style={styles.commandButton}>
+                <TouchableOpacity
+                    onPress={() => {
+                        if(bookData?.title && bookData?.author && bookData?.sinopse) {
+                            saveNewBookOnAsyncStorage();
+                        } else {
+                            alert("")
+                        }
+                    }}
+                    style={styles.commandButton}>
                     <Text style={styles.panelButtonTitle}>Salvar Mudanças </Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {navigation.goBack()}} style={styles.commandButton}>
