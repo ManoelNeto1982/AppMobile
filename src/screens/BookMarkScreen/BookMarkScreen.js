@@ -1,15 +1,26 @@
 import React,{useState, useRef} from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, CheckBox, ScrollView} from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView} from 'react-native'
 import { FontAwesome } from '@expo/vector-icons';
 import CustomButton from '../../component/CustomButton/CustomButton';
+import { Modalize } from "react-native-modalize";
 
 const BookMarkScreen = ({navigation}) => {
-  const [isSelected, setSelected] = useState(false);
+  const modalizeRef = useRef(null);
+  
+  function OpenModal() {
+    modalizeRef.current?.open();
+  }
+
+  function closeModal() {
+    modalizeRef.current?.close();
+  }
+ 
   const [mark, setMark] = useState('');
   const [markList, setMarkList] = useState([]);
   const [edditingMark, setEdditingMark] = useState(0);
 
   const addMark = () => {
+   
     setMarkList([...markList, 
     {key:Math.random().toString() , data:mark }]);
     setMark('')
@@ -52,22 +63,18 @@ const BookMarkScreen = ({navigation}) => {
             /> 
           </View>
         </View>
-    
+        
         {markList.map((item ) => {
           return (
-        <View style={{width: 325, marginLeft:20, marginRight: 50, marginBottom:10, backgroundColor:  "white", borderRadius: 6, borderColor: "rgba(0,0,0,0.1)"}} key={item.key} >       
-          <View style={styles.form2} >
-            <CheckBox   
-            value={isSelected}
-            onValueChange={() => setSelected(!isSelected)}
-            style={{marginTop: 5, marginRight: 5, marginLeft:5}} 
-            />      
-            <Text style={{marginRight: 35, width: 190, paddingTop:1, fontSize:16, fontWeight: 'bold', paddingRight:10}}>{item.data}</Text>
+        <TouchableOpacity onPress={OpenModal}>
+        <View style={{width: 325, marginLeft:20, marginRight: 60, marginBottom:10, backgroundColor:  "white", borderRadius: 6, borderColor: "rgba(0,0,0,0.1)"}} key={item.key} >       
+          <View style={styles.form2} >              
+            <Text style={{marginRight: 50, width: 190, paddingTop:3, fontSize:16, fontWeight: 'bold', paddingRight:10, marginLeft: 10}}>{item.data}</Text>
             <View>
               <TouchableOpacity onPress={() => {removeMark(item.key)}}>
                   <FontAwesome name="trash" size={30} color= "red" style={{
                     opacity: 0.7,
-                    marginRight: 5,       
+                    marginRight: 15,       
                     borderWidth: 1,
                     borderColor: '#fff',
                     borderRadius: 10,
@@ -79,7 +86,7 @@ const BookMarkScreen = ({navigation}) => {
               <TouchableOpacity  onPress={() => editMark(item)}>
                   <FontAwesome name="pencil-square-o" size={30} color="green" style={{
                     opacity: 0.7,
-                    marginRight: 5,       
+                    marginRight: 15,       
                     borderWidth: 1,
                     borderColor: '#fff',
                     borderRadius: 10,
@@ -89,8 +96,43 @@ const BookMarkScreen = ({navigation}) => {
             </View>
           </View>          
         </View>
+
+        <Modalize ref={modalizeRef} snapPoint={360} modalHeight={360}>
+        <View style={styles.panel}>
+          <View style={{ alignItems: "center", marginTop: "25%" }}>
+            <Text
+              style={{
+                marginTop: 10,
+                fontWeight: "bold",
+                fontSize: 18,
+                marginBottom: 5,
+              }}
+            >
+              Meta alcançada?
+            </Text>
+          </View>
+          <View style={{flexDirection:'row', alignSelf: "center"}}>
+            <TouchableOpacity
+             onPress={() => {removeMark(item.key)}}             
+             style={styles.panelButton}
+            
+            >
+              <Text style={styles.panelButtonTitle}>Sim</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {closeModal()}}
+              style={styles.panelButtonNo}
+            >
+              <Text style={styles.panelButtonTitle}>Ainda Não</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modalize>
+        </TouchableOpacity>
           )
         })}
+
+   
       </ScrollView>
    )
 }
@@ -185,4 +227,29 @@ const styles = StyleSheet.create({
     marginBottom: 2,  
   
   },
+  panelButton: {
+    padding: 13,
+    borderRadius: 10,
+    backgroundColor: "#35AAFF",
+    alignItems: "center",
+    marginVertical: 7,
+    width: 120,
+    marginHorizontal:5,
+
+
+  },
+  panelButtonNo:{
+    padding: 13,
+    borderRadius: 10,
+    backgroundColor: "red",
+    alignItems: "center",
+    marginVertical: 7,
+    width: 120
+  },
+  panelButtonTitle: {
+    fontSize: 17,
+    fontWeight: "bold",
+    color: "white",
+  },
+  
 })

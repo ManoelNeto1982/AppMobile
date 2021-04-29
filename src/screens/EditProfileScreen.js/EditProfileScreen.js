@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { View, Text, Button, StyleSheet, TouchableOpacity, ImageBackground, TextInput } from "react-native";
+import { Caption } from 'react-native-paper'
 import Icon from "react-native-vector-icons/Ionicons";
 import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
@@ -36,8 +37,16 @@ const EditProfileScreen = ({ navigation }) => {
   const changeDataFromAsyncStorage = async ({ users, newUser }) => {
     try {
       await AsyncStorage.setItem("users", JSON.stringify([...users, newUser]));
+<<<<<<< HEAD
       if (!newData.name || !newData.password) {
         alert("Dados alterados com sucesso");
+=======
+      if(newData.name || newData.password){
+      alert("Dados alterados com sucesso");
+      } else {
+        alert('Não houve alteração nos dados')
+        navigation.navigate('Perfil')
+>>>>>>> 34215018a14f377f0a04d2c221f6f412bf70bceb
       }
       myContext.setUserName(newUser.name);
       navigation.navigate("Perfil");
@@ -53,6 +62,8 @@ const EditProfileScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+       <Text style={styles.title}>Editar Perfil</Text>
+       <Caption style={styles.caption}>Digite apenas nos campos que deseja alterar</Caption>
       <View style={{ margin: 20 }}>
         <View style={styles.action}>
           <Feather name="user" size={20} />
@@ -122,13 +133,7 @@ const styles = StyleSheet.create({
   panel: {
     padding: 20,
     backgroundColor: "#FFFFFF",
-    padding: 20,
-    // borderTopLeftRadius: 20,
-    // borderTopRightRadius: 20,
-    // shadowColor: "#000000",
-    // shadowOffset: {width: 0, height: 0},
-    // shadowRadius: 2,
-    // shadowOpacity: 0.4,
+    padding: 20, 
   },
   header: {
     backgroundColor: "#FFFFFF",
@@ -197,5 +202,18 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: "#1E90FF",
     height: 30,
+  },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 25,
+    marginBottom: 20,
+    marginTop: 12,
+    paddingLeft:'30%'
+  },
+  caption: {
+    fontSize: 13,
+    lineHeight: 14,   
+    paddingLeft:'12%',
+    color: 'green'
   },
 });

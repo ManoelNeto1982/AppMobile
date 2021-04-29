@@ -27,7 +27,7 @@ const HomeScreen = (props) => {
       }
     });
 
-  const bookToEdit = async ({ title }) => {
+  const bookToEdit = async ({ title }) => {    
     await AsyncStorage.setItem("bookToEdit", JSON.stringify(title));
         navigation.dispatch(CommonActions.reset({
             index: 0,
@@ -50,7 +50,7 @@ const HomeScreen = (props) => {
             setAllBooksData([]);
           }
         } catch (e) {
-          //console.log(e);
+          console.log(e);
           return alert("Erro ao pegar os dados dos usuarios para exibir os seus livros postados");
         }
       };

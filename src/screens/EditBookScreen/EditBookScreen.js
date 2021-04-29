@@ -1,10 +1,13 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity, ImageBackground, TextInput, ScrollView} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { Caption } from 'react-native-paper'
 import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
+<<<<<<< HEAD
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Modalize } from 'react-native-modalize';
+=======
+>>>>>>> 34215018a14f377f0a04d2c221f6f412bf70bceb
 import {  useNavigation, CommonActions } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useGlobal } from "../../../components/GlobalContext";
@@ -14,11 +17,6 @@ const EditProductScreen = (props) => {
     const navigation = useNavigation();
 
     const myContext = useGlobal();
-
-    const modalizeRef = useRef(null);
-    function OpenModal2(){
-        modalizeRef.current?.open();
-    }
 
     const initialNewBookState = {
         title: "", 
@@ -45,7 +43,7 @@ const EditProductScreen = (props) => {
         setBookData({...bookData, [field]: value})
     }
 
-    useEffect(() => {
+    useEffect(() => {        
         const getBookDataToEditFromAsyncStorage = async () => {
             const bookTitle = JSON.parse(await AsyncStorage.getItem("bookToEdit"));
             const bookList = JSON.parse(await AsyncStorage.getItem("books"));
@@ -53,12 +51,14 @@ const EditProductScreen = (props) => {
             setBookData(book);
         }
 
-        getBookDataToEditFromAsyncStorage();
+        getBookDataToEditFromAsyncStorage();       
     }, []);
 
 
     return (
-        <View style={styles.container}>         
+        <View style={styles.container}>  
+        <Text style={styles.title}>Editar Livro</Text>      
+        <Caption style={styles.caption}>Digite apenas nos campos que deseja alterar</Caption> 
             <View style={{margin: 20}}>
                 <View style={{alignItems: 'center'}}>
                 </View>
@@ -108,28 +108,15 @@ const EditProductScreen = (props) => {
                     style={styles.commandButton}>
                     <Text style={styles.panelButtonTitle}>Salvar Mudanças </Text>
                 </TouchableOpacity>
+<<<<<<< HEAD
                 <TouchableOpacity onPress={() => {navigation.navigate("HomeScreen")}} style={styles.commandButton}>
+=======
+                <TouchableOpacity onPress={() => {navigation.navigate('HomeScreen')}} style={styles.commandButton}>
+>>>>>>> 34215018a14f377f0a04d2c221f6f412bf70bceb
                     <Text style={styles.panelButtonTitle}>Voltar</Text>
                 </TouchableOpacity>
             </View>
-
-            <Modalize ref={modalizeRef} snapPoint={360} modalHeight={360}>
-                <View style={styles.panel}>
-                    <View style={{alignItems:'center'}}>
-                        <Text style={styles.panelTitle}>Escolher Capa do Livro</Text>
-                        <Text style={styles.panelSubtitle}>Escolha sua capa</Text>
-                    </View>
-                    <TouchableOpacity style={styles.panelButton}>
-                        <Text style={styles.panelButtonTitle}>Tirar foto</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.panelButton}>
-                        <Text style={styles.panelButtonTitle}>Usar foto do Álbum</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.panelButton}>
-                        <Text style={styles.panelButtonTitle}>Excluir Foto</Text>
-                    </TouchableOpacity>
-                </View> 
-            </Modalize>
+       
         </View>
     );
 };
@@ -150,21 +137,14 @@ const styles = StyleSheet.create({
     panel: {
         padding: 20,
         backgroundColor: "#FFFFFF",
-        padding: 20,
-        // borderTopLeftRadius: 20,
-        // borderTopRightRadius: 20,
-        // shadowColor: "#000000",
-        // shadowOffset: {width: 0, height: 0},
-        // shadowRadius: 2,
-        // shadowOpacity: 0.4,
+        padding: 20,      
     },
     header: {
         backgroundColor: "#FFFFFF",
         shadowColor: "#333333",
         shadowOffset: {width: -1, height: -3},
         shadowRadius: 2,
-        shadowOpacity: 0.4,
-        // elevation: 5,
+        shadowOpacity: 0.4,        
         paddingTop: 20,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
@@ -218,5 +198,18 @@ const styles = StyleSheet.create({
         marginTop: -12,
         paddingLeft: 10,
         color:"#05375a"
-    }
+    },
+    title: {
+        fontWeight: 'bold',
+        fontSize: 25,
+        marginBottom: 20,
+        marginTop: 12,
+        paddingLeft:'30%'
+      },
+      caption: {
+        fontSize: 13,
+        lineHeight: 14,   
+        paddingLeft:'12%',
+        color: 'green'
+  },
 })

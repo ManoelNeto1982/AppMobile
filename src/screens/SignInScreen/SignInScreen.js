@@ -77,15 +77,15 @@ const myContext = useGlobal();
               onChangeText={(text) => setPassword(text)}
             />
           </View>
-          <View style={{flexDirection:'row'}}>
+          <View style={{flexDirection:'row', marginTop:5}}>
             <CheckBox               
               value={isSelected}
               onValueChange={() => setSelected(!isSelected)}
-              style={{marginTop: 15, marginRight: 5, marginLeft:5, with:15, height:14}} 
+              style={{marginTop: 15, with:15, height:14}} 
               />   
-              <Text style={{marginTop:14, color:'blue', fontSize:13}}>Lembrar minha senha</Text>
+              <Text style={{marginTop:14, color:'blue', fontSize:13, paddingLeft: 5}}>Lembrar minha senha</Text>
             </View>
-        </View>
+           </View>
       
         <View style={styles.button}>
           <TouchableOpacity
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: "center",
-    marginTop: 50,
+    marginTop: 30,
   },
   signIn: {
     width: "100%",

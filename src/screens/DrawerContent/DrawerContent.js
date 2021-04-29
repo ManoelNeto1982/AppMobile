@@ -1,7 +1,7 @@
-import React, {useRef, useState, useEffect, useContext} from 'react';
+import React from 'react';
 import { View, Text, StyleSheet} from 'react-native';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
-import { Avatar, Title, Caption, Paragraph, Drawer} from 'react-native-paper'
+import { Avatar, Title, Caption, Paragraph, Drawer, Divider} from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppContext from '../../../components/GlobalContext';
@@ -25,12 +25,12 @@ export function DrawerContent(props){
                     <View style={styles.userInfoSection}>
                         <View style={{flexDirection:'row', marginTop: 15}}>
                            <View style={{ flexDirection:'column'}}>
-                                <Title style={styles.title}>{`Usuário: ${myContext.userName}`}</Title>
-                                <Caption style={styles.caption}>{`Email: ${myContext.userEmail}`}</Caption>
+                                <Title style={styles.title}>{myContext.userName}</Title>
+                                <Caption style={styles.caption}>{myContext.userEmail}</Caption>
                             </View>
                         </View>
-
-                        <View style={styles.row}>
+                        <Divider/>
+                         {/* <View style={styles.row}>
                             <View style={styles.section}>
                                 <Paragraph style={styles.paragraph, styles.section}>80</Paragraph>
                                 <Caption style={styles.caption}>Seguindo</Caption>
@@ -39,7 +39,7 @@ export function DrawerContent(props){
                                 <Paragraph style={styles.paragraph, styles.section}>100</Paragraph>
                                 <Caption style={styles.caption}>Seguidores</Caption>
                             </View>
-                        </View>
+                        </View> */}
                     </View>
                     <Drawer.Section style={styles.drawerSection}>
                         <DrawerItem 
