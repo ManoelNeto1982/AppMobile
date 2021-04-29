@@ -3,7 +3,7 @@ import { View, Text, Button, StyleSheet, TouchableOpacity, ImageBackground, Text
 import { Caption } from 'react-native-paper'
 import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
-import {  useNavigation } from "@react-navigation/native";
+import {  useNavigation, CommonActions } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useGlobal } from "../../../components/GlobalContext";
 
@@ -38,7 +38,7 @@ const EditProductScreen = (props) => {
         setBookData({...bookData, [field]: value})
     }
 
-    useEffect(() => {
+    useEffect(() => {        
         const getBookDataToEditFromAsyncStorage = async () => {
             const bookTitle = JSON.parse(await AsyncStorage.getItem("bookToEdit"));
             const bookList = JSON.parse(await AsyncStorage.getItem("books"));
@@ -47,7 +47,7 @@ const EditProductScreen = (props) => {
             console.log(book);
         }
 
-        getBookDataToEditFromAsyncStorage();
+        getBookDataToEditFromAsyncStorage();       
     }, []);
 
 
@@ -104,7 +104,7 @@ const EditProductScreen = (props) => {
                     style={styles.commandButton}>
                     <Text style={styles.panelButtonTitle}>Salvar Mudanças </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => {navigation.goBack()}} style={styles.commandButton}>
+                <TouchableOpacity onPress={() => {navigation.navigate('HomeScreen')}} style={styles.commandButton}>
                     <Text style={styles.panelButtonTitle}>Voltar</Text>
                 </TouchableOpacity>
             </View>
@@ -203,5 +203,5 @@ const styles = StyleSheet.create({
         lineHeight: 14,   
         paddingLeft:'12%',
         color: 'green'
-      },
+  },
 })

@@ -140,7 +140,7 @@ const SignUpScreen = ({ navigation }) => {
                 return alert(
                   "Preencha todos os campos para poder realizar o cadastro"
                 );
-            }}
+                window.location.reload();}}
           >
             <LinearGradient
               colors={["#008bdd", "#6cb7ff"]}

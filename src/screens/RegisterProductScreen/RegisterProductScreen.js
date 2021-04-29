@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useFocusEffect } from "react";
 import {
   View,
   Text,
@@ -20,10 +20,7 @@ import { useCallback } from "react";
 import { useNavigation } from "@react-navigation/native";
 
 const RegisterProductScreen = (props) => {
-  const modalizeRef = useRef(null);
-  function OpenModal() {
-    modalizeRef.current?.open();
-  }
+
 
   const navigation = useNavigation();
 
@@ -41,27 +38,29 @@ const RegisterProductScreen = (props) => {
       try {
         const currentUser = JSON.parse(await AsyncStorage.getItem("currentUser"));
         const booksList = JSON.parse(await AsyncStorage.getItem("books"));
-        const books = booksList != null ? booksList : [];
+        const books = booksList != null ? booksList : [];   
         if (books?.find?.((book) => book?.title === title && book?.owner === currentUser?.email)) {
           alert("Já existe um livro com o titulo inserido, escolha outro titulo ou edite o já existente");
         } else {
           const newBook = { title, author, sinopse, owner: currentUser?.email };
-          await AsyncStorage.setItem("books", JSON.stringify([...books, newBook]));
+          await AsyncStorage.setItem("books", JSON.stringify([...books, newBook]));                            
           navigation.navigate("HomeScreen");
         }
       } catch (e) {
-        //console.log(e);
-        return alert("Erro ao inserir dados do livro");
-      }     
-    },    
+        //console.log(e);        
+      } 
+    },
     [navigation]    
   );
-   
+
+  
+
   const handleChange = useCallback((field, value) => {
       setBookData({ ...bookData, [field]: value });
     },
     [bookData, setBookData],
   );
+  
 
   return (
     <View style={styles.container}>
@@ -119,9 +118,10 @@ const RegisterProductScreen = (props) => {
               alert("Preencha todos os campos!");
             }
           }}
+          
           style={styles.commandButton}
         >
-          <Text style={styles.panelButtonTitle}>Cadstrar</Text>
+          <Text style={styles.panelButtonTitle}>Cadastrar</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
@@ -133,23 +133,7 @@ const RegisterProductScreen = (props) => {
         </TouchableOpacity>
       </View>
 
-      <Modalize ref={modalizeRef} snapPoint={360} modalHeight={360}>
-        <View style={styles.panel}>
-          <View style={{ alignItems: "center" }}>
-            <Text style={styles.panelTitle}>Escolher Capa do Livro</Text>
-            <Text style={styles.panelSubtitle}>Escolha sua capa</Text>
-          </View>
-          <TouchableOpacity style={styles.panelButton}>
-            <Text style={styles.panelButtonTitle}>Tirar foto</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.panelButton}>
-            <Text style={styles.panelButtonTitle}>Usar foto do Álbum</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.panelButton}>
-            <Text style={styles.panelButtonTitle}>Excluir Foto</Text>
-          </TouchableOpacity>
-        </View>
-      </Modalize>
+     
     </View>
   );
 };
