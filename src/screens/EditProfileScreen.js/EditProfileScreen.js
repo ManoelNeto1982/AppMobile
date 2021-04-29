@@ -37,7 +37,12 @@ const EditProfileScreen = ({ navigation }) => {
   const changeDataFromAsyncStorage = async ({ users, newUser }) => {
     try {
       await AsyncStorage.setItem("users", JSON.stringify([...users, newUser]));
+      if(newData.name || newData.password){
       alert("Dados alterados com sucesso");
+      } else {
+        alert('Não houve alteração nos dados')
+        navigation.navigate('Perfil')
+      }
       myContext.setUserName(newUser.name);
       navigation.navigate("Perfil");
     } catch (e){
