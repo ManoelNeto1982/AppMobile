@@ -5,7 +5,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Modalize } from 'react-native-modalize';
-import {  useNavigation } from "@react-navigation/native";
+import {  useNavigation, CommonActions } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useGlobal } from "../../../components/GlobalContext";
 
@@ -51,7 +51,6 @@ const EditProductScreen = (props) => {
             const bookList = JSON.parse(await AsyncStorage.getItem("books"));
             const book = bookList?.find?.((book) => bookTitle === book?.title);
             setBookData(book);
-            console.log(book);
         }
 
         getBookDataToEditFromAsyncStorage();
@@ -103,13 +102,13 @@ const EditProductScreen = (props) => {
                         if(bookData?.title && bookData?.author && bookData?.sinopse) {
                             saveNewBookOnAsyncStorage();
                         } else {
-                            alert("")
+                            alert("Preencha todos os campos");
                         }
                     }}
                     style={styles.commandButton}>
                     <Text style={styles.panelButtonTitle}>Salvar Mudanças </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => {navigation.goBack()}} style={styles.commandButton}>
+                <TouchableOpacity onPress={() => {navigation.navigate("HomeScreen")}} style={styles.commandButton}>
                     <Text style={styles.panelButtonTitle}>Voltar</Text>
                 </TouchableOpacity>
             </View>

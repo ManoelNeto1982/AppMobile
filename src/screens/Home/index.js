@@ -29,7 +29,10 @@ const HomeScreen = (props) => {
 
   const bookToEdit = async ({ title }) => {
     await AsyncStorage.setItem("bookToEdit", JSON.stringify(title));
-    navigation.navigate("EditProductScreen");
+        navigation.dispatch(CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'EditProductScreen'}], 
+          }));
   }
 
   useFocusEffect(
