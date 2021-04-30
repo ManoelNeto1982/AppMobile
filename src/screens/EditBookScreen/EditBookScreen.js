@@ -3,11 +3,6 @@ import { View, Text, Button, StyleSheet, TouchableOpacity, ImageBackground, Text
 import { Caption } from 'react-native-paper'
 import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
-<<<<<<< HEAD
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Modalize } from 'react-native-modalize';
-=======
->>>>>>> 34215018a14f377f0a04d2c221f6f412bf70bceb
 import {  useNavigation, CommonActions } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useGlobal } from "../../../components/GlobalContext";
@@ -108,11 +103,7 @@ const EditProductScreen = (props) => {
                     style={styles.commandButton}>
                     <Text style={styles.panelButtonTitle}>Salvar Mudanças </Text>
                 </TouchableOpacity>
-<<<<<<< HEAD
-                <TouchableOpacity onPress={() => {navigation.navigate("HomeScreen")}} style={styles.commandButton}>
-=======
                 <TouchableOpacity onPress={() => {navigation.navigate('HomeScreen')}} style={styles.commandButton}>
->>>>>>> 34215018a14f377f0a04d2c221f6f412bf70bceb
                     <Text style={styles.panelButtonTitle}>Voltar</Text>
                 </TouchableOpacity>
             </View>

@@ -127,21 +127,18 @@ const SignUpScreen = ({ navigation }) => {
           <TouchableOpacity
             style={([styles.button], { marginTop: 10 })}
             onPress={() => {
-              if (
-                dataSignUp.email &&
-                dataSignUp.name &&
-                dataSignUp.password &&
-                rePassword
-              ) {
-                if (dataSignUp.password === rePassword) {
-                  verifyItemOnAsyncstorage(dataSignUp);
-                } else return alert("As senhas não são compativeis");
-              } else
-                return alert(
-                  "Preencha todos os campos para poder realizar o cadastro"
-                );
-                window.location.reload();}}
-          >
+              if (isSelected) {
+                if ( dataSignUp.email && dataSignUp.name && dataSignUp.password && rePassword) {
+                  if (dataSignUp.password === rePassword) {
+                    verifyItemOnAsyncstorage(dataSignUp);
+                  } else return alert("As senhas não são compativeis");
+                } else
+                  return alert( "Preencha todos os campos para poder realizar o cadastro");
+                  window.location.reload();
+              } else {
+                return alert("Aceite os termos de uso para poder realizar o cadastro");
+              }
+            }} >
             <LinearGradient
               colors={["#008bdd", "#6cb7ff"]}
               style={styles.signIn}
