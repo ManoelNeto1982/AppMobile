@@ -3,17 +3,14 @@ import { View, Text, Button, StyleSheet, TouchableOpacity, ImageBackground, Text
 import { Caption } from 'react-native-paper'
 import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
-<<<<<<< HEAD
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Modalize } from 'react-native-modalize';
-=======
->>>>>>> 34215018a14f377f0a04d2c221f6f412bf70bceb
+import { Foundation } from '@expo/vector-icons';
+import {Picker} from '@react-native-picker/picker';
 import {  useNavigation, CommonActions } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useGlobal } from "../../../components/GlobalContext";
 
-const EditProductScreen = (props) => {
-
+const EditProductScreen = (props) => {    
+    const [selectedValue, setSelectedValue] = useState('');
     const navigation = useNavigation();
 
     const myContext = useGlobal();
@@ -83,6 +80,25 @@ const EditProductScreen = (props) => {
                      
                         style={styles.textInput}/>
                 </View>
+                <View style={{flexDirection:'row'}}>
+                    <Foundation name="quote" size={24} color="black" />
+                    <View>
+                        <Picker        
+                            selectedValue={selectedValue}
+                            style={{ height: 30, width: 280, marginLeft:10}}
+                            onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+                        >
+                            <Picker.Item label="Selecione um gênero" value="" />
+                            <Picker.Item label="Aventura" value="aventura" />
+                            <Picker.Item label="Biografia" value="biografia" />
+                            <Picker.Item label="Contos" value="contos" />
+                            <Picker.Item label="Ficção" value="ficção" />
+                            <Picker.Item label="Não Ficção" value="NãoFicção" />
+                            <Picker.Item label="Romance" value="romance" />
+                            <Picker.Item label="Terror" value="terror" />
+                        </Picker>
+                    </View> 
+              </View>
                 <View style={styles.action}>
                     <FontAwesome name="pencil-square-o" size={20}/>
                     <TextInput
@@ -108,11 +124,7 @@ const EditProductScreen = (props) => {
                     style={styles.commandButton}>
                     <Text style={styles.panelButtonTitle}>Salvar Mudanças </Text>
                 </TouchableOpacity>
-<<<<<<< HEAD
-                <TouchableOpacity onPress={() => {navigation.navigate("HomeScreen")}} style={styles.commandButton}>
-=======
                 <TouchableOpacity onPress={() => {navigation.navigate('HomeScreen')}} style={styles.commandButton}>
->>>>>>> 34215018a14f377f0a04d2c221f6f412bf70bceb
                     <Text style={styles.panelButtonTitle}>Voltar</Text>
                 </TouchableOpacity>
             </View>
