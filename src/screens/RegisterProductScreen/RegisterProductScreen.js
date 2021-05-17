@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect, useFocusEffect } from "react";
+import {Picker} from '@react-native-picker/picker';
 import {
   View,
   Text,
@@ -7,20 +8,21 @@ import {
   TouchableOpacity,
   ImageBackground,
   TextInput,
-  ScrollView,
+  ScrollView,  
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
+import { Foundation } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AppContext, { useGlobal } from "../../../components/GlobalContext";
-import { Modalize } from "react-native-modalize";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useCallback } from "react";
 import { useNavigation } from "@react-navigation/native";
 
 const RegisterProductScreen = (props) => {
 
+  const [selectedValue, setSelectedValue] = useState('');
 
   const navigation = useNavigation();
 
@@ -88,6 +90,26 @@ const RegisterProductScreen = (props) => {
             style={styles.textInput}
           />
         </View>
+        <View style={{flexDirection:'row'}}>
+          <Foundation name="quote" size={24} color="black" />
+        <View>
+          <Picker        
+            selectedValue={selectedValue}
+            style={{ height: 30, width: 280, marginLeft:10}}
+            onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+          >
+            <Picker.Item label="Selecione um gênero" value="" />
+            <Picker.Item label="Aventura" value="aventura" />
+            <Picker.Item label="Biografia" value="biografia" />
+            <Picker.Item label="Contos" value="contos" />
+            <Picker.Item label="Ficção" value="ficção" />
+            <Picker.Item label="Não Ficção" value="NãoFicção" />
+            <Picker.Item label="Romance" value="romance" />
+            <Picker.Item label="Terror" value="terror" />
+          </Picker>
+        </View> 
+        </View>
+     
         <View style={styles.action}>
           <FontAwesome name="pencil-square-o" size={20} />
           <TextInput
@@ -109,7 +131,7 @@ const RegisterProductScreen = (props) => {
               })
             }
           />
-        </View>
+        </View>            
         <TouchableOpacity
           onPress={async () => {
             if (bookData.title && bookData.sinopse && bookData.author) {

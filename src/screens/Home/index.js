@@ -1,11 +1,23 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
+import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect, useNavigation, CommonActions } from "@react-navigation/native";
+import { Modalize } from "react-native-modalize";
 
 const HomeScreen = (props) => {
+  const modalizeRef = useRef(null);
+  
+  function OpenModal() {
+    modalizeRef.current?.open();
+  }
+
+  function closeModal() {
+    modalizeRef.current?.close();
+  }
+ 
 
   const navigation = useNavigation();
 
@@ -77,16 +89,33 @@ const HomeScreen = (props) => {
                   <Text style={styles.name}>{`Título: ${book.title}`}</Text>
                   <Text style={styles.listItem}>{`Autor: ${book.author}`}</Text>
                   <Text style={styles.listItem}>{`Descrição: ${book.sinopse}`}</Text>
-                  <View style={{ flexDirection: "row", marginLeft: "75%" }}>
-                    <View>                    
+                  <View style={{ flexDirection: "row", marginLeft: "65%"  }}>
+                    <View>
+                      <TouchableOpacity
+                        onPress={() => {navigation.navigate('BookMarkScreen')}}
+                      >
+                        <Ionicons
+                          name="bookmark-outline"
+                          size={30}
+                          color="blue"
+                          style={{
+                            opacity: 0.7,                           
+                            borderWidth: 1,
+                            marginRight: 5,
+                            borderWidth:1,
+                            borderColor: "#fff",
+                            borderRadius: 10,
+                          }}
+                        />
+                      </TouchableOpacity>
                     </View>
                     <View>
                       <TouchableOpacity
-                        onPress={() => {removeBookFromAsyncStorage({title: book.title}); }} 
+                        onPress={OpenModal}
                       >
                         <Icon
                           name="trash"
-                          size={35}
+                          size={30}
                           color="red"
                           style={{
                             opacity: 0.7,
@@ -106,7 +135,7 @@ const HomeScreen = (props) => {
                       >
                         <FontAwesome
                           name="pencil-square-o"
-                          size={35}
+                          size={30}
                           color="green"
                           style={{
                             opacity: 0.7,
@@ -121,10 +150,43 @@ const HomeScreen = (props) => {
                   </View>               
                 </View>
               </View>
-            </View>
+              <Modalize ref={modalizeRef} snapPoint={360} modalHeight={360}>
+              <View style={styles.panel}>
+                <View style={{ alignItems: "center", marginTop: "25%" }}>
+                  <Text
+                    style={{
+                      marginTop: 10,
+                      fontWeight: "bold",
+                      fontSize: 18,
+                      marginBottom: 5,
+                    }}
+                  >
+                    Meta alcançada?
+                  </Text>
+                </View>
+                <View style={{flexDirection:'row', alignSelf: "center"}}>
+                  <TouchableOpacity
+                  onPress={() => {removeBookFromAsyncStorage({title: book.title}); }}           
+                  style={styles.panelButton}
+                  
+                  >
+                    <Text style={styles.panelButtonTitle}>Sim</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {closeModal()}}
+                    style={styles.panelButtonNo}
+                  >
+                    <Text style={styles.panelButtonTitle}>Ainda Não</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modalize>   
+            </View>                 
           );
+          
         })}
       </View>
+    
     </ScrollView>
   );
 };
@@ -180,15 +242,9 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   panel: {
-    padding: 20,
+   
     backgroundColor: "#FFFFFF",
-    padding: 20,
-    // borderTopLeftRadius: 20,
-    // borderTopRightRadius: 20,
-    // shadowColor: "#000000",
-    // shadowOffset: {width: 0, height: 0},
-    // shadowRadius: 2,
-    // shadowOpacity: 0.4,
+    padding: 10
   },
   panelButton: {
     padding: 13,
@@ -196,6 +252,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#FF6347",
     alignItems: "center",
     marginVertical: 7,
+  },
+  panelButtonNo:{
+    padding: 13,
+    borderRadius: 10,
+    backgroundColor: "red",
+    alignItems: "center",
+    marginVertical: 7,
+    width: 120
   },
   panelButtonTitle: {
     fontSize: 17,
