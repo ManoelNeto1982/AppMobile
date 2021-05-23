@@ -43,8 +43,8 @@ export function DrawerContent(props){
                     <View style={styles.userInfoSection}>
                         <View style={{flexDirection:'row', marginTop: 15}}>
                            <View style={{ flexDirection:'column'}}>
-                                <Title style={styles.title}>{myContext.userName}</Title>
-                                <Caption style={styles.caption}>{myContext.userEmail}</Caption>
+                                <Title style={styles.title}>{Context.userName}</Title>
+                                <Caption style={styles.caption}>{Context.userEmail}</Caption>
                             </View>
                         </View>
                         <Divider/>
