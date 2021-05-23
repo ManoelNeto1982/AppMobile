@@ -1,54 +1,83 @@
-import React, { useRef, useState, useEffect } from "react";
-import { View, Text, Button, StyleSheet, TouchableOpacity, ImageBackground, TextInput } from "react-native";
+import React, { 
+  useRef,
+  useState,
+  useEffect
+} from "react";
+import { 
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+  ImageBackground,
+  TextInput
+} from "react-native";
 import { Caption } from 'react-native-paper'
 import Icon from "react-native-vector-icons/Ionicons";
 import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useGlobal } from "../../../components/GlobalContext";
+import AxiosInstance from "../../../axios.config";
 
 const EditProfileScreen = ({ navigation }) => {
 
-  const myContext = useGlobal();
+  const Context = useGlobal();
 
   const initialCurrentData = {
-    //email: "",
+    email: "",
     name: "",
     password: "",
   };
 
   const [newData, setNewData] = useState(initialCurrentData);
 
-  const updateDataFromAsyncStorage = async ({name, password}) => {
+  const verifyEmailExist = async (email) => {
     try {
-      const userList = JSON.parse(await AsyncStorage.getItem("users"));
-      const userToChangeData = userList?.find?.((user) => user?.email === myContext?.userEmail);
-      userToChangeData.name = (name) ? name : userToChangeData.name;
-      userToChangeData.password = (password) ? password : userToChangeData.password;
-      const newUserList = userList?.filter?.((user) => user.email !== myContext?.userEmail);
-      await changeDataFromAsyncStorage({ users: newUserList, newUser: userToChangeData });
-    } catch (e) {
-      //console.log(e);
-      return alert("Erro ao atualizar dados");
+      const userList = await AxiosInstance?.get(`/users?email=${email}`);
+      if (userList?.data?.find((user) => user?.email === email)) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      //console.log(error);
+      throw alert(`Houve um problema na conexão com o servidor por favor tente novamente mais tarde`);
     }
   };
 
-  const changeDataFromAsyncStorage = async ({ users, newUser }) => {
+  const updateDataFromApiRest = async ({ email, name, password }) => {
     try {
-      await AsyncStorage.setItem("users", JSON.stringify([...users, newUser]));
-      if(newData.name || newData.password){
-      alert("Dados alterados com sucesso");
+      if (Context?.userEmail !== email && await verifyEmailExist(email)) {
+        return alert(`Email ja registrado`);
       } else {
-        alert('Não houve alteração nos dados')
-        navigation.navigate('Perfil')
+        const user = await AxiosInstance?.get(`/users/${Context.userId}`);
+        const userData = user.data;
+        userData.email = (email) ? email : userData.email;
+        userData.name = (name) ? name : userData.name;
+        userData.password = (password) ? password : userData.password;
+        await changeDataOnApiRest({ user: userData });
       }
-      myContext.setUserName(newUser.name);
-      navigation.navigate("Perfil");
-    } catch (e){
-      //console.log(e);
-      alert("Erro ao salvar os dados após as alterações");
+    } catch (error) {
+      //console.log(error);
+      throw alert("Erro ao salvar os novos dados, tente novamente mais tarde");
     }
+  };
+
+  const changeDataOnApiRest = async ({ user }) => {
+    try {
+      const newUserData = await AxiosInstance?.put(`/users/${Context.userId}`, user);
+      setContext(newUserData?.data);
+      navigation.navigate("Perfil");
+    } catch (error) {
+      //console.log(error);
+      //throw alert("Erro ao salvar os novos dados, tente novamente mais tarde");
+    }
+  }
+
+  const setContext = (newUserData) => {
+    Context?.setUserEmail(newUserData?.email);
+    Context?.setUserName(newUserData?.name);
   }
 
   const handleChange = (field, value) => {
@@ -61,6 +90,17 @@ const EditProfileScreen = ({ navigation }) => {
        <Caption style={styles.caption}>Digite apenas nos campos que deseja alterar</Caption>
       <View style={{ margin: 20 }}>
         <View style={styles.action}>
+          <MaterialCommunityIcons name="email-outline" size={20} />
+          <TextInput
+            placeholder="Alterar E-mail"
+            placeholderTextColor="#666666"
+            autoCorrect={false}
+            onChangeText={(text) => handleChange("email", text)}
+            autoCorrect={false}
+            style={styles.textInput}
+          />
+        </View>
+        <View style={styles.action}>
           <Feather name="user" size={20} />
           <TextInput
             placeholder="Alterar Nome"
@@ -71,18 +111,6 @@ const EditProfileScreen = ({ navigation }) => {
             style={styles.textInput}
           />
         </View>
-        {/* <View style={styles.action}>
-          <MaterialCommunityIcons name="email-outline" size={20} />
-          <TextInput
-            placeholder="Alterar E-mail"
-            placeholderTextColor="#666666"
-            autoCorrect={false}
-            onChangeText={(text) => handleChange("email", text)}
-            autoCorrect={false}
-            style={styles.textInput}
-          />
-        </View> */}
-    
         <View style={styles.action}>
           <Feather name="lock" size={20} />
           <TextInput
@@ -95,7 +123,14 @@ const EditProfileScreen = ({ navigation }) => {
           />
         </View>
         <TouchableOpacity 
-          onPress={() => updateDataFromAsyncStorage({name: newData.name, password: newData.password})}
+          onPress={() => {
+              if (newData?.email || newData?.name || newData?.password) {
+                updateDataFromApiRest({email: newData?.email, name: newData?.name, password: newData?.password})
+              } else {
+                return alert(`Preencha pelo menos um dos campos para continuar com a alteração`);
+              }
+            }
+          }
           style={styles.commandButton}>
           <Text style={styles.panelButtonTitle}>Alterar Dados</Text>
         </TouchableOpacity>

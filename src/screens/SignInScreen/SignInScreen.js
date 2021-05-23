@@ -1,13 +1,21 @@
-import React, { useState, useCallback } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, StatusBar, CheckBox } from "react-native";
+import React, {
+  useState,
+  useCallback
+} from "react";
+import { 
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity, 
+  TextInput, 
+  StatusBar, 
+  CheckBox 
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Feather } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useGlobal } from "../../../components/GlobalContext";
-
-
+import AxiosInstance from "../../../axios.config";
 
 const SignInScreen = ({ navigation }) => {
 
@@ -16,29 +24,35 @@ const SignInScreen = ({ navigation }) => {
     name: "",
   };
 
-const myContext = useGlobal();
+const Context = useGlobal();
 
   const [password, setPassword] = useState("");
   const [loginData, setLoginData] = useState(userData);
   const [isSelected, setSelected] = useState(false);
 
-  const verifyItemOnAsyncstorage = useCallback(
+  const verifyItemInApiRest = useCallback (
     async ({ email, password }) => {
       try {
-        const userList = JSON.parse(await AsyncStorage.getItem("users"));
-        const currentUser = userList?.find?.((user) => user?.email == email);
-        if (currentUser?.password === password) {
-          await AsyncStorage.setItem("currentUser", JSON.stringify(currentUser));
-          myContext.setUserEmail(currentUser?.email);
-          myContext.setUserName(currentUser?.name);
-          navigation.navigate("HomeScreen");
-        } else return alert("Usuario ou senha invalido");
-      } catch (e) {
-        return alert("Ocorreu um erro no login");
+        const userList = await AxiosInstance?.get(`/users?filter=id&email=${email}&limit=1`);
+        const userData = userList?.data?.find((user) => user?.email === email && user?.password === password); 
+        if (userData) {
+            setContext(userData);
+            navigation.navigate("HomeScreen");
+        } else {
+          alert(`Usuario ou senha invalida`);
+        }
+      } catch (error) {
+        throw alert("Houve um problema no servidor. Tente novamente mais tarde");
       }
     },
     [password],   
   );
+  
+  const setContext = (currentUser) => {
+    Context?.setUserId(currentUser?.id);
+    Context?.setUserEmail(currentUser?.email);
+    Context?.setUserName(currentUser?.name);
+  }
 
   const handleChange = (field, value) => {
     setLoginData({ [field]: value });
@@ -92,9 +106,8 @@ const myContext = useGlobal();
             style={styles.signIn}
             onPress={() => {
               if (loginData?.email && password) {
-                verifyItemOnAsyncstorage({ email: loginData.email, password });
-              } else {return alert("Você precisa preencher todos os campos");}
-                //console.log(loginData.email);
+                verifyItemInApiRest({ email: loginData.email, password });
+              } else return alert("Você precisa preencher todos os campos");
             }}
           >
             <LinearGradient

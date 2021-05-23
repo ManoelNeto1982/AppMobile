@@ -1,4 +1,9 @@
-import React, { useRef, useState, useEffect, useFocusEffect } from "react";
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useFocusEffect
+} from "react";
 import {Picker} from '@react-native-picker/picker';
 import {
   View,
@@ -15,44 +20,37 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { Foundation } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import AppContext, { useGlobal } from "../../../components/GlobalContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useGlobal } from "../../../components/GlobalContext";
 import { useCallback } from "react";
 import { useNavigation } from "@react-navigation/native";
 
 const RegisterProductScreen = (props) => {
 
-  const [selectedValue, setSelectedValue] = useState('');
+  const [selectedValue, setSelectedValue] = useState("");
 
   const navigation = useNavigation();
+
+  const Context = useGlobal();
 
   const initialBook = {
     title: "",
     author: "",
-    sinopse: "",
-    owner: "",
+    resume: "",
+    genre: "",
+    owner: Context?.userId
   };
 
   const [bookData, setBookData] = useState(initialBook);
 
-  const registerNewBook = useCallback(
-    async ({ title, author, sinopse }) => {
+  const registerNewBook = useCallback (
+    async ({ title, author, resume }) => {
       try {
-        const currentUser = JSON.parse(await AsyncStorage.getItem("currentUser"));
-        const booksList = JSON.parse(await AsyncStorage.getItem("books"));
-        const books = booksList != null ? booksList : [];   
-        if (books?.find?.((book) => book?.title === title && book?.owner === currentUser?.email)) {
-          alert("Já existe um livro com o titulo inserido, escolha outro titulo ou edite o já existente");
-        } else {
-          const newBook = { title, author, sinopse, owner: currentUser?.email };
-          await AsyncStorage.setItem("books", JSON.stringify([...books, newBook]));                            
-          navigation.navigate("HomeScreen");
-        }
+
       } catch (e) {
-        //console.log(e);        
+        console.log(e); 
       } 
     },
-    [navigation]    
+    [navigation] 
   );
 
   
@@ -113,12 +111,12 @@ const RegisterProductScreen = (props) => {
         <View style={styles.action}>
           <FontAwesome name="pencil-square-o" size={20} />
           <TextInput
-            placeholder="Sinopse"
+            placeholder="resume"
             placeholderTextColor="#666666"
             autoCorrect={false}
             multiline={true}
             numberOfLines={1}
-            onChangeText={(text) => handleChange("sinopse", text)}
+            onChangeText={(text) => handleChange("resume", text)}
             style={
               ([styles.textInput],
               {
@@ -134,7 +132,7 @@ const RegisterProductScreen = (props) => {
         </View>            
         <TouchableOpacity
           onPress={async () => {
-            if (bookData.title && bookData.sinopse && bookData.author) {
+            if (bookData.title && bookData.resume && bookData.author) {
               await registerNewBook(bookData);
             } else {
               alert("Preencha todos os campos!");

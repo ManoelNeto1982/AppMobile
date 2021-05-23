@@ -1,54 +1,61 @@
 import React, { useState } from "react";
-import { View, Text, Modal, Button, StyleSheet, TouchableOpacity, Platform, Image, TextInput, StatusBar, CheckBox} from "react-native";
+import { 
+  View,
+  Text,
+  Modal,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+  Platform,
+  Image,
+  TextInput,
+  StatusBar,
+  CheckBox
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AxiosInstance from "../../../axios.config";
 
 const SignUpScreen = ({ navigation }) => {
+
   const [isSelected, setSelected] = useState(false);
+  const [rePassword, setRePassword] = useState("");
+  const [dataSignUp, setDataSignUp] = useState(initialSignUpState);
+
   const initialSignUpState = {
     email: "",
     name: "",
     password: "",
   };
 
-  const verifyItemOnAsyncstorage = async (value) => {
+  const verifyItemExist = async (userDataToSave) => {
     try {
-      const userList = JSON.parse(await AsyncStorage.getItem("users"));
-
-      if (!userList?.find?.((user) => user?.email === value?.email)) {
-        await storeDataToAsyncStorage(value);
+      // Melhoria: Criar api & Criar metodo para fazer busca estrita
+      const userList = await AxiosInstance?.get(`/users?email=${userDataToSave?.email}`);
+      if (userList?.data?.find((user) => user?.email === userDataToSave?.email)) {
+        return alert(`Email ja registrado`);
       } else {
-        alert("Email já registrado por favor escolha outro email");
+        // Melhoria: Criar um axios interceptor para refazer o post caso aconteça erro
+        await storeDataInApiRest(userDataToSave);
       }
-    } catch (e) {
-      //console.log(e);
-      alert("Houve uma falha ao carregar os dados, tente novamente");
+    } catch (error) {
+      //console.log(error);
+      throw alert(`Houve um problema na conexão com o servidor por favor tente novamente mais tarde`);
     }
   };
 
-  const storeDataToAsyncStorage = async (value) => {
+  const storeDataInApiRest = async (userDataToSave, request = 0) => {
     try {
-      const userList = JSON.parse(await AsyncStorage.getItem("users"));
-      if (userList?.length) {
-        await AsyncStorage.setItem("users", JSON.stringify([...userList, value]));
-      } else {
-        await AsyncStorage.setItem("users", JSON.stringify([value]));
-      }
-      //await AsyncStorage.setItem("user", JSON.stringify(value));
+      const user = await AxiosInstance?.post(`/users/`, userDataToSave);
       alert("Conta criada com sucesso");
-      navigation.navigate("SignInScreen");
-    } catch (e) {
-      throw e;
-      //console.log(e);
-      return alert("Falha ao salvar tente novamente");
+      navigation?.navigate("SignInScreen");
+    } catch (error) {
+      console.log(error);
+      if (request < 2) storeDataInApiRest(userDataToSave, request += 1);
     }
-  };
-
-  const [rePassword, setRePassword] = useState("");
-  const [dataSignUp, setDataSignUp] = useState(initialSignUpState);
+  }
 
   const handleChange = (field, value) => {
     setDataSignUp({ ...dataSignUp, [field]: value });
@@ -130,11 +137,11 @@ const SignUpScreen = ({ navigation }) => {
               if (isSelected) {
                 if ( dataSignUp.email && dataSignUp.name && dataSignUp.password && rePassword) {
                   if (dataSignUp.password === rePassword) {
-                    verifyItemOnAsyncstorage(dataSignUp);
+                    verifyItemExist(dataSignUp);
                   } else return alert("As senhas não são compativeis");
                 } else
                   return alert( "Preencha todos os campos para poder realizar o cadastro");
-                  window.location.reload();
+                  //window.location.reload();
               } else {
                 return alert("Aceite os termos de uso para poder realizar o cadastro");
               }

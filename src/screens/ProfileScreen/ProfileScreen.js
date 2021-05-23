@@ -1,12 +1,23 @@
 import React, {useRef} from "react";
-import { View, SafeAreaView, StyleSheet, TextInput, TouchableOpacity } from "react-native";
-import { Title, Caption, Text, TouchableRipple } from "react-native-paper";
+import { 
+  View,
+  SafeAreaView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity
+} from "react-native";
+import { 
+  Title,
+  Caption,
+  Text,
+  TouchableRipple
+} from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Modalize } from "react-native-modalize";
 import { useGlobal } from "../../../components/GlobalContext";
+import AxiosInstance from "../../../axios.config";
 
 const ProfileScreen = ({ navigation }) => {
 
@@ -20,36 +31,24 @@ const ProfileScreen = ({ navigation }) => {
     modalizeRef.current?.close();
   }
 
-  const myContext = useGlobal();
+  const Context = useGlobal();
 
   const removeAccount = async () => {
     try {
-      const userList = JSON.parse(await AsyncStorage.getItem("users"));
-      const bookList = JSON.parse(await AsyncStorage.getItem("books"));
-      const currentUser = JSON.parse(await AsyncStorage.getItem("currentUser"));
-      if(userList?.length) {
-        await AsyncStorage.setItem("users", JSON.stringify(userList?.filter?.((user) =>
-          user?.email !== currentUser?.email)));
-        if (bookList?.legth) {
-          await AsyncStorage.setItem("books", JSON.stringify(bookList?.filter?.((book) =>
-            book?.owner !== currentUser?.email )));
-        } else {
-          await AsyncStorage.setItem("books", JSON.stringify([]));
-        }
-      } else {
-        await AsyncStorage.setItem("users", JSON.stringify([]));
-        return alert("Problema no sitema aparentemente o úsuario não está logado").
-        navigation.navigate("SignInScreen");
-      }
-      //myContext.userEmail = "";
-      //myContext.userName = "";
-      alert("Conta apagada com sucesso");
+      const foo = await AxiosInstance?.delete(`/users/${Context?.userId}`);
+      setContext();
       navigation.navigate("SignInScreen");
-    } catch (e) {
-      console.log(e);
-      return alert("Problema na remoção");
+    } catch (error) {
+      console.log(error);
+      throw alert("Houve um problema na remoção da conta, por favor tente em outro momento");
     }
   };
+
+  const setContext = () => {
+    Context?.setUserId("");
+    Context?.setUserEmail("");
+    Context?.setUserName("");
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -63,7 +62,7 @@ const ProfileScreen = ({ navigation }) => {
                         marginTop={20}
                     /> */}
           <View style={{ marginTop: 30 }}>
-            <Title style={styles.title}>{`${myContext.userName}`}</Title>
+            <Title style={styles.title}>{`${Context?.userName}`}</Title>
           </View>
         </View>
       </View>
@@ -80,7 +79,7 @@ const ProfileScreen = ({ navigation }) => {
         <View style={styles.row}>
           <Entypo name="email" color="#777777" size={20} />
           <Text style={{ color: "#777777", marginLeft: 20 }}>
-            {`${myContext.userEmail}`}
+            {`${Context?.userEmail}`}
           </Text>
         </View>
       </View>
@@ -137,7 +136,7 @@ const ProfileScreen = ({ navigation }) => {
               onPress={() => {
                 removeAccount();
                 closeModal();
-                window.location.reload();
+                //window.location.reload();
               }}
               style={styles.panelButtonYes}
             >
