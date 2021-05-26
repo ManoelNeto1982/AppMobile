@@ -3,14 +3,16 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 
 import Icon from "react-native-vector-icons/Ionicons";
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect, useNavigation, CommonActions } from "@react-navigation/native";
 import { Modalize } from "react-native-modalize";
+import { useGlobal } from "../../../components/GlobalContext";
+import AxiosInstance from "../../../axios.config";
 
 const HomeScreen = (props) => {
   const modalizeRef = useRef(null);
   
-  function OpenModal() {
+  function OpenModal(bookId) {
+    console.log(bookId);
     modalizeRef.current?.open();
   }
 
@@ -18,17 +20,17 @@ const HomeScreen = (props) => {
     modalizeRef.current?.close();
   }
  
-
   const navigation = useNavigation();
+  
+  const Context = useGlobal();
 
-  const [allBooksData, setAllBooksData] = useState([]);
+  const [userBooks, setUserBooks] = useState([]);
 
-  const removeBookFromAsyncStorage = useCallback (
-    async ({ title }) => {
+  const removeBookFromApiRest = useCallback (
+    async ({ bookId }) => {
       try {
-        const booksList = JSON.parse(await AsyncStorage.getItem("books"));
-        const newBooksList = booksList?.filter?.((book) => book?.title !== title);
-        await AsyncStorage.setItem("books", JSON.stringify(newBooksList));
+        const bookToRemove = await AxiosInstance?.get(`/users/${Context?.userId}/books/${bookId}`);
+        console.log(bookToRemove);
         navigation.dispatch(CommonActions.reset({
             index: 0,
             routes: [{ name: 'HomeScreen'}], 
@@ -39,7 +41,7 @@ const HomeScreen = (props) => {
       }
     });
 
-  const bookToEdit = async ({ title }) => {    
+  const bookToEdit = async ({ bookId }) => {    
     await AsyncStorage.setItem("bookToEdit", JSON.stringify(title));
         navigation.dispatch(CommonActions.reset({
             index: 0,
@@ -53,20 +55,18 @@ const HomeScreen = (props) => {
 
       const fetchBooks = async () => {
         try {
-          const booksList = JSON.parse(await AsyncStorage.getItem("books"));
-          const currentUser = JSON.parse(await AsyncStorage.getItem("currentUser"));
-          const books = booksList?.filter?.((book) => currentUser?.email === book?.owner);
+          const booksList = await AxiosInstance?.get(`/users/${Context?.userId}/books/`);
+          const books = booksList?.data;
           if (books?.length && isActive) {
-            setAllBooksData([...books]);
+            setUserBooks([...books]);
           } else {
-            setAllBooksData([]);
+            setUserBooks([]);
           }
         } catch (e) {
           console.log(e);
           return alert("Erro ao pegar os dados dos usuarios para exibir os seus livros postados");
         }
       };
-
 
       fetchBooks();
 
@@ -81,14 +81,15 @@ const HomeScreen = (props) => {
     <ScrollView>
       <View style={styles.container}>
         <Text style={styles.title}>Lista de Livros </Text>
-        {allBooksData.map((book) => {
+        {userBooks.map((book) => {
           return (
             <View style={{ flexDirection: "row" }}>
               <View style={{ justifyContent: "center" }}>
                 <View style={styles.clienteListContainer}>
-                  <Text style={styles.name}>{`Título: ${book.title}`}</Text>
-                  <Text style={styles.listItem}>{`Autor: ${book.author}`}</Text>
-                  <Text style={styles.listItem}>{`Descrição: ${book.sinopse}`}</Text>
+                  <Text style={styles.name}>{`Título: ${book?.title}`}</Text>
+                  <Text style={styles.listItem}>{`Genêro: ${book?.genre}`}</Text>
+                  <Text style={styles.listItem}>{`Autor: ${book?.author}`}</Text>
+                  <Text style={styles.listItem}>{`Descrição: ${book?.resume}`}</Text>
                   <View style={{ flexDirection: "row", marginLeft: "65%"  }}>
                     <View>
                       <TouchableOpacity
@@ -99,7 +100,7 @@ const HomeScreen = (props) => {
                           size={30}
                           color="blue"
                           style={{
-                            opacity: 0.7,                           
+                            opacity: 0.7,
                             borderWidth: 1,
                             marginRight: 5,
                             borderWidth:1,
@@ -111,7 +112,7 @@ const HomeScreen = (props) => {
                     </View>
                     <View>
                       <TouchableOpacity
-                        onPress={OpenModal}
+                        onPress={() => { removeBookFromApiRest({bookId: book?.id}); }}
                       >
                         <Icon
                           name="trash"
@@ -130,7 +131,7 @@ const HomeScreen = (props) => {
                     <View>
                       <TouchableOpacity
                         onPress={() => {
-                          bookToEdit({title: book.title});
+                          bookToEdit({bookId: book?.id});
                         }}
                       >
                         <FontAwesome
@@ -166,9 +167,8 @@ const HomeScreen = (props) => {
                 </View>
                 <View style={{flexDirection:'row', alignSelf: "center"}}>
                   <TouchableOpacity
-                  onPress={() => {removeBookFromAsyncStorage({title: book.title}); }}           
+                  onPress={() => {console.log(book?.id); removeBookFromApiRest({bookId: book?.id}); }}           
                   style={styles.panelButton}
-                  
                   >
                     <Text style={styles.panelButtonTitle}>Sim</Text>
                   </TouchableOpacity>
