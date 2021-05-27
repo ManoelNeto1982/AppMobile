@@ -23,10 +23,9 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useGlobal } from "../../../components/GlobalContext";
 import { useCallback } from "react";
 import { useNavigation } from "@react-navigation/native";
+import AxiosInstance from "../../../axios.config";
 
 const RegisterProductScreen = (props) => {
-
-  const [selectedValue, setSelectedValue] = useState("");
 
   const navigation = useNavigation();
 
@@ -43,17 +42,16 @@ const RegisterProductScreen = (props) => {
   const [bookData, setBookData] = useState(initialBook);
 
   const registerNewBook = useCallback (
-    async ({ title, author, resume }) => {
+    async ({ title, author, resume, genre, owner }) => {
       try {
-
+        const book = await AxiosInstance?.post(`/users/${owner}/books/`, { title, author, resume, genre });
+       navigation?.navigate("HomeScreen"); 
       } catch (e) {
         console.log(e); 
       } 
     },
     [navigation] 
   );
-
-  
 
   const handleChange = useCallback((field, value) => {
       setBookData({ ...bookData, [field]: value });
@@ -92,9 +90,9 @@ const RegisterProductScreen = (props) => {
           <Foundation name="quote" size={24} color="black" />
         <View>
           <Picker        
-            selectedValue={selectedValue}
+            selectedValue={bookData?.genre}
             style={{ height: 30, width: 280, marginLeft:10}}
-            onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+            onValueChange={(genre) => handleChange("genre", genre)}
           >
             <Picker.Item label="Selecione um gênero" value="" />
             <Picker.Item label="Aventura" value="aventura" />
@@ -131,8 +129,8 @@ const RegisterProductScreen = (props) => {
           />
         </View>            
         <TouchableOpacity
-          onPress={async () => {
-            if (bookData.title && bookData.resume && bookData.author) {
+          onPress={ async () => {
+            if (bookData?.title && bookData?.resume && bookData?.author && bookData?.genre) {
               await registerNewBook(bookData);
             } else {
               alert("Preencha todos os campos!");

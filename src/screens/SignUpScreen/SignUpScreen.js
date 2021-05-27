@@ -46,14 +46,14 @@ const SignUpScreen = ({ navigation }) => {
     }
   };
 
-  const storeDataInApiRest = async (userDataToSave, request = 0) => {
+  const storeDataInApiRest = async (userDataToSave) => {
     try {
       const user = await AxiosInstance?.post(`/users/`, userDataToSave);
       alert("Conta criada com sucesso");
       navigation?.navigate("SignInScreen");
     } catch (error) {
-      console.log(error);
-      if (request < 2) storeDataInApiRest(userDataToSave, request += 1);
+      //console.log(error);
+      //if (request < 2) storeDataInApiRest(userDataToSave, request += 1);
     }
   }
 

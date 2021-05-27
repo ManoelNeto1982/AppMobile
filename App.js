@@ -17,6 +17,7 @@ import Home from "./src/screens/Home/index";
 import RegisterProductScreen from "./src/screens/RegisterProductScreen/RegisterProductScreen";
 import AppGlobalProvider from "./components/GlobalContext";
 import BookMarkScreen from "./src/screens/BookMarkScreen/BookMarkScreen";
+import Modal from "./src/screens/Home/Modal";
 
 const HomeStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -302,6 +303,7 @@ const App = () => {
           />
           <Drawer.Screen name="Perfil" component={ProfileStackScreen} />
           <Drawer.Screen name="BookMarkScreen" component={BookMarkStackScreen} />
+          <Drawer.Screen name="Modal" component={Modal} />
         </Drawer.Navigator>
       </NavigationContainer>
     </AppGlobalProvider>
