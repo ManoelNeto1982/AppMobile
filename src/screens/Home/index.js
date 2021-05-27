@@ -1,52 +1,44 @@
-import React, { useState, useCallback, useRef } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from "react-native";
+import React, { 
+  useState,
+  useCallback,
+} from "react";
+import { 
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from "@expo/vector-icons";
-import { useFocusEffect, useNavigation, CommonActions } from "@react-navigation/native";
-import { Modalize } from "react-native-modalize";
+import {
+  useFocusEffect,
+  useNavigation, 
+  CommonActions 
+} from "@react-navigation/native";
 import { useGlobal } from "../../../components/GlobalContext";
 import AxiosInstance from "../../../axios.config";
+import Modal from "./Modal";
 
 const HomeScreen = (props) => {
-  const modalizeRef = useRef(null);
-  
-  function OpenModal(bookId) {
-    console.log(bookId);
-    modalizeRef.current?.open();
-  }
-
-  function closeModal() {
-    modalizeRef.current?.close();
-  }
- 
   const navigation = useNavigation();
   
   const Context = useGlobal();
 
   const [userBooks, setUserBooks] = useState([]);
 
-  const removeBookFromApiRest = useCallback (
-    async ({ bookId }) => {
-      try {
-        const bookToRemove = await AxiosInstance?.get(`/users/${Context?.userId}/books/${bookId}`);
-        console.log(bookToRemove);
-        navigation.dispatch(CommonActions.reset({
-            index: 0,
-            routes: [{ name: 'HomeScreen'}], 
-          }));
-      } catch (e) {
-        //console.log(e);
-        alert("Não foi possivél remover o livro");
-      }
-    });
+  const dispatch = (screen) => {
+      navigation.dispatch(CommonActions.reset({
+          index: 0,
+          routes: [{ name: screen }], 
+      }));
+  }
 
   const bookToEdit = async ({ bookId }) => {    
     await AsyncStorage.setItem("bookToEdit", JSON.stringify(title));
-        navigation.dispatch(CommonActions.reset({
-            index: 0,
-            routes: [{ name: 'EditProductScreen'}], 
-          }));
+    dispatch('EditProductScreen');
   }
 
   useFocusEffect(
@@ -89,7 +81,7 @@ const HomeScreen = (props) => {
                   <Text style={styles.name}>{`Título: ${book?.title}`}</Text>
                   <Text style={styles.listItem}>{`Genêro: ${book?.genre}`}</Text>
                   <Text style={styles.listItem}>{`Autor: ${book?.author}`}</Text>
-                  <Text style={styles.listItem}>{`Descrição: ${book?.resume}`}</Text>
+                  <Text style={styles.listItem}>{`Resumo: ${book?.resume}`}</Text>
                   <View style={{ flexDirection: "row", marginLeft: "65%"  }}>
                     <View>
                       <TouchableOpacity
@@ -112,7 +104,10 @@ const HomeScreen = (props) => {
                     </View>
                     <View>
                       <TouchableOpacity
-                        onPress={() => { removeBookFromApiRest({bookId: book?.id}); }}
+                        onPress={() => { 
+                          Context?.setBookId(book?.id);
+                          dispatch("Modal");
+                        }}
                       >
                         <Icon
                           name="trash"
@@ -151,36 +146,6 @@ const HomeScreen = (props) => {
                   </View>               
                 </View>
               </View>
-              <Modalize ref={modalizeRef} snapPoint={360} modalHeight={360}>
-              <View style={styles.panel}>
-                <View style={{ alignItems: "center", marginTop: "25%" }}>
-                  <Text
-                    style={{
-                      marginTop: 10,
-                      fontWeight: "bold",
-                      fontSize: 18,
-                      marginBottom: 5,
-                    }}
-                  >
-                    Meta alcançada?
-                  </Text>
-                </View>
-                <View style={{flexDirection:'row', alignSelf: "center"}}>
-                  <TouchableOpacity
-                  onPress={() => {console.log(book?.id); removeBookFromApiRest({bookId: book?.id}); }}           
-                  style={styles.panelButton}
-                  >
-                    <Text style={styles.panelButtonTitle}>Sim</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {closeModal()}}
-                    style={styles.panelButtonNo}
-                  >
-                    <Text style={styles.panelButtonTitle}>Ainda Não</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </Modalize>   
             </View>                 
           );
           
