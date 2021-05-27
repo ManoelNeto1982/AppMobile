@@ -1,10 +1,20 @@
-import React,{useState, useRef} from 'react'
+import React,{useState, useRef, useCallback} from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView} from 'react-native'
 import { FontAwesome } from '@expo/vector-icons';
 import CustomButton from '../../component/CustomButton/CustomButton';
 import { Modalize } from "react-native-modalize";
+import AxiosInstance from "../../../axios.config";
 
 const BookMarkScreen = ({navigation}) => {
+
+  const Context = useGlobal();
+
+  //Eu preciso dos dados do livro e do id do usuário, mas initialbook não é chamado em nenhum lugar??  
+  const initialBook = {
+    title: "",
+    owner: Context?.userId
+  }
+
   const modalizeRef = useRef(null);
   
   function OpenModal() {
@@ -18,30 +28,48 @@ const BookMarkScreen = ({navigation}) => {
   const [mark, setMark] = useState('');
   const [markList, setMarkList] = useState([]);
   const [edditingMark, setEdditingMark] = useState(0);
+  
 
-  const addMark = () => {
-   
-    setMarkList([...markList, 
-    {key:Math.random().toString() , data:mark }]);
-    setMark('')
-  }
+  const addMark = useCallback (
+    async ({ title, owner }) => {
+      try {
+        //const bookMark = await AxiosInstance?.post(`/users/${owner}/books/`, { title, owner })
+        setMarkList([...markList, 
+        {key:Math.random().toString() , data:mark }]);
+        setMark('')
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  );
 
   const editMark = (item) => {
     setMark(item.data)
     setEdditingMark(item.key)
   }
 
-  const upadateMark = () => {
-    setMarkList(list => markList.map(item => item.key === edditingMark  ? { key:item.key, data: mark} : item ))
-    setMark('')
-    setEdditingMark(0)
+  const upadateMark = async () => {
+    try{
+      //const newMarkData = await AxiosInstance?.put(`/users/${owner}/books/:id/marks/:id`)
+      setMarkList(list => markList.map(item => item.key === edditingMark  ? { key:item.key, data: newMarkData} : item ))//data: mark
+      setMark('')
+      setEdditingMark(0)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
-  const removeMark = (itemKey) => {
-    let list = markList.filter(item => item.key !== itemKey)
-    setMarkList(list)
-    console.log(list)
+  const removeMark =  async (itemKey) => {
+    try{ 
+      //const newMarkData = await AxiosInstance?.delete(`/users/${owner}/books/:id/marks/:id`)
+      let list = markList.filter(item => item.key !== itemKey)
+      setMarkList(list)
+      console.log(list)
+    } catch (e) {
+      console.log(e)
+    }
   }
+
    return(    
      <ScrollView>     
         <Text style={styles.title}>Meus Marcadores</Text>
