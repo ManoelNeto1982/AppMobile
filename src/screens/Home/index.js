@@ -8,7 +8,6 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  TextInput,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Ionicons } from '@expo/vector-icons';
@@ -20,7 +19,7 @@ import {
 } from "@react-navigation/native";
 import { useGlobal } from "../../../components/GlobalContext";
 import AxiosInstance from "../../../axios.config";
-import Modal from "./Modal";
+
 
 const HomeScreen = (props) => {
   const navigation = useNavigation();

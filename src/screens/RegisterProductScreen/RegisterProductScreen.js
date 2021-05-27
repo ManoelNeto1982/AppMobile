@@ -1,25 +1,17 @@
-import React, {
-  useRef,
-  useState,
-  useEffect,
-  useFocusEffect
+import React, {  
+  useState,  
 } from "react";
 import {Picker} from '@react-native-picker/picker';
 import {
   View,
-  Text,
-  Button,
+  Text, 
   StyleSheet,
-  TouchableOpacity,
-  ImageBackground,
-  TextInput,
-  ScrollView,  
+  TouchableOpacity,  
+  TextInput,  
 } from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
 import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { Foundation } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useGlobal } from "../../../components/GlobalContext";
 import { useCallback } from "react";
 import { useNavigation } from "@react-navigation/native";

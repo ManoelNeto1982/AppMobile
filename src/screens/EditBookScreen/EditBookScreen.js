@@ -1,15 +1,15 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity, ImageBackground, TextInput, ScrollView} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
 import { Caption } from 'react-native-paper'
 import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { Foundation } from '@expo/vector-icons';
 import {Picker} from '@react-native-picker/picker';
-import {  useNavigation, CommonActions } from "@react-navigation/native";
+import {  useNavigation  } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useGlobal } from "../../../components/GlobalContext";
 
-const EditProductScreen = (props) => {    
+const EditProductScreen = () => {    
     const [selectedValue, setSelectedValue] = useState('');
     const navigation = useNavigation();
 

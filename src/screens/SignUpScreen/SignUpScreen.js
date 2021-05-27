@@ -2,12 +2,8 @@ import React, { useState } from "react";
 import { 
   View,
   Text,
-  Modal,
-  Button,
   StyleSheet,
-  TouchableOpacity,
-  Platform,
-  Image,
+  TouchableOpacity,  
   TextInput,
   StatusBar,
   CheckBox

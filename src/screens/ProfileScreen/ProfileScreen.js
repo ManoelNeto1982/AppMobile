@@ -2,8 +2,7 @@ import React, {useRef} from "react";
 import { 
   View,
   SafeAreaView,
-  StyleSheet,
-  TextInput,
+  StyleSheet, 
   TouchableOpacity
 } from "react-native";
 import { 

@@ -1,23 +1,19 @@
 import React from 'react';
 import { 
-    View,
-    Text,
+    View,    
     StyleSheet
 } from 'react-native';
 import { 
     DrawerContentScrollView,
     DrawerItem
 } from '@react-navigation/drawer';
-import {
-    Avatar,
+import {    
     Title,
-    Caption,
-    Paragraph,
+    Caption,  
     Drawer,
     Divider
 } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import AppContext from '../../../components/GlobalContext';
 import { Feather } from '@expo/vector-icons';
 import { useGlobal } from "../../../components/GlobalContext";
 

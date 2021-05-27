@@ -1,20 +1,14 @@
-import React, { 
-  useRef,
-  useState,
-  useEffect
+import React, {   
+  useState, 
 } from "react";
 import { 
   View,
   Text,
-  Button,
   StyleSheet,
-  TouchableOpacity,
-  ImageBackground,
+  TouchableOpacity, 
   TextInput
 } from "react-native";
 import { Caption } from 'react-native-paper'
-import Icon from "react-native-vector-icons/Ionicons";
-import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useGlobal } from "../../../components/GlobalContext";
