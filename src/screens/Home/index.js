@@ -84,7 +84,7 @@ const HomeScreen = (props) => {
                   <View style={{ flexDirection: "row", marginLeft: "65%"  }}>
                     <View>
                       <TouchableOpacity
-                        onPress={() => {navigation.navigate('BookMarkScreen')}}
+                        onPress={() => {Context.setBookId(book.id); dispatch('BookMarkScreen')}}
                       >
                         <Ionicons
                           name="bookmark-outline"
@@ -149,8 +149,7 @@ const HomeScreen = (props) => {
           );
           
         })}
-      </View>
-    
+      </View>    
     </ScrollView>
   );
 };

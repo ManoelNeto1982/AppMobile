@@ -1,8 +1,9 @@
-import React,{useState, useRef, useCallback} from 'react'
+import React,{useState, useRef, useCallback, useEffect} from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView} from 'react-native'
 import { FontAwesome } from '@expo/vector-icons';
 import CustomButton from '../../component/CustomButton/CustomButton';
 import { Modalize } from "react-native-modalize";
+import { useGlobal } from "../../../components/GlobalContext";
 import AxiosInstance from "../../../axios.config";
 
 const BookMarkScreen = ({navigation}) => {
@@ -29,46 +30,53 @@ const BookMarkScreen = ({navigation}) => {
   const [markList, setMarkList] = useState([]);
   const [edditingMark, setEdditingMark] = useState(0);
   
+  // useEffect(()=> {
+  //   console.log(Context.bookId)
+  //   console.log(Context.userId)
+  // }, [])
 
-  const addMark = useCallback (
-    async ({ title, owner }) => {
-      try {
-        //const bookMark = await AxiosInstance?.post(`/users/${owner}/books/`, { title, owner })
-        setMarkList([...markList, 
-        {key:Math.random().toString() , data:mark }]);
-        setMark('')
-      } catch (e) {
-        console.log(e)
-      }
-    }
-  );
+  // const addMark = useCallback (
+  //   async ({ userId, bookId }) => {
+  //     try {
+  //       const bookMark = await AxiosInstance?.post(`/users/${userId}/books/${bookId}/marks`, { description: mark })
+  //       console.log(bookMark);
+  //       // setMarkList([...markList, 
+  //       // {key:Math.random().toString() , data:mark }]);
+  //       // setMark('')
+  //       // console.log(bookMark)
+  //     } catch (e) {
+  //       console.log(e)
+  //     }
+  //   }
+  // );
 
-  const editMark = (item) => {
-    setMark(item.data)
-    setEdditingMark(item.key)
-  }
+  // const editMark = (item) => {
+  //   setMark(item.data)
+  //   setEdditingMark(item.key)
+  // }
 
-  const upadateMark = async () => {
-    try{
-      //const newMarkData = await AxiosInstance?.put(`/users/${owner}/books/:id/marks/:id`)
-      setMarkList(list => markList.map(item => item.key === edditingMark  ? { key:item.key, data: newMarkData} : item ))//data: mark
-      setMark('')
-      setEdditingMark(0)
-    } catch (e) {
-      console.log(e)
-    }
-  }
+  // const upadateMark = async () => {
+  //   try{
+  //     //const newMarkData = await AxiosInstance?.put(`/users/${owner}/books/:id/marks/:id`)
+  //     console.log(owner)
+  //     setMarkList(list => markList.map(item => item.key === edditingMark  ? { key:item.key, data: newMarkData} : item ))//data: mark
+  //     setMark('')
+  //     setEdditingMark(0)
+  //   } catch (e) {
+  //     console.log(e)
+  //   }
+  // }
 
-  const removeMark =  async (itemKey) => {
-    try{ 
-      //const newMarkData = await AxiosInstance?.delete(`/users/${owner}/books/:id/marks/:id`)
-      let list = markList.filter(item => item.key !== itemKey)
-      setMarkList(list)
-      console.log(list)
-    } catch (e) {
-      console.log(e)
-    }
-  }
+  // const removeMark =  async (itemKey) => {
+  //   try{ 
+  //     const newMarkData = await AxiosInstance?.delete(`/users/${owner}/books/:id/marks/:id`)
+  //     let list = markList.filter(item => item.key !== itemKey)
+  //     setMarkList(list)
+  //     console.log(list)
+  //   } catch (e) {
+  //     console.log(e)
+  //   }
+  // }
 
    return(    
      <ScrollView>     
@@ -86,7 +94,7 @@ const BookMarkScreen = ({navigation}) => {
               textSize={20}
               padding={20}
               textColor="white"
-              onPressEvent={edditingMark === 0 ? addMark : upadateMark}
+              onPressEvent={edditingMark === 0 ? addMark({userId: Context.userId, bookId: Context.bookId}) : upadateMark}
               disabled={mark.length <= 0}
             /> 
           </View>
