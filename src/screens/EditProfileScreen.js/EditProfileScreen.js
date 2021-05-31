@@ -136,7 +136,7 @@ const EditProfileScreen = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            navigation.goBack();
+            navigation.navigate("Perfil");
           }}
           style={styles.commandButton}
         >

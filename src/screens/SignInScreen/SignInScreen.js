@@ -15,6 +15,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Feather } from "@expo/vector-icons";
 import { useGlobal } from "../../../components/GlobalContext";
+import { CommonActions } from "@react-navigation/native";
 import AxiosInstance from "../../../axios.config";
 
 const SignInScreen = ({ navigation }) => {
@@ -52,6 +53,13 @@ const Context = useGlobal();
     Context?.setUserId(currentUser?.id);
     Context?.setUserEmail(currentUser?.email);
     Context?.setUserName(currentUser?.name);
+  }
+
+  const dispatch = (screen) => {
+      navigation.dispatch(CommonActions.reset({
+          index: 0,
+          routes: [{ name: screen }], 
+      }));
   }
 
   const handleChange = (field, value) => {
@@ -129,7 +137,7 @@ const Context = useGlobal();
 
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("SignUpScreen");
+              dispatch("SignUpScreen");
             }}
             style={[
               styles.signIn,

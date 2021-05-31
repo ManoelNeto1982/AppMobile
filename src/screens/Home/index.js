@@ -36,11 +36,6 @@ const HomeScreen = (props) => {
       }));
   }
 
-  const bookToEdit = async ({ bookId }) => {    
-    await AsyncStorage.setItem("bookToEdit", JSON.stringify(title));
-    dispatch('EditProductScreen');
-  }
-
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
@@ -75,7 +70,7 @@ const HomeScreen = (props) => {
         <Text style={styles.title}>Lista de Livros </Text>
         {userBooks.map((book) => {
           return (
-            <View style={{ flexDirection: "row" }}>
+            <View key={book?.id} style={{ flexDirection: "row" }}>
               <View style={{ justifyContent: "center" }}>
                 <View style={styles.clienteListContainer}>
                   <Text style={styles.name}>{`Título: ${book?.title}`}</Text>
@@ -126,7 +121,8 @@ const HomeScreen = (props) => {
                     <View>
                       <TouchableOpacity
                         onPress={() => {
-                          bookToEdit({bookId: book?.id});
+                          Context?.setBookId(book?.id);
+                          dispatch("EditProductScreen");
                         }}
                       >
                         <FontAwesome

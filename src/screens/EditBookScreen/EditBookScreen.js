@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity, ImageBackground, TextInput, ScrollView} from 'react-native';
 import { Caption } from 'react-native-paper'
 import { FontAwesome } from '@expo/vector-icons';
@@ -6,51 +6,47 @@ import { Feather } from '@expo/vector-icons';
 import { Foundation } from '@expo/vector-icons';
 import {Picker} from '@react-native-picker/picker';
 import {  useNavigation, CommonActions } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useGlobal } from "../../../components/GlobalContext";
+import AxiosInstance from "../../../axios.config";
 
 const EditProductScreen = (props) => {    
+
+    const initialBook = {
+        id: Context?.bookId,
+        title: "",
+        author: "",
+        resume: "",
+        genre: "",
+        owner: Context?.userId
+    };
+
     const [selectedValue, setSelectedValue] = useState('');
+    const [bookData, setBookData] = useState(initialBook);
+
     const navigation = useNavigation();
 
-    const myContext = useGlobal();
+    const Context = useGlobal();
 
-    const initialNewBookState = {
-        title: "", 
-        author: "",
-        sinopse: "",
-        owner: myContext.userEmail
-    }
-
-    const [bookData, setBookData] = useState(initialNewBookState);
-
-    const saveNewBookOnAsyncStorage = async () => {
-        const bookList = JSON.parse(await AsyncStorage.getItem("books"));
-        const bookToEdit = JSON.parse(await AsyncStorage.getItem("bookToEdit"));
-        const newBooksList = bookList?.filter?.((book) => bookToEdit !== book?.title);
-        if (newBooksList?.length) {
-            await AsyncStorage.setItem("books", JSON.stringify([...newBooksList, bookData]));
-        } else {
-            await AsyncStorage.setItem("books", JSON.stringify([bookData]));
-        }
+    const updateBook = async (book) => {
+        const newBook = await AxiosInstance?.put(`/users/${book?.owner}/books/${book?.id}`, { title: book?.title, author: book?.author, genre: book?.genre, resume: book?.resume });
+        Context?.setBookId("");
         navigation.navigate("HomeScreen");
     }
 
-    const handleChange = (field, value) => {
-        setBookData({...bookData, [field]: value})
-    }
+  const handleChange = useCallback((field, value) => {
+      setBookData({ ...bookData, [field]: value });
+    },
+    [bookData, setBookData],
+  );
 
     useEffect(() => {        
-        const getBookDataToEditFromAsyncStorage = async () => {
-            const bookTitle = JSON.parse(await AsyncStorage.getItem("bookToEdit"));
-            const bookList = JSON.parse(await AsyncStorage.getItem("books"));
-            const book = bookList?.find?.((book) => bookTitle === book?.title);
-            setBookData(book);
+        const getBookDataFromApiRest = async () => {
+            const book = await AxiosInstance?.get(`/users/${Context?.userId}/books/${Context?.bookId}`);
+            setBookData(book?.data);
         }
 
-        getBookDataToEditFromAsyncStorage();       
+        getBookDataFromApiRest();
     }, []);
-
 
     return (
         <View style={styles.container}>  
@@ -64,7 +60,7 @@ const EditProductScreen = (props) => {
                     <TextInput
                         placeholder='Alterar título do Livro'
                         placeholderTextColor="#666666"
-                        value={`${bookData.title}`}
+                        value={`${bookData?.title}`}
                         autoCorrect={false}                        
                         onChangeText={(text) => handleChange('title', text)}
                         style={styles.textInput}/>
@@ -74,7 +70,7 @@ const EditProductScreen = (props) => {
                     <TextInput
                         placeholder='Alterar Nome do autor'
                         placeholderTextColor="#666666"
-                        value={`${bookData.author}`}
+                        value={`${bookData?.author}`}
                         autoCorrect={false}
                         onChangeText={(text) => handleChange('author', text)}
                      
@@ -84,9 +80,9 @@ const EditProductScreen = (props) => {
                     <Foundation name="quote" size={24} color="black" />
                     <View>
                         <Picker        
-                            selectedValue={selectedValue}
+                            selectedValue={bookData?.genre}
                             style={{ height: 30, width: 280, marginLeft:10}}
-                            onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+                            onValueChange={(genre) => handleChange("genre", genre)}
                         >
                             <Picker.Item label="Selecione um gênero" value="" />
                             <Picker.Item label="Aventura" value="aventura" />
@@ -102,21 +98,21 @@ const EditProductScreen = (props) => {
                 <View style={styles.action}>
                     <FontAwesome name="pencil-square-o" size={20}/>
                     <TextInput
-                        placeholder='Alterar Sinopse'                       
+                        placeholder='Alterar resume'                       
                         placeholderTextColor="#666666"                        
-                        value={`${bookData.sinopse}`}
+                        value={`${bookData?.resume}`}
                         autoCorrect={false}
                         multiline={true}
                         numberOfLines={1}                       
-                        onChangeText={(text) => handleChange('sinopse', text)}
+                        onChangeText={(text) => handleChange('resume', text)}
                         style={[styles.textInput], { width:'90%', backgroundColor: '#CACACA', paddingBottom: 125, paddingLeft: 10, marginLeft: 5}}                     
                         />
                                             
                 </View>
                 <TouchableOpacity
                     onPress={() => {
-                        if(bookData?.title && bookData?.author && bookData?.sinopse) {
-                            saveNewBookOnAsyncStorage();
+                        if(bookData?.title && bookData?.author && bookData?.resume && bookData?.genre) {
+                            updateBook(bookData);
                         } else {
                             alert("Preencha todos os campos");
                         }

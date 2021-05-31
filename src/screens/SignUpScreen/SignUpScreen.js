@@ -135,8 +135,8 @@ const SignUpScreen = ({ navigation }) => {
             style={([styles.button], { marginTop: 10 })}
             onPress={() => {
               if (isSelected) {
-                if ( dataSignUp.email && dataSignUp.name && dataSignUp.password && rePassword) {
-                  if (dataSignUp.password === rePassword) {
+                if ( dataSignUp?.email && dataSignUp?.name && dataSignUp?.password && rePassword) {
+                  if (dataSignUp?.password === rePassword) {
                     verifyItemExist(dataSignUp);
                   } else return alert("As senhas não são compativeis");
                 } else

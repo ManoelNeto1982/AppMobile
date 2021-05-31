@@ -47,8 +47,8 @@ const RegisterProductScreen = (props) => {
         const book = await AxiosInstance?.post(`/users/${owner}/books/`, { title, author, resume, genre });
        navigation?.navigate("HomeScreen"); 
       } catch (e) {
-        console.log(e); 
-      } 
+        console.log(e);
+      }
     },
     [navigation] 
   );
@@ -58,7 +58,6 @@ const RegisterProductScreen = (props) => {
     },
     [bookData, setBookData],
   );
-  
 
   return (
     <View style={styles.container}>

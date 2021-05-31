@@ -17,7 +17,7 @@ import {
     Divider
 } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import AppContext from '../../../components/GlobalContext';
+import { CommonActions } from "@react-navigation/native";
 import { Feather } from '@expo/vector-icons';
 import { useGlobal } from "../../../components/GlobalContext";
 
@@ -27,16 +27,24 @@ export function DrawerContent(props){
 
     const setContext = () => {
       Context.setUserId("");
+      Context.setBookId("");
       Context.setUserName("");
       Context.setUserEmail("");
     }
 
+  const dispatch = (screen) => {
+      props.navigation.dispatch(CommonActions.reset({
+          index: 0,
+          routes: [{ name: screen }], 
+      }));
+  }
+
     const signOut = () => {
         setContext();
-        props.navigation.navigate('SignInScreen');
+        dispatch('SignInScreen');
     }
 
-    return(
+    return (
         <View style={{flex:1}}>
             <DrawerContentScrollView {...props}>
                 <View style={styles.drawerContent}>
@@ -59,7 +67,7 @@ export function DrawerContent(props){
                                 />                        
                             )}
                             label="Home"
-                            onPress={() => {props.navigation.navigate('Home')}}
+                            onPress={() => {props.navigation.navigate('HomeScreen')}}
                             >
                         </DrawerItem>   
                         <DrawerItem 
@@ -71,7 +79,7 @@ export function DrawerContent(props){
                                 />                        
                             )}
                             label="Perfil"
-                            onPress={() => {props.navigation.navigate('Perfil')}}
+                            onPress={() => {dispatch('Perfil')}}
                             >
                         </DrawerItem>                
                         <DrawerItem 
@@ -83,7 +91,7 @@ export function DrawerContent(props){
                                 />                        
                             )}
                             label="Cadastrar Livro"
-                            onPress={() => {props.navigation.navigate('RegisterProductScreen')}}
+                            onPress={() => {dispatch('RegisterProductScreen')}}
                             >
                         </DrawerItem>
                         <DrawerItem 
@@ -95,7 +103,7 @@ export function DrawerContent(props){
                                 />                        
                             )}
                             label="Meus Marcadores "
-                            onPress={() => {props.navigation.navigate('BookMarkScreen')}}
+                            onPress={() => {dispatch('BookMarkScreen')}}
                             >
                         </DrawerItem>
                 </Drawer.Section>
@@ -110,10 +118,10 @@ export function DrawerContent(props){
                             name="exit-to-app"
                             color={color}
                             size={size}
-                            />                        
+                            />
                         )}
                         label="Sign-out"
-                        onPress={() => { signOut(), window.location.reload()}}
+                        onPress={() => { signOut() }}
                         >
                     </DrawerItem>
 

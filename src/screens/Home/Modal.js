@@ -37,17 +37,16 @@ const Modal = (props) => {
         async () => {
             const bookData = await AxiosInstance?.get(`/users/${Context?.userId}/books/${Context?.bookId}`);
             setBook(bookData?.data);
-    })
+    }, [navigation]);
     
     const removeBookFromApiRest = useCallback (
         async (bookId) => {
         try {
-            const bookToRemove = await AxiosInstance?.get(`/users/${Context?.userId}/books/${bookId}`);
-            console.log(bookToRemove);
-            //Context?.setBookId("");
-            //navigation.navigate("HomeScreen");
+            const bookToRemove = await AxiosInstance?.delete(`/users/${Context?.userId}/books/${bookId}`);
+            Context?.setBookId("");
+            navigation.navigate("HomeScreen");
         } catch (e) {
-            //console.log(e);
+            console.log(e);
             alert("Não foi possivél remover o livro");
         }
     });
