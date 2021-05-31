@@ -150,9 +150,9 @@ const HomeScreen = (props) => {
                   </View>               
                 </View>
               </View>
-              <Modalize ref={modalizeRef} snapPoint={360} modalHeight={360}>
+              <Modalize ref={modalizeRef} snapPoint={180} modalHeight={180}>
               <View style={styles.panel}>
-                <View style={{ alignItems: "center", marginTop: "25%" }}>
+                <View style={{ alignItems: "center", marginTop: "2%" }}>
                   <Text
                     style={{
                       marginTop: 10,
@@ -172,6 +172,7 @@ const HomeScreen = (props) => {
                   >
                     <Text style={styles.panelButtonTitle}>Sim</Text>
                   </TouchableOpacity>
+
                   <TouchableOpacity
                     onPress={() => {closeModal()}}
                     style={styles.panelButtonNo}
@@ -195,8 +196,9 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     paddingHorizontal: 20,
-    width: "80%",
+    width: "100%",
   },
   buttonContainer: {
     marginTop: 10,
@@ -242,9 +244,8 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   panel: {
-   
     backgroundColor: "#FFFFFF",
-    padding: 10
+    padding: 10,
   },
   panelButton: {
     padding: 13,
@@ -252,14 +253,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#FF6347",
     alignItems: "center",
     marginVertical: 7,
+    width: 100
   },
-  panelButtonNo:{
+  panelButtonNo: {
     padding: 13,
     borderRadius: 10,
     backgroundColor: "red",
     alignItems: "center",
     marginVertical: 7,
-    width: 120
+    width: 120,
+    marginHorizontal: 10,
   },
   panelButtonTitle: {
     fontSize: 17,
