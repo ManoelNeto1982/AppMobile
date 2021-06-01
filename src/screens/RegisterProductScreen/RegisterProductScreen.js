@@ -1,61 +1,49 @@
-import React, { useRef, useState, useEffect, useFocusEffect } from "react";
+import React, {  
+  useState,  
+} from "react";
 import {Picker} from '@react-native-picker/picker';
 import {
   View,
-  Text,
-  Button,
+  Text, 
   StyleSheet,
-  TouchableOpacity,
-  ImageBackground,
-  TextInput,
-  ScrollView,  
+  TouchableOpacity,  
+  TextInput,  
 } from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
 import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { Foundation } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import AppContext, { useGlobal } from "../../../components/GlobalContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useGlobal } from "../../../components/GlobalContext";
 import { useCallback } from "react";
 import { useNavigation } from "@react-navigation/native";
+import AxiosInstance from "../../../axios.config";
 
 const RegisterProductScreen = (props) => {
 
-  const [selectedValue, setSelectedValue] = useState('');
-
   const navigation = useNavigation();
+
+  const Context = useGlobal();
 
   const initialBook = {
     title: "",
     author: "",
-    sinopse: "",
-    owner: "",
+    resume: "",
+    genre: "",
+    owner: Context?.userId
   };
 
   const [bookData, setBookData] = useState(initialBook);
 
-  const registerNewBook = useCallback(
-    async ({ title, author, sinopse }) => {
+  const registerNewBook = useCallback (
+    async ({ title, author, resume, genre, owner }) => {
       try {
-        const currentUser = JSON.parse(await AsyncStorage.getItem("currentUser"));
-        const booksList = JSON.parse(await AsyncStorage.getItem("books"));
-        const books = booksList != null ? booksList : [];   
-        if (books?.find?.((book) => book?.title === title && book?.owner === currentUser?.email)) {
-          alert("Já existe um livro com o titulo inserido, escolha outro titulo ou edite o já existente");
-        } else {
-          const newBook = { title, author, sinopse, owner: currentUser?.email };
-          await AsyncStorage.setItem("books", JSON.stringify([...books, newBook]));                            
-          navigation.navigate("HomeScreen");
-        }
+        const book = await AxiosInstance?.post(`/users/${owner}/books/`, { title, author, resume, genre });
+       navigation?.navigate("HomeScreen"); 
       } catch (e) {
-        //console.log(e);        
+        console.log(e); 
       } 
     },
-    [navigation]    
+    [navigation] 
   );
-
-  
 
   const handleChange = useCallback((field, value) => {
       setBookData({ ...bookData, [field]: value });
@@ -94,9 +82,9 @@ const RegisterProductScreen = (props) => {
           <Foundation name="quote" size={24} color="black" />
         <View>
           <Picker        
-            selectedValue={selectedValue}
+            selectedValue={bookData?.genre}
             style={{ height: 30, width: 280, marginLeft:10}}
-            onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+            onValueChange={(genre) => handleChange("genre", genre)}
           >
             <Picker.Item label="Selecione um gênero" value="" />
             <Picker.Item label="Aventura" value="aventura" />
@@ -113,12 +101,12 @@ const RegisterProductScreen = (props) => {
         <View style={styles.action}>
           <FontAwesome name="pencil-square-o" size={20} />
           <TextInput
-            placeholder="Sinopse"
+            placeholder="resume"
             placeholderTextColor="#666666"
             autoCorrect={false}
             multiline={true}
             numberOfLines={1}
-            onChangeText={(text) => handleChange("sinopse", text)}
+            onChangeText={(text) => handleChange("resume", text)}
             style={
               ([styles.textInput],
               {
@@ -133,8 +121,8 @@ const RegisterProductScreen = (props) => {
           />
         </View>            
         <TouchableOpacity
-          onPress={async () => {
-            if (bookData.title && bookData.sinopse && bookData.author) {
+          onPress={ async () => {
+            if (bookData?.title && bookData?.resume && bookData?.author && bookData?.genre) {
               await registerNewBook(bookData);
             } else {
               alert("Preencha todos os campos!");

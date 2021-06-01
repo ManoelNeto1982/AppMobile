@@ -36,7 +36,8 @@ local.properties
 node_modules/
 npm-debug.log
 yarn-error.log
-*.lock
+yarn.lock
+package-lock.json
 *.log
 
 # BUCK
@@ -65,3 +66,6 @@ buck-out/
 # Expo
 .expo/*
 web-build/
+
+# Misc
+.env*

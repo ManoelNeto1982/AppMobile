@@ -1,50 +1,43 @@
-import React, { useState, useCallback, useRef } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from "react-native";
+import React, { 
+  useState,
+  useCallback,
+} from "react";
+import { 
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect, useNavigation, CommonActions } from "@react-navigation/native";
-import { Modalize } from "react-native-modalize";
+import {
+  useFocusEffect,
+  useNavigation, 
+  CommonActions 
+} from "@react-navigation/native";
+import { useGlobal } from "../../../components/GlobalContext";
+import AxiosInstance from "../../../axios.config";
+
 
 const HomeScreen = (props) => {
-  const modalizeRef = useRef(null);
-  
-  function OpenModal() {
-    modalizeRef.current?.open();
-  }
-
-  function closeModal() {
-    modalizeRef.current?.close();
-  }
- 
-
   const navigation = useNavigation();
+  
+  const Context = useGlobal();
 
-  const [allBooksData, setAllBooksData] = useState([]);
+  const [userBooks, setUserBooks] = useState([]);
 
-  const removeBookFromAsyncStorage = useCallback (
-    async ({ title }) => {
-      try {
-        const booksList = JSON.parse(await AsyncStorage.getItem("books"));
-        const newBooksList = booksList?.filter?.((book) => book?.title !== title);
-        await AsyncStorage.setItem("books", JSON.stringify(newBooksList));
-        navigation.dispatch(CommonActions.reset({
-            index: 0,
-            routes: [{ name: 'HomeScreen'}], 
-          }));
-      } catch (e) {
-        //console.log(e);
-        alert("Não foi possivél remover o livro");
-      }
-    });
+  const dispatch = (screen) => {
+      navigation.dispatch(CommonActions.reset({
+          index: 0,
+          routes: [{ name: screen }], 
+      }));
+  }
 
-  const bookToEdit = async ({ title }) => {    
+  const bookToEdit = async ({ bookId }) => {    
     await AsyncStorage.setItem("bookToEdit", JSON.stringify(title));
-        navigation.dispatch(CommonActions.reset({
-            index: 0,
-            routes: [{ name: 'EditProductScreen'}], 
-          }));
+    dispatch('EditProductScreen');
   }
 
   useFocusEffect(
@@ -53,20 +46,18 @@ const HomeScreen = (props) => {
 
       const fetchBooks = async () => {
         try {
-          const booksList = JSON.parse(await AsyncStorage.getItem("books"));
-          const currentUser = JSON.parse(await AsyncStorage.getItem("currentUser"));
-          const books = booksList?.filter?.((book) => currentUser?.email === book?.owner);
+          const booksList = await AxiosInstance?.get(`/users/${Context?.userId}/books/`);
+          const books = booksList?.data;
           if (books?.length && isActive) {
-            setAllBooksData([...books]);
+            setUserBooks([...books]);
           } else {
-            setAllBooksData([]);
+            setUserBooks([]);
           }
         } catch (e) {
           console.log(e);
           return alert("Erro ao pegar os dados dos usuarios para exibir os seus livros postados");
         }
       };
-
 
       fetchBooks();
 
@@ -81,25 +72,26 @@ const HomeScreen = (props) => {
     <ScrollView>
       <View style={styles.container}>
         <Text style={styles.title}>Lista de Livros </Text>
-        {allBooksData.map((book) => {
+        {userBooks.map((book) => {
           return (
             <View style={{ flexDirection: "row" }}>
               <View style={{ justifyContent: "center" }}>
                 <View style={styles.clienteListContainer}>
-                  <Text style={styles.name}>{`Título: ${book.title}`}</Text>
-                  <Text style={styles.listItem}>{`Autor: ${book.author}`}</Text>
-                  <Text style={styles.listItem}>{`Descrição: ${book.sinopse}`}</Text>
+                  <Text style={styles.name}>{`Título: ${book?.title}`}</Text>
+                  <Text style={styles.listItem}>{`Genêro: ${book?.genre}`}</Text>
+                  <Text style={styles.listItem}>{`Autor: ${book?.author}`}</Text>
+                  <Text style={styles.listItem}>{`Resumo: ${book?.resume}`}</Text>
                   <View style={{ flexDirection: "row", marginLeft: "65%"  }}>
                     <View>
                       <TouchableOpacity
-                        onPress={() => {navigation.navigate('BookMarkScreen')}}
+                        onPress={() => {Context.setBookId(book.id); dispatch('BookMarkScreen')}}
                       >
                         <Ionicons
                           name="bookmark-outline"
                           size={30}
                           color="blue"
                           style={{
-                            opacity: 0.7,                           
+                            opacity: 0.7,
                             borderWidth: 1,
                             marginRight: 5,
                             borderWidth:1,
@@ -111,7 +103,10 @@ const HomeScreen = (props) => {
                     </View>
                     <View>
                       <TouchableOpacity
-                        onPress={OpenModal}
+                        onPress={() => { 
+                          Context?.setBookId(book?.id);
+                          dispatch("Modal");
+                        }}
                       >
                         <Icon
                           name="trash"
@@ -130,7 +125,7 @@ const HomeScreen = (props) => {
                     <View>
                       <TouchableOpacity
                         onPress={() => {
-                          bookToEdit({title: book.title});
+                          bookToEdit({bookId: book?.id});
                         }}
                       >
                         <FontAwesome
@@ -150,44 +145,11 @@ const HomeScreen = (props) => {
                   </View>               
                 </View>
               </View>
-              <Modalize ref={modalizeRef} snapPoint={180} modalHeight={180}>
-              <View style={styles.panel}>
-                <View style={{ alignItems: "center", marginTop: "2%" }}>
-                  <Text
-                    style={{
-                      marginTop: 10,
-                      fontWeight: "bold",
-                      fontSize: 18,
-                      marginBottom: 5,
-                    }}
-                  >
-                    Meta alcançada?
-                  </Text>
-                </View>
-                <View style={{flexDirection:'row', alignSelf: "center"}}>
-                  <TouchableOpacity
-                  onPress={() => {removeBookFromAsyncStorage({title: book.title}); }}           
-                  style={styles.panelButton}
-                  
-                  >
-                    <Text style={styles.panelButtonTitle}>Sim</Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    onPress={() => {closeModal()}}
-                    style={styles.panelButtonNo}
-                  >
-                    <Text style={styles.panelButtonTitle}>Ainda Não</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </Modalize>   
             </View>                 
           );
           
         })}
-      </View>
-    
+      </View>    
     </ScrollView>
   );
 };

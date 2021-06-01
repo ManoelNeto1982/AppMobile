@@ -1,20 +1,34 @@
 import React from 'react';
-import { View, Text, StyleSheet} from 'react-native';
-import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
-import { Avatar, Title, Caption, Paragraph, Drawer, Divider} from 'react-native-paper'
+import { 
+    View,    
+    StyleSheet
+} from 'react-native';
+import { 
+    DrawerContentScrollView,
+    DrawerItem
+} from '@react-navigation/drawer';
+import {    
+    Title,
+    Caption,  
+    Drawer,
+    Divider
+} from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import AppContext from '../../../components/GlobalContext';
 import { Feather } from '@expo/vector-icons';
 import { useGlobal } from "../../../components/GlobalContext";
 
 export function DrawerContent(props){
 
-    const myContext = useGlobal();
+    const Context = useGlobal();
+
+    const setContext = () => {
+      Context.setUserId("");
+      Context.setUserName("");
+      Context.setUserEmail("");
+    }
 
     const signOut = () => {
-        myContext.setUserName("");
-        myContext.setUserEmail("");
+        setContext();
         props.navigation.navigate('SignInScreen');
     }
 
@@ -25,21 +39,11 @@ export function DrawerContent(props){
                     <View style={styles.userInfoSection}>
                         <View style={{flexDirection:'row', marginTop: 15}}>
                            <View style={{ flexDirection:'column'}}>
-                                <Title style={styles.title}>{myContext.userName}</Title>
-                                <Caption style={styles.caption}>{myContext.userEmail}</Caption>
+                                <Title style={styles.title}>{Context.userName}</Title>
+                                <Caption style={styles.caption}>{Context.userEmail}</Caption>
                             </View>
                         </View>
                         <Divider/>
-                         {/* <View style={styles.row}>
-                            <View style={styles.section}>
-                                <Paragraph style={styles.paragraph, styles.section}>80</Paragraph>
-                                <Caption style={styles.caption}>Seguindo</Caption>
-                            </View>
-                            <View style={styles.section}>
-                                <Paragraph style={styles.paragraph, styles.section}>100</Paragraph>
-                                <Caption style={styles.caption}>Seguidores</Caption>
-                            </View>
-                        </View> */}
                     </View>
                     <Drawer.Section style={styles.drawerSection}>
                         <DrawerItem 
