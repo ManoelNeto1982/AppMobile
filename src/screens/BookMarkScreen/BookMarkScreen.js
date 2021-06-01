@@ -78,171 +78,212 @@ const BookMarkScreen = ({navigation}) => {
   //   }
   // }
 
-   return(    
-     <ScrollView>     
-        <Text style={styles.title}>Meus Marcadores</Text>
-        <View style={styles.container}> 
-          <View style={styles.form}>
-              <TextInput
-                style={styles.field}  
-                placeholder={'Adicione um marcador'}          
-                onChangeText={text=> setMark(text)}
-                value={mark}
-              />
-            <CustomButton
-              text={edditingMark === 0 ? "+" : "Up"}
-              textSize={20}
-              padding={20}
-              textColor="white"
-              onPressEvent={edditingMark === 0 ? addMark({userId: Context.userId, bookId: Context.bookId}) : upadateMark}
-              disabled={mark.length <= 0}
-            /> 
-          </View>
-        </View>
-        
-        {markList.map((item ) => {
-          return (
-        <TouchableOpacity onPress={OpenModal}>
-        <View style={{width: 325, marginLeft:20, marginRight: 60, marginBottom:10, backgroundColor:  "white", borderRadius: 6, borderColor: "rgba(0,0,0,0.1)"}} key={item.key} >       
-          <View style={styles.form2} >              
-            <Text style={{marginRight: 50, width: 190, paddingTop:3, fontSize:16, fontWeight: 'bold', paddingRight:10, marginLeft: 10}}>{item.data}</Text>
-            <View>
-              <TouchableOpacity onPress={() => {removeMark(item.key)}}>
-                  <FontAwesome name="trash" size={30} color= "red" style={{
-                    opacity: 0.7,
-                    marginRight: 15,       
-                    borderWidth: 1,
-                    borderColor: '#fff',
-                    borderRadius: 10,
-                    marginTop: 4,                                      
-                  }}/>
-              </TouchableOpacity>  
-            </View>
-             <View>    
-              <TouchableOpacity  onPress={() => editMark(item)}>
-                  <FontAwesome name="pencil-square-o" size={30} color="green" style={{
-                    opacity: 0.7,
-                    marginRight: 15,       
-                    borderWidth: 1,
-                    borderColor: '#fff',
-                    borderRadius: 10,
-                    marginTop: 5
-                  }}/>
-                </TouchableOpacity>  
-            </View>
-          </View>          
-        </View>
-    
+   return (
+     <ScrollView>
+       <Text style={styles.title}>Meus Marcadores</Text>
+       <View style={styles.container}>
+         <View style={styles.form}>
+           <TextInput
+             style={styles.field}
+             placeholder={"Adicione um marcador"}
+             onChangeText={(text) => setMark(text)}
+             value={mark}
+           />
+           <CustomButton
+             text={edditingMark === 0 ? "+" : "Up"}
+             textSize={20}
+             padding={20}
+             textColor="white"
+             onPressEvent={
+               edditingMark === 0
+                 ? addMark({ userId: Context.userId, bookId: Context.bookId })
+                 : upadateMark
+             }
+             disabled={mark.length <= 0}
+           />
+         </View>
+       </View>
+       {markList.map((item) => {
+         return (
+           <TouchableOpacity onPress={OpenModal}>
+             <View
+               style={{
+                 width: 325,
+                 marginLeft: 20,
+                 marginRight: 60,
+                 marginBottom: 10,
+                 backgroundColor: "white",
+                 borderRadius: 6,
+                 borderColor: "rgba(0,0,0,0.1)",
+               }}
+               key={item.key}
+             >
+               <View style={styles.form2}>
+                 <Text
+                   style={{
+                     marginRight: 50,
+                     width: 190,
+                     paddingTop: 3,
+                     fontSize: 16,
+                     fontWeight: "bold",
+                     paddingRight: 10,
+                     marginLeft: 10,
+                   }}
+                 >
+                   {item.data}
+                 </Text>
+                 <View>
+                   <TouchableOpacity
+                     onPress={() => {
+                       removeMark(item.key);
+                     }}
+                   >
+                     <FontAwesome
+                       name="trash"
+                       size={30}
+                       color="red"
+                       style={{
+                         opacity: 0.7,
+                         marginRight: 15,
+                         borderWidth: 1,
+                         borderColor: "#fff",
+                         borderRadius: 10,
+                         marginTop: 4,
+                       }}
+                     />
+                   </TouchableOpacity>
+                 </View>
+                 <View>
+                   <TouchableOpacity onPress={() => editMark(item)}>
+                     <FontAwesome
+                       name="pencil-square-o"
+                       size={30}
+                       color="green"
+                       style={{
+                         opacity: 0.7,
+                         marginRight: 15,
+                         borderWidth: 1,
+                         borderColor: "#fff",
+                         borderRadius: 10,
+                         marginTop: 5,
+                       }}
+                     />
+                   </TouchableOpacity>
+                 </View>
+               </View>
+             </View>
+           </TouchableOpacity>
+         );
+       })}
+       {markList.map((item) => {
+         return (
+           <TouchableOpacity onPress={OpenModal}>
+             <View
+               style={{
+                 width: 325,
+                 marginLeft: 20,
+                 marginRight: 60,
+                 marginBottom: 10,
+                 backgroundColor: "white",
+                 borderRadius: 6,
+                 borderColor: "rgba(0,0,0,0.1)",
+               }}
+               key={item.key}
+             >
+               <View style={styles.form2}>
+                 <Text
+                   style={{
+                     marginRight: 50,
+                     width: 190,
+                     paddingTop: 3,
+                     fontSize: 16,
+                     fontWeight: "bold",
+                     paddingRight: 10,
+                     marginLeft: 10,
+                   }}
+                 >
+                   {item.data}
+                 </Text>
+                 <View>
+                   <TouchableOpacity
+                     onPress={() => {
+                       removeMark(item.key);
+                     }}
+                   >
+                     <FontAwesome
+                       name="trash"
+                       size={30}
+                       color="red"
+                       style={{
+                         opacity: 0.7,
+                         marginRight: 15,
+                         borderWidth: 1,
+                         borderColor: "#fff",
+                         borderRadius: 10,
+                         marginTop: 4,
+                       }}
+                     />
+                   </TouchableOpacity>
+                 </View>
+                 <View>
+                   <TouchableOpacity onPress={() => editMark(item)}>
+                     <FontAwesome
+                       name="pencil-square-o"
+                       size={30}
+                       color="green"
+                       style={{
+                         opacity: 0.7,
+                         marginRight: 15,
+                         borderWidth: 1,
+                         borderColor: "#fff",
+                         borderRadius: 10,
+                         marginTop: 5,
+                       }}
+                     />
+                   </TouchableOpacity>
+                 </View>
+               </View>
+             </View>
 
-      {markList.map((item) => {
-        return (
-          <TouchableOpacity onPress={OpenModal}>
-            <View
-              style={{
-                width: 325,
-                marginLeft: 20,
-                marginRight: 60,
-                marginBottom: 10,
-                backgroundColor: "white",
-                borderRadius: 6,
-                borderColor: "rgba(0,0,0,0.1)",
-              }}
-              key={item.key}
-            >
-              <View style={styles.form2}>
-                <Text
-                  style={{
-                    marginRight: 50,
-                    width: 190,
-                    paddingTop: 3,
-                    fontSize: 16,
-                    fontWeight: "bold",
-                    paddingRight: 10,
-                    marginLeft: 10,
-                  }}
-                >
-                  {item.data}
-                </Text>
-                <View>
-                  <TouchableOpacity
-                    onPress={() => {
-                      removeMark(item.key);
-                    }}
-                  >
-                    <FontAwesome
-                      name="trash"
-                      size={30}
-                      color="red"
-                      style={{
-                        opacity: 0.7,
-                        marginRight: 15,
-                        borderWidth: 1,
-                        borderColor: "#fff",
-                        borderRadius: 10,
-                        marginTop: 4,
-                      }}
-                    />
-                  </TouchableOpacity>
-                </View>
-                <View>
-                  <TouchableOpacity onPress={() => editMark(item)}>
-                    <FontAwesome
-                      name="pencil-square-o"
-                      size={30}
-                      color="green"
-                      style={{
-                        opacity: 0.7,
-                        marginRight: 15,
-                        borderWidth: 1,
-                        borderColor: "#fff",
-                        borderRadius: 10,
-                        marginTop: 5,
-                      }}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-
-            <Modalize ref={modalizeRef} snapPoint={180} modalHeight={180}>
-              <View style={styles.panel}>
-                <View style={{ alignItems: "center", marginTop: "2%" }}>
-                  <Text
-                    style={{
-                      marginTop: 10,
-                      fontWeight: "bold",
-                      fontSize: 18,
-                      marginBottom: 5,
-                    }}
-                  >
-                    Meta alcançada?
-                  </Text>
-                </View>
-                <View style={{ flexDirection: "row", alignSelf: "center" }}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      removeMark(item.key);
-                    }}
-                    style={styles.panelButton}
-                  >
-                    <Text style={styles.panelButtonTitle}>Sim</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {
-                      closeModal();
-                    }}
-                    style={styles.panelButtonNo}
-                  >
-                    <Text style={styles.panelButtonTitle}>Ainda Não</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </Modalize>
-          </TouchableOpacity>
-        );
-      })}
-    </ScrollView>
-  );
+             <Modalize ref={modalizeRef} snapPoint={180} modalHeight={180}>
+               <View style={styles.panel}>
+                 <View style={{ alignItems: "center", marginTop: "2%" }}>
+                   <Text
+                     style={{
+                       marginTop: 10,
+                       fontWeight: "bold",
+                       fontSize: 18,
+                       marginBottom: 5,
+                     }}
+                   >
+                     Meta alcançada?
+                   </Text>
+                 </View>
+                 <View style={{ flexDirection: "row", alignSelf: "center" }}>
+                   <TouchableOpacity
+                     onPress={() => {
+                       removeMark(item.key);
+                     }}
+                     style={styles.panelButton}
+                   >
+                     <Text style={styles.panelButtonTitle}>Sim</Text>
+                   </TouchableOpacity>
+                   <TouchableOpacity
+                     onPress={() => {
+                       closeModal();
+                     }}
+                     style={styles.panelButtonNo}
+                   >
+                     <Text style={styles.panelButtonTitle}>Ainda Não</Text>
+                   </TouchableOpacity>
+                 </View>
+               </View>
+             </Modalize>
+           </TouchableOpacity>
+         );
+       })}
+     </ScrollView>
+   );
 };
 
 export default BookMarkScreen;
