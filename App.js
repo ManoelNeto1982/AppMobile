@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
-import React, { useState } from "react";
-import { StyleSheet, ActivityIndicator } from "react-native";
+import React from "react";
+import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -13,7 +13,7 @@ import SignUpScreen from "./src/screens/SignUpScreen/SignUpScreen";
 import EditProductScreen from "./src/screens/EditBookScreen/EditBookScreen";
 import Home from "./src/screens/Home/index";
 import RegisterProductScreen from "./src/screens/RegisterProductScreen/RegisterProductScreen";
-import AppGlobalProvider from "./components/GlobalContext";
+import AppGlobalProvider from "./src/components/GlobalContext";
 import BookMarkScreen from "./src/screens/BookMarkScreen/BookMarkScreen";
 import Modal from "./src/screens/Home/Modal";
 
