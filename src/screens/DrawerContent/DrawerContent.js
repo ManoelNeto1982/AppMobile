@@ -1,25 +1,22 @@
 import React from 'react';
 import { 
-    View,
-    Text,
+    View,    
     StyleSheet
 } from 'react-native';
 import { 
     DrawerContentScrollView,
     DrawerItem
 } from '@react-navigation/drawer';
-import {
-    Avatar,
+import {    
     Title,
-    Caption,
-    Paragraph,
+    Caption,  
     Drawer,
     Divider
 } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { CommonActions } from "@react-navigation/native";
 import { Feather } from '@expo/vector-icons';
-import { useGlobal } from "../../../components/GlobalContext";
+import { useGlobal } from "../../components/GlobalContext";
 
 export function DrawerContent(props){
 
@@ -58,7 +55,9 @@ export function DrawerContent(props){
                         <Divider/>
                     </View>
                     <Drawer.Section style={styles.drawerSection}>
-                        <DrawerItem 
+                        <
+// @ts-ignore
+                        DrawerItem 
                             icon={({color, size}) => (
                                 <Icon
                                 name="home-outline"
@@ -70,7 +69,9 @@ export function DrawerContent(props){
                             onPress={() => {props.navigation.navigate('HomeScreen')}}
                             >
                         </DrawerItem>   
-                        <DrawerItem 
+                        <
+// @ts-ignore
+                        DrawerItem 
                             icon={({color, size}) => (
                                 <Icon
                                 name="account-outline"
@@ -82,7 +83,9 @@ export function DrawerContent(props){
                             onPress={() => {dispatch('Perfil')}}
                             >
                         </DrawerItem>                
-                        <DrawerItem 
+                        <
+// @ts-ignore
+                        DrawerItem 
                             icon={({color, size}) => (
                                 <Icon
                                 name="book-outline"
@@ -94,7 +97,9 @@ export function DrawerContent(props){
                             onPress={() => {dispatch('RegisterProductScreen')}}
                             >
                         </DrawerItem>
-                        <DrawerItem 
+                        <
+// @ts-ignore
+                        DrawerItem 
                             icon={({color, size}) => (
                                 <Feather
                                 name="bookmark"
@@ -112,7 +117,9 @@ export function DrawerContent(props){
                 </View>
                 </DrawerContentScrollView>
                 <Drawer.Section style={styles.bottomDrawerSection}>
-                    <DrawerItem 
+                    <
+// @ts-ignore
+                    DrawerItem 
                         icon={({color, size}) => (
                             <Icon
                             name="exit-to-app"

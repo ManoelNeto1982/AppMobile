@@ -2,12 +2,8 @@ import React, { useState } from "react";
 import { 
   View,
   Text,
-  Modal,
-  Button,
   StyleSheet,
-  TouchableOpacity,
-  Platform,
-  Image,
+  TouchableOpacity,  
   TextInput,
   StatusBar,
   CheckBox
@@ -16,13 +12,9 @@ import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
-import AxiosInstance from "../../../axios.config";
+import Request from "../../Service/request";
 
 const SignUpScreen = ({ navigation }) => {
-
-  const [isSelected, setSelected] = useState(false);
-  const [rePassword, setRePassword] = useState("");
-  const [dataSignUp, setDataSignUp] = useState(initialSignUpState);
 
   const initialSignUpState = {
     email: "",
@@ -30,10 +22,14 @@ const SignUpScreen = ({ navigation }) => {
     password: "",
   };
 
+  const [isSelected, setSelected] = useState(false);
+  const [rePassword, setRePassword] = useState("");
+  const [dataSignUp, setDataSignUp] = useState(initialSignUpState);
+
   const verifyItemExist = async (userDataToSave) => {
     try {
       // Melhoria: Criar api & Criar metodo para fazer busca estrita
-      const userList = await AxiosInstance?.get(`/users?email=${userDataToSave?.email}`);
+      const userList = await Request?.getUsersByEmail(userDataToSave?.email);
       if (userList?.data?.find((user) => user?.email === userDataToSave?.email)) {
         return alert(`Email ja registrado`);
       } else {
@@ -48,7 +44,7 @@ const SignUpScreen = ({ navigation }) => {
 
   const storeDataInApiRest = async (userDataToSave) => {
     try {
-      const user = await AxiosInstance?.post(`/users/`, userDataToSave);
+      const user = await Request?.saveUser(userDataToSave);
       alert("Conta criada com sucesso");
       navigation?.navigate("SignInScreen");
     } catch (error) {

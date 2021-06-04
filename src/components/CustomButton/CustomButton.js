@@ -6,6 +6,7 @@ const CustomButton = (props) => {
     if (props.disabled)
         var btnColor = 'grey';
     else
+        // @ts-ignore
         var btnColor = props.color != undefined ? props.color : 'blue';
     return (
         <TouchableOpacity

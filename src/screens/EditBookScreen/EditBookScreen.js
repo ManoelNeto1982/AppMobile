@@ -1,15 +1,19 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity, ImageBackground, TextInput, ScrollView} from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
 import { Caption } from 'react-native-paper'
 import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { Foundation } from '@expo/vector-icons';
 import {Picker} from '@react-native-picker/picker';
 import {  useNavigation, CommonActions } from "@react-navigation/native";
-import { useGlobal } from "../../../components/GlobalContext";
-import AxiosInstance from "../../../axios.config";
+import { useGlobal } from "../../components/GlobalContext";
+import Request from "../../Service/request";
 
-const EditProductScreen = (props) => {    
+const EditProductScreen = () => {    
+
+    const navigation = useNavigation();
+
+    const Context = useGlobal();
 
     const initialBook = {
         id: Context?.bookId,
@@ -20,15 +24,10 @@ const EditProductScreen = (props) => {
         owner: Context?.userId
     };
 
-    const [selectedValue, setSelectedValue] = useState('');
     const [bookData, setBookData] = useState(initialBook);
 
-    const navigation = useNavigation();
-
-    const Context = useGlobal();
-
-    const updateBook = async (book) => {
-        const newBook = await AxiosInstance?.put(`/users/${book?.owner}/books/${book?.id}`, { title: book?.title, author: book?.author, genre: book?.genre, resume: book?.resume });
+    const updateBook = async ({ title, author, genre, resume, owner, id }) => {
+        const newBook = await Request?.updateBook(owner, id, { title, author, genre, resume });
         Context?.setBookId("");
         navigation.navigate("HomeScreen");
     }
@@ -41,7 +40,7 @@ const EditProductScreen = (props) => {
 
     useEffect(() => {        
         const getBookDataFromApiRest = async () => {
-            const book = await AxiosInstance?.get(`/users/${Context?.userId}/books/${Context?.bookId}`);
+            const book = await Request?.getBook(Context?.userId, Context?.bookId);
             setBookData(book?.data);
         }
 
@@ -105,6 +104,7 @@ const EditProductScreen = (props) => {
                         multiline={true}
                         numberOfLines={1}                       
                         onChangeText={(text) => handleChange('resume', text)}
+                        // @ts-ignore
                         style={[styles.textInput], { width:'90%', backgroundColor: '#CACACA', paddingBottom: 125, paddingLeft: 10, marginLeft: 5}}                     
                         />
                                             
@@ -145,7 +145,6 @@ const styles = StyleSheet.create({
     panel: {
         padding: 20,
         backgroundColor: "#FFFFFF",
-        padding: 20,      
     },
     header: {
         backgroundColor: "#FFFFFF",

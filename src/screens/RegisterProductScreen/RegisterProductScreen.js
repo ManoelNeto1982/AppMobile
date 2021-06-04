@@ -1,29 +1,21 @@
-import React, {
-  useRef,
-  useState,
-  useEffect,
-  useFocusEffect
+import React, {  
+  useState,  
 } from "react";
 import {Picker} from '@react-native-picker/picker';
 import {
   View,
-  Text,
-  Button,
+  Text, 
   StyleSheet,
-  TouchableOpacity,
-  ImageBackground,
-  TextInput,
-  ScrollView,  
+  TouchableOpacity,  
+  TextInput,  
 } from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
 import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { Foundation } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useGlobal } from "../../../components/GlobalContext";
+import { useGlobal } from "../../components/GlobalContext";
 import { useCallback } from "react";
 import { useNavigation } from "@react-navigation/native";
-import AxiosInstance from "../../../axios.config";
+import Request from "../../Service/request";
 
 const RegisterProductScreen = (props) => {
 
@@ -44,8 +36,8 @@ const RegisterProductScreen = (props) => {
   const registerNewBook = useCallback (
     async ({ title, author, resume, genre, owner }) => {
       try {
-        const book = await AxiosInstance?.post(`/users/${owner}/books/`, { title, author, resume, genre });
-       navigation?.navigate("HomeScreen"); 
+        const book = await Request?.saveBook(owner, { title, author, resume, genre });
+       navigation?.navigate("HomeScreen");
       } catch (e) {
         console.log(e);
       }
@@ -93,7 +85,7 @@ const RegisterProductScreen = (props) => {
             style={{ height: 30, width: 280, marginLeft:10}}
             onValueChange={(genre) => handleChange("genre", genre)}
           >
-            <Picker.Item label="Selecione um gênero" value="" />
+            <Picker.Item label="Selecione um género" value="" />
             <Picker.Item label="Aventura" value="aventura" />
             <Picker.Item label="Biografia" value="biografia" />
             <Picker.Item label="Contos" value="contos" />
@@ -115,7 +107,7 @@ const RegisterProductScreen = (props) => {
             numberOfLines={1}
             onChangeText={(text) => handleChange("resume", text)}
             style={
-              ([styles.textInput],
+              (styles.textInput,
               {
                 height: 120,
                 width: "90%",
@@ -126,7 +118,7 @@ const RegisterProductScreen = (props) => {
               })
             }
           />
-        </View>            
+        </View>
         <TouchableOpacity
           onPress={ async () => {
             if (bookData?.title && bookData?.resume && bookData?.author && bookData?.genre) {
@@ -142,7 +134,7 @@ const RegisterProductScreen = (props) => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            navigation.goBack();
+            navigation.navigate("HomeScreen");
           }}
           style={styles.commandButton}
         >
@@ -171,7 +163,6 @@ const styles = StyleSheet.create({
   panel: {
     padding: 20,
     backgroundColor: "#FFFFFF",
-    padding: 20, 
   },
   header: {
     backgroundColor: "#FFFFFF",

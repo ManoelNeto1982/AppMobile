@@ -2,8 +2,7 @@ import React, {useRef} from "react";
 import { 
   View,
   SafeAreaView,
-  StyleSheet,
-  TextInput,
+  StyleSheet, 
   TouchableOpacity
 } from "react-native";
 import { 
@@ -17,8 +16,8 @@ import { Entypo } from "@expo/vector-icons";
 import { CommonActions } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import { Modalize } from "react-native-modalize";
-import { useGlobal } from "../../../components/GlobalContext";
-import AxiosInstance from "../../../axios.config";
+import { useGlobal } from "../../components/GlobalContext";
+import Request from "../../Service/request";
 
 const ProfileScreen = ({ navigation }) => {
 
@@ -36,18 +35,24 @@ const ProfileScreen = ({ navigation }) => {
 
   const removeAccount = async () => {
     try {
-      const bookList = await AxiosInstance?.get(`/users/${Context?.userId}/books/`);
-      bookList?.data?.map( async (book) => {
-        const res = await AxiosInstance?.delete(`/users/${Context?.userId}/books/${book?.id}`);
-      })
-      const userRemoved = await AxiosInstance?.delete(`/users/${Context?.userId}`);
+      const userId = Context?.userId;
+      const bookList = await Request?.getAllBooks(userId);
+      await removeBook(userId, bookList?.data);
+      const userRemoved = await Request?.deleteUser(userId);
+      console.log(userRemoved);
       setContext();
-      navigation.navigate("SignInScreen");
+      dispatch("SignInScreen");
     } catch (error) {
       console.log(error);
       throw alert("Houve um problema na remoção da conta, por favor tente em outro momento");
     }
   };
+
+  const removeBook = (userId, bookList) => {
+    bookList?.map( async book => {
+      await Request?.deleteBook(userId, book?.id);
+    })
+  }
 
   const setContext = () => {
     Context?.setUserId("");
@@ -123,7 +128,7 @@ const ProfileScreen = ({ navigation }) => {
 
       
       <Modalize ref={modalizeRef} snapPoint={360} modalHeight={360}>
-        <View style={styles.panel}>
+        <View >
           <View style={{ alignItems: "center", marginTop: "25%" }}>
             <Text
               style={{

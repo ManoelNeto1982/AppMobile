@@ -8,7 +8,6 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  TextInput,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Ionicons } from '@expo/vector-icons';
@@ -18,11 +17,12 @@ import {
   useNavigation, 
   CommonActions 
 } from "@react-navigation/native";
-import { useGlobal } from "../../../components/GlobalContext";
-import AxiosInstance from "../../../axios.config";
-import Modal from "./Modal";
+import { useGlobal } from "../../components/GlobalContext";
+import Request from "../../Service/request";
 
-const HomeScreen = (props) => {
+
+const HomeScreen = () => {
+  
   const navigation = useNavigation();
   
   const Context = useGlobal();
@@ -42,7 +42,7 @@ const HomeScreen = (props) => {
 
       const fetchBooks = async () => {
         try {
-          const booksList = await AxiosInstance?.get(`/users/${Context?.userId}/books/`);
+          const booksList = await Request?.getAllBooks(Context?.userId);
           const books = booksList?.data;
           if (books?.length && isActive) {
             setUserBooks([...books]);
@@ -51,7 +51,7 @@ const HomeScreen = (props) => {
           }
         } catch (e) {
           console.log(e);
-          return alert("Erro ao pegar os dados dos usuarios para exibir os seus livros postados");
+          return alert("Erro ao pegar os dados dos usuários para exibir os seus livros postados");
         }
       };
 
@@ -74,13 +74,13 @@ const HomeScreen = (props) => {
               <View style={{ justifyContent: "center" }}>
                 <View style={styles.clienteListContainer}>
                   <Text style={styles.name}>{`Título: ${book?.title}`}</Text>
-                  <Text style={styles.listItem}>{`Genêro: ${book?.genre}`}</Text>
-                  <Text style={styles.listItem}>{`Autor: ${book?.author}`}</Text>
-                  <Text style={styles.listItem}>{`Resumo: ${book?.resume}`}</Text>
+                  <Text >{`Genêro: ${book?.genre}`}</Text>
+                  <Text >{`Autor: ${book?.author}`}</Text>
+                  <Text >{`Resumo: ${book?.resume}`}</Text>
                   <View style={{ flexDirection: "row", marginLeft: "65%"  }}>
                     <View>
                       <TouchableOpacity
-                        onPress={() => {navigation.navigate('BookMarkScreen')}}
+                        onPress={() => {Context.setBookId(book.id); dispatch('BookMarkScreen')}}
                       >
                         <Ionicons
                           name="bookmark-outline"
@@ -90,7 +90,6 @@ const HomeScreen = (props) => {
                             opacity: 0.7,
                             borderWidth: 1,
                             marginRight: 5,
-                            borderWidth:1,
                             borderColor: "#fff",
                             borderRadius: 10,
                           }}
@@ -146,8 +145,7 @@ const HomeScreen = (props) => {
           );
           
         })}
-      </View>
-    
+      </View>    
     </ScrollView>
   );
 };
@@ -200,7 +198,6 @@ const styles = StyleSheet.create({
     borderColor: "rgba(0,0,0,0.1)",
     width: 320,
     marginLeft: 5,
-    marginBottom: 2,
   },
   panel: {
    

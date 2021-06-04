@@ -9,14 +9,14 @@ import {
   TouchableOpacity, 
   TextInput, 
   StatusBar, 
-  CheckBox 
+  CheckBox,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Feather } from "@expo/vector-icons";
-import { useGlobal } from "../../../components/GlobalContext";
+import { useGlobal } from "../../components/GlobalContext";
 import { CommonActions } from "@react-navigation/native";
-import AxiosInstance from "../../../axios.config";
+import Request from "../../Service/request";
 
 const SignInScreen = ({ navigation }) => {
 
@@ -34,7 +34,7 @@ const Context = useGlobal();
   const verifyItemInApiRest = useCallback (
     async ({ email, password }) => {
       try {
-        const userList = await AxiosInstance?.get(`/users?filter=id&email=${email}&limit=1`);
+        const userList = await Request?.getUsersByEmail(email);
         const userData = userList?.data?.find((user) => user?.email === email && user?.password === password); 
         if (userData) {
             setContext(userData);
@@ -63,7 +63,7 @@ const Context = useGlobal();
   }
 
   const handleChange = (field, value) => {
-    setLoginData({ [field]: value });
+    setLoginData({ ...loginData, [field]: value });
   };
 
   return (

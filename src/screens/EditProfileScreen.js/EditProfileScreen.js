@@ -1,24 +1,18 @@
-import React, { 
-  useRef,
-  useState,
-  useEffect
+import React, {   
+  useState, 
 } from "react";
 import { 
   View,
   Text,
-  Button,
   StyleSheet,
-  TouchableOpacity,
-  ImageBackground,
+  TouchableOpacity, 
   TextInput
 } from "react-native";
 import { Caption } from 'react-native-paper'
-import Icon from "react-native-vector-icons/Ionicons";
-import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useGlobal } from "../../../components/GlobalContext";
-import AxiosInstance from "../../../axios.config";
+import { useGlobal } from "../../components/GlobalContext";
+import Request from "../../Service/request";
 
 const EditProfileScreen = ({ navigation }) => {
 
@@ -34,7 +28,7 @@ const EditProfileScreen = ({ navigation }) => {
 
   const verifyEmailExist = async (email) => {
     try {
-      const userList = await AxiosInstance?.get(`/users?email=${email}`);
+      const userList = await Request?.getUsersByEmail(email);
       if (userList?.data?.find((user) => user?.email === email)) {
         return true;
       } else {
@@ -51,12 +45,12 @@ const EditProfileScreen = ({ navigation }) => {
       if (Context?.userEmail !== email && await verifyEmailExist(email)) {
         return alert(`Email ja registrado`);
       } else {
-        const user = await AxiosInstance?.get(`/users/${Context.userId}`);
+        const user = await Request?.getUser(Context.userId);
         const userData = user.data;
         userData.email = (email) ? email : userData.email;
         userData.name = (name) ? name : userData.name;
         userData.password = (password) ? password : userData.password;
-        await changeDataOnApiRest({ user: userData });
+        await changeDataOnApiRest(userData);
       }
     } catch (error) {
       //console.log(error);
@@ -64,9 +58,9 @@ const EditProfileScreen = ({ navigation }) => {
     }
   };
 
-  const changeDataOnApiRest = async ({ user }) => {
+  const changeDataOnApiRest = async ({ email, name, password }) => {
     try {
-      const newUserData = await AxiosInstance?.put(`/users/${Context.userId}`, user);
+      const newUserData = await Request?.updateUser(Context.userId, { email, name, password });
       setContext(newUserData?.data);
       navigation.navigate("Perfil");
     } catch (error) {
@@ -96,7 +90,6 @@ const EditProfileScreen = ({ navigation }) => {
             placeholderTextColor="#666666"
             autoCorrect={false}
             onChangeText={(text) => handleChange("email", text)}
-            autoCorrect={false}
             style={styles.textInput}
           />
         </View>
@@ -107,7 +100,6 @@ const EditProfileScreen = ({ navigation }) => {
             placeholderTextColor="#666666"
             autoCorrect={false}
             onChangeText={(text) => handleChange("name", text)}
-            autoCorrect={false}
             style={styles.textInput}
           />
         </View>
@@ -163,7 +155,6 @@ const styles = StyleSheet.create({
   panel: {
     padding: 20,
     backgroundColor: "#FFFFFF",
-    padding: 20, 
   },
   header: {
     backgroundColor: "#FFFFFF",
