@@ -125,11 +125,10 @@ const ProfileScreen = ({ navigation }) => {
           </View>
         </TouchableRipple>
       </View>      
-
       
-      <Modalize ref={modalizeRef} snapPoint={360} modalHeight={360}>
-        <View >
-          <View style={{ alignItems: "center", marginTop: "25%" }}>
+      <Modalize ref={modalizeRef} snapPoint={180} modalHeight={180}>
+        <View style={styles.panel}>
+          <View style={{ alignItems: "center", marginTop: "2%" }}>
             <Text
               style={{
                 marginTop: 10,
@@ -224,7 +223,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 7,
     width: 100,
-    marginHorizontal:5,
+    marginHorizontal:10,
 
 
   },
