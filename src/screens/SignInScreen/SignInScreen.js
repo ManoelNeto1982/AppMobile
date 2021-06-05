@@ -1,58 +1,60 @@
-import React, {
-  useState,
-  useCallback
-} from "react";
-import { 
+import React, { useState, useCallback } from "react";
+import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity, 
-  TextInput, 
-  StatusBar, 
-  CheckBox 
+  TouchableOpacity,
+  TextInput,
+  StatusBar,
+  CheckBox,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { Feather } from "@expo/vector-icons";
+import { Feather, FontAwesome } from "@expo/vector-icons";
+
 import { useGlobal } from "../../../components/GlobalContext";
 import AxiosInstance from "../../../axios.config";
 
 const SignInScreen = ({ navigation }) => {
-
   const userData = {
     email: "",
     name: "",
   };
 
-const Context = useGlobal();
+  const Context = useGlobal();
 
   const [password, setPassword] = useState("");
   const [loginData, setLoginData] = useState(userData);
   const [isSelected, setSelected] = useState(false);
 
-  const verifyItemInApiRest = useCallback (
+  const verifyItemInApiRest = useCallback(
     async ({ email, password }) => {
       try {
-        const userList = await AxiosInstance?.get(`/users?filter=id&email=${email}&limit=1`);
-        const userData = userList?.data?.find((user) => user?.email === email && user?.password === password); 
+        const userList = await AxiosInstance?.get(
+          `/users?filter=id&email=${email}&limit=1`
+        );
+        const userData = userList?.data?.find(
+          (user) => user?.email === email && user?.password === password
+        );
         if (userData) {
-            setContext(userData);
-            navigation.navigate("HomeScreen");
+          setContext(userData);
+          navigation.navigate("HomeScreen");
         } else {
           alert(`Usuario ou senha invalida`);
         }
       } catch (error) {
-        throw alert("Houve um problema no servidor. Tente novamente mais tarde");
+        throw alert(
+          "Houve um problema no servidor. Tente novamente mais tarde"
+        );
       }
     },
-    [password],   
+    [password]
   );
-  
+
   const setContext = (currentUser) => {
     Context?.setUserId(currentUser?.id);
     Context?.setUserEmail(currentUser?.email);
     Context?.setUserName(currentUser?.name);
-  }
+  };
 
   const handleChange = (field, value) => {
     setLoginData({ [field]: value });
@@ -91,16 +93,25 @@ const Context = useGlobal();
               onChangeText={(text) => setPassword(text)}
             />
           </View>
-          <View style={{flexDirection:'row', marginTop:5}}>
-            <CheckBox               
+          <View style={{ flexDirection: "row", marginTop: 5 }}>
+            <CheckBox
               value={isSelected}
               onValueChange={() => setSelected(!isSelected)}
-              style={{marginTop: 15, with:15, height:14}} 
-              />   
-              <Text style={{marginTop:14, color:'blue', fontSize:13, paddingLeft: 5}}>Lembrar minha senha</Text>
-            </View>
-           </View>
-      
+              style={{ marginTop: 15, with: 15, height: 14 }}
+            />
+            <Text
+              style={{
+                marginTop: 14,
+                color: "blue",
+                fontSize: 13,
+                paddingLeft: 5,
+              }}
+            >
+              Lembrar minha senha
+            </Text>
+          </View>
+        </View>
+
         <View style={styles.button}>
           <TouchableOpacity
             style={styles.signIn}

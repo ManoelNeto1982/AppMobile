@@ -1,289 +1,197 @@
-import React,{useState, useRef, useCallback, useEffect} from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView} from 'react-native'
-import { FontAwesome } from '@expo/vector-icons';
-import CustomButton from '../../component/CustomButton/CustomButton';
+import React, { useState, useRef, useCallback, useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  ScrollView,
+} from "react-native";
+import CustomButton from "../../component/CustomButton/CustomButton";
 import { Modalize } from "react-native-modalize";
 import { useGlobal } from "../../../components/GlobalContext";
 import AxiosInstance from "../../../axios.config";
+import MarkItem from "../../component/MarkItem";
 
-const BookMarkScreen = ({navigation}) => {
-
+const BookMarkScreen = ({ navigation }) => {
   const Context = useGlobal();
 
-  //Eu preciso dos dados do livro e do id do usuário, mas initialbook não é chamado em nenhum lugar??  
-  const initialBook = {
-    title: "",
-    owner: Context?.userId
-  }
+  //Eu preciso dos dados do livro e do id do usuário, mas initialbook não é chamado em nenhum lugar??
+  const [mark, setMark] = useState("");
+  const [currentMark, setCurrentMark] = useState(null);
+  const [markList, setMarkList] = useState([]);
+  const [edditingMark, setEdditingMark] = useState(null);
 
   const modalizeRef = useRef(null);
 
-  function OpenModal() {
-    modalizeRef.current?.open();
-  }
+  const openModal = useCallback(
+    ({ markId }) => {
+      setCurrentMark(markId);
+      modalizeRef.current?.open();
+    },
+    [modalizeRef.current]
+  );
 
-  function closeModal() {
+  const closeModal = useCallback(() => {
+    setCurrentMark(null);
     modalizeRef.current?.close();
-  }
+  }, [modalizeRef.current]);
 
-  const [mark, setMark] = useState("");
-  const [markList, setMarkList] = useState([]);
-  const [edditingMark, setEdditingMark] = useState(0);
-  
-  // useEffect(()=> {
-  //   console.log(Context.bookId)
-  //   console.log(Context.userId)
-  // }, [])
+  const getMarks = useCallback(
+    async ({ userId, bookId }) => {
+      try {
+        const bookMark = await AxiosInstance.get(
+          `/users/${userId}/books/${bookId}/marks`
+        );
+        setMarkList([...bookMark.data, ...markList]);
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [Context.userId, Context.bookId]
+  );
 
-  // const addMark = useCallback (
-  //   async ({ userId, bookId }) => {
-  //     try {
-  //       const bookMark = await AxiosInstance?.post(`/users/${userId}/books/${bookId}/marks`, { description: mark })
-  //       console.log(bookMark);
-  //       // setMarkList([...markList, 
-  //       // {key:Math.random().toString() , data:mark }]);
-  //       // setMark('')
-  //       // console.log(bookMark)
-  //     } catch (e) {
-  //       console.log(e)
-  //     }
-  //   }
-  // );
+  const addMark = useCallback(
+    async ({ userId, bookId, mark }) => {
+      try {
+        const bookMark = await AxiosInstance?.post(
+          `users/${userId}/books/${bookId}/marks`,
+          { description: mark }
+        );
+        setMarkList([
+          { id: bookMark?.data?.id, description: bookMark?.data?.description },
+          ...markList,
+        ]);
+        setMark("");
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [Context.userId, Context.bookId, markList.length]
+  );
 
-  // const editMark = (item) => {
-  //   setMark(item.data)
-  //   setEdditingMark(item.key)
-  // }
+  const removeMark = useCallback(
+    async ({ userId, bookId, markId }) => {
+      try {
+        await AxiosInstance?.delete(
+          `/users/${userId}/books/${bookId}/marks/${markId}`
+        );
 
-  // const upadateMark = async () => {
-  //   try{
-  //     //const newMarkData = await AxiosInstance?.put(`/users/${owner}/books/:id/marks/:id`)
-  //     console.log(owner)
-  //     setMarkList(list => markList.map(item => item.key === edditingMark  ? { key:item.key, data: newMarkData} : item ))//data: mark
-  //     setMark('')
-  //     setEdditingMark(0)
-  //   } catch (e) {
-  //     console.log(e)
-  //   }
-  // }
+        setMarkList(markList.filter((item) => item.id !== markId));
+        closeModal();
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [Context.userId, Context.bookId, markList.length]
+  );
 
-  // const removeMark =  async (itemKey) => {
-  //   try{ 
-  //     const newMarkData = await AxiosInstance?.delete(`/users/${owner}/books/:id/marks/:id`)
-  //     let list = markList.filter(item => item.key !== itemKey)
-  //     setMarkList(list)
-  //     console.log(list)
-  //   } catch (e) {
-  //     console.log(e)
-  //   }
-  // }
+  const upadateMark = useCallback(
+    async ({ userId, bookId, markId, ...data }) => {
+      try {
+        const updatedItem = await AxiosInstance.put(
+          `/users/${userId}/books/${bookId}/marks/${markId}`,
+          { ...data }
+        );
+        setMarkList([
+          ...markList.map((item) =>
+            item.id == updatedItem?.data?.id
+              ? { ...item, ...updatedItem?.data }
+              : item
+          ),
+        ]);
+        setEdditingMark(null);
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [Context.userId, Context.bookId, markList]
+  );
 
-   return (
-     <ScrollView>
-       <Text style={styles.title}>Meus Marcadores</Text>
-       <View style={styles.container}>
-         <View style={styles.form}>
-           <TextInput
-             style={styles.field}
-             placeholder={"Adicione um marcador"}
-             onChangeText={(text) => setMark(text)}
-             value={mark}
-           />
-           <CustomButton
-             text={edditingMark === 0 ? "+" : "Up"}
-             textSize={20}
-             padding={20}
-             textColor="white"
-             onPressEvent={
-               edditingMark === 0
-                 ? addMark({ userId: Context.userId, bookId: Context.bookId })
-                 : upadateMark
-             }
-             disabled={mark.length <= 0}
-           />
-         </View>
-       </View>
-       {markList.map((item) => {
-         return (
-           <TouchableOpacity onPress={OpenModal}>
-             <View
-               style={{
-                 width: 325,
-                 marginLeft: 20,
-                 marginRight: 60,
-                 marginBottom: 10,
-                 backgroundColor: "white",
-                 borderRadius: 6,
-                 borderColor: "rgba(0,0,0,0.1)",
-               }}
-               key={item.key}
-             >
-               <View style={styles.form2}>
-                 <Text
-                   style={{
-                     marginRight: 50,
-                     width: 190,
-                     paddingTop: 3,
-                     fontSize: 16,
-                     fontWeight: "bold",
-                     paddingRight: 10,
-                     marginLeft: 10,
-                   }}
-                 >
-                   {item.data}
-                 </Text>
-                 <View>
-                   <TouchableOpacity
-                     onPress={() => {
-                       removeMark(item.key);
-                     }}
-                   >
-                     <FontAwesome
-                       name="trash"
-                       size={30}
-                       color="red"
-                       style={{
-                         opacity: 0.7,
-                         marginRight: 15,
-                         borderWidth: 1,
-                         borderColor: "#fff",
-                         borderRadius: 10,
-                         marginTop: 4,
-                       }}
-                     />
-                   </TouchableOpacity>
-                 </View>
-                 <View>
-                   <TouchableOpacity onPress={() => editMark(item)}>
-                     <FontAwesome
-                       name="pencil-square-o"
-                       size={30}
-                       color="green"
-                       style={{
-                         opacity: 0.7,
-                         marginRight: 15,
-                         borderWidth: 1,
-                         borderColor: "#fff",
-                         borderRadius: 10,
-                         marginTop: 5,
-                       }}
-                     />
-                   </TouchableOpacity>
-                 </View>
-               </View>
-             </View>
-           </TouchableOpacity>
-         );
-       })}
-       {markList.map((item) => {
-         return (
-           <TouchableOpacity onPress={OpenModal}>
-             <View
-               style={{
-                 width: 325,
-                 marginLeft: 20,
-                 marginRight: 60,
-                 marginBottom: 10,
-                 backgroundColor: "white",
-                 borderRadius: 6,
-                 borderColor: "rgba(0,0,0,0.1)",
-               }}
-               key={item.key}
-             >
-               <View style={styles.form2}>
-                 <Text
-                   style={{
-                     marginRight: 50,
-                     width: 190,
-                     paddingTop: 3,
-                     fontSize: 16,
-                     fontWeight: "bold",
-                     paddingRight: 10,
-                     marginLeft: 10,
-                   }}
-                 >
-                   {item.data}
-                 </Text>
-                 <View>
-                   <TouchableOpacity
-                     onPress={() => {
-                       removeMark(item.key);
-                     }}
-                   >
-                     <FontAwesome
-                       name="trash"
-                       size={30}
-                       color="red"
-                       style={{
-                         opacity: 0.7,
-                         marginRight: 15,
-                         borderWidth: 1,
-                         borderColor: "#fff",
-                         borderRadius: 10,
-                         marginTop: 4,
-                       }}
-                     />
-                   </TouchableOpacity>
-                 </View>
-                 <View>
-                   <TouchableOpacity onPress={() => editMark(item)}>
-                     <FontAwesome
-                       name="pencil-square-o"
-                       size={30}
-                       color="green"
-                       style={{
-                         opacity: 0.7,
-                         marginRight: 15,
-                         borderWidth: 1,
-                         borderColor: "#fff",
-                         borderRadius: 10,
-                         marginTop: 5,
-                       }}
-                     />
-                   </TouchableOpacity>
-                 </View>
-               </View>
-             </View>
+  useEffect(() => {
+    const { userId, bookId } = Context;
+    getMarks({ userId, bookId });
+  }, [Context.bookId, Context.userId]);
 
-             <Modalize ref={modalizeRef} snapPoint={180} modalHeight={180}>
-               <View style={styles.panel}>
-                 <View style={{ alignItems: "center", marginTop: "2%" }}>
-                   <Text
-                     style={{
-                       marginTop: 10,
-                       fontWeight: "bold",
-                       fontSize: 18,
-                       marginBottom: 5,
-                     }}
-                   >
-                     Meta alcançada?
-                   </Text>
-                 </View>
-                 <View style={{ flexDirection: "row", alignSelf: "center" }}>
-                   <TouchableOpacity
-                     onPress={() => {
-                       removeMark(item.key);
-                     }}
-                     style={styles.panelButton}
-                   >
-                     <Text style={styles.panelButtonTitle}>Sim</Text>
-                   </TouchableOpacity>
-                   <TouchableOpacity
-                     onPress={() => {
-                       closeModal();
-                     }}
-                     style={styles.panelButtonNo}
-                   >
-                     <Text style={styles.panelButtonTitle}>Ainda Não</Text>
-                   </TouchableOpacity>
-                 </View>
-               </View>
-             </Modalize>
-           </TouchableOpacity>
-         );
-       })}
-     </ScrollView>
-   );
+  return (
+    <>
+      <ScrollView>
+        <Text style={styles.title}>Meus Marcadores</Text>
+        <View style={styles.container}>
+          <View style={styles.form}>
+            <TextInput
+              style={styles.field}
+              placeholder={"Adicione um marcador"}
+              onChangeText={(text) => setMark(text)}
+              value={mark}
+            />
+
+            <CustomButton
+              text={"+"}
+              textSize={20}
+              padding={20}
+              textColor="white"
+              onPress={() =>
+                addMark({
+                  userId: Context.userId,
+                  bookId: Context.bookId,
+                  mark,
+                })
+              }
+              disabled={mark.length <= 0}
+            />
+          </View>
+        </View>
+        {markList.map(({ description, id }, key) => (
+          <MarkItem
+            description={description}
+            id={id}
+            key={key}
+            edditingMark={edditingMark}
+            setEdditingMark={setEdditingMark}
+            upadateMark={upadateMark}
+            openModal={openModal}
+            closeModal={closeModal}
+          />
+        ))}
+      </ScrollView>
+
+      <Modalize ref={modalizeRef} snapPoint={180} modalHeight={180}>
+        <View style={styles.panel}>
+          <View style={{ alignItems: "center", marginTop: "2%" }}>
+            <Text
+              style={{
+                marginTop: 10,
+                fontWeight: "bold",
+                fontSize: 18,
+                marginBottom: 5,
+              }}
+            >
+              Meta alcançada?
+            </Text>
+          </View>
+          <View style={{ flexDirection: "row", alignSelf: "center" }}>
+            <TouchableOpacity
+              onPress={() => {
+                removeMark({ ...Context, markId: currentMark });
+              }}
+              style={styles.panelButton}
+            >
+              <Text style={styles.panelButtonTitle}>Sim</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                closeModal();
+              }}
+              style={styles.panelButtonNo}
+            >
+              <Text style={styles.panelButtonTitle}>Ainda Não</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modalize>
+    </>
+  );
 };
 
 export default BookMarkScreen;
@@ -293,75 +201,82 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 25,
     marginBottom: 20,
     marginTop: 10,
-    paddingLeft:'25%'
-
+    paddingLeft: "25%",
   },
   panel: {
     padding: 20,
     backgroundColor: "#FFFFFF",
-    padding: 20,      
-},
+    padding: 20,
+  },
   confirmUpdate: {
     borderWidth: 1,
-    width:'100%',
+    width: "100%",
     borderRadius: 5,
     borderColor: "#1E90FF",
     height: 30,
-    
-  }, 
+  },
   field: {
     borderWidth: 1,
-    borderColor: '#DCDCDC',
+    borderColor: "#DCDCDC",
     padding: 10,
     fontSize: 15,
-    color: '#333',
+    color: "#333",
     borderRadius: 5,
     flex: 1,
     marginRight: 15,
   },
-  field2: {
+  itenField: {
     borderWidth: 1,
-    borderColor: '#DCDCDC',
+    borderColor: "#DCDCDC",
     padding: 10,
     fontSize: 15,
-    color: '#333',
+    color: "#333",
+    borderRadius: 5,
+    flex: 1,
+    marginRight: 15,
+    width: 125,
+  },
+  field2: {
+    borderWidth: 1,
+    borderColor: "#DCDCDC",
+    padding: 10,
+    fontSize: 15,
+    color: "#333",
     borderRadius: 5,
     flex: 1,
     marginRight: 10,
     height: 32,
-    marginTop: 5, 
-    
+    marginTop: 5,
   },
   button: {
-    backgroundColor: '#00cc99',  
+    backgroundColor: "#00cc99",
     borderRadius: 5,
-    justifyContent: 'center',
+    justifyContent: "center",
     width: 50,
-    height: 50,   
+    height: 50,
   },
   buttonText: {
-    color: '#fdfdfd',
-    fontSize: 25, 
-    fontWeight: 'bold',
-    alignSelf: 'center'
+    color: "#fdfdfd",
+    fontSize: 25,
+    fontWeight: "bold",
+    alignSelf: "center",
   },
   item: {
     borderWidth: 1,
-    borderColor: '#dcdcdc',
+    borderColor: "#dcdcdc",
     padding: 10,
     marginTop: 15,
-    borderRadius: 3,   
+    borderRadius: 3,
   },
-  form:{
-    flexDirection: 'row',
-   
+  form: {
+    flexDirection: "row",
   },
-  form2:{
-    flexDirection: 'row',
+  form2: {
+    flexDirection: "row",
     height: 60,
   },
   clienteListContainer: {
@@ -369,12 +284,11 @@ const styles = StyleSheet.create({
     elevation: 4,
     backgroundColor: "white",
     padding: 10,
-    borderRadius: 6,  
+    borderRadius: 6,
     borderColor: "rgba(0,0,0,0.1)",
     width: 280,
     marginLeft: 5,
-    marginBottom: 2,  
-  
+    marginBottom: 2,
   },
   panelButton: {
     padding: 13,
@@ -384,21 +298,18 @@ const styles = StyleSheet.create({
     marginVertical: 7,
     width: 120,
     marginHorizontal: 10,
-
-
   },
-  panelButtonNo:{
+  panelButtonNo: {
     padding: 13,
     borderRadius: 10,
     backgroundColor: "red",
     alignItems: "center",
     marginVertical: 7,
-    width: 120
+    width: 120,
   },
   panelButtonTitle: {
     fontSize: 17,
     fontWeight: "bold",
     color: "white",
   },
-  
-})
+});

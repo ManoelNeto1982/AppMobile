@@ -1,25 +1,13 @@
-import React, {useRef} from "react";
-import { 
-  View,
-  SafeAreaView,
-  StyleSheet, 
-  TouchableOpacity
-} from "react-native";
-import { 
-  Title,
-  Caption,
-  Text,
-  TouchableRipple
-} from "react-native-paper";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
+import React, { useRef } from "react";
+import { View, SafeAreaView, StyleSheet, TouchableOpacity } from "react-native";
+import { Title, Caption, Text, TouchableRipple } from "react-native-paper";
+import { MaterialCommunityIcons, Entypo, AntDesign } from "@expo/vector-icons";
 import { Modalize } from "react-native-modalize";
+
 import { useGlobal } from "../../../components/GlobalContext";
 import AxiosInstance from "../../../axios.config";
 
 const ProfileScreen = ({ navigation }) => {
-
   const modalizeRef = useRef(null);
 
   function OpenModal() {
@@ -39,7 +27,9 @@ const ProfileScreen = ({ navigation }) => {
       navigation.navigate("SignInScreen");
     } catch (error) {
       console.log(error);
-      throw alert("Houve um problema na remoção da conta, por favor tente em outro momento");
+      throw alert(
+        "Houve um problema na remoção da conta, por favor tente em outro momento"
+      );
     }
   };
 
@@ -47,7 +37,7 @@ const ProfileScreen = ({ navigation }) => {
     Context?.setUserId("");
     Context?.setUserEmail("");
     Context?.setUserName("");
-  }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -105,17 +95,14 @@ const ProfileScreen = ({ navigation }) => {
             <Text style={styles.menuItemText}>Editar Perfil</Text>
           </View>
         </TouchableRipple>
-        <TouchableRipple
-          onPress={OpenModal}
-        >
+        <TouchableRipple onPress={OpenModal}>
           <View style={styles.menuItem}>
             <AntDesign name="delete" color="#FF6347" size={25} />
             <Text style={styles.menuItemText}>Excluir Conta</Text>
           </View>
         </TouchableRipple>
-      </View>      
+      </View>
 
-      
       <Modalize ref={modalizeRef} snapPoint={180} modalHeight={180}>
         <View style={styles.panel}>
           <View style={{ alignItems: "center", marginTop: "2%" }}>
@@ -130,7 +117,7 @@ const ProfileScreen = ({ navigation }) => {
               Deseja excluir sua conta?
             </Text>
           </View>
-          <View style={{flexDirection:'row', alignSelf: "center"}}>
+          <View style={{ flexDirection: "row", alignSelf: "center" }}>
             <TouchableOpacity
               onPress={() => {
                 removeAccount();
@@ -142,7 +129,9 @@ const ProfileScreen = ({ navigation }) => {
               <Text style={styles.panelButtonTitle}>Sim</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => {closeModal()}}
+              onPress={() => {
+                closeModal();
+              }}
               style={styles.panelButton}
             >
               <Text style={styles.panelButtonTitle}>Não</Text>
@@ -151,7 +140,6 @@ const ProfileScreen = ({ navigation }) => {
         </View>
       </Modalize>
     </SafeAreaView>
-    
   );
 };
 
@@ -213,17 +201,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 7,
     width: 100,
-    marginHorizontal:10,
-
-
+    marginHorizontal: 10,
   },
-  panelButtonYes:{
+  panelButtonYes: {
     padding: 13,
     borderRadius: 10,
     backgroundColor: "red",
     alignItems: "center",
     marginVertical: 7,
-    width: 100
+    width: 100,
   },
   panelButtonTitle: {
     fontSize: 17,

@@ -45,10 +45,10 @@ const Modal = (props) => {
     const removeBookFromApiRest = useCallback (
         async (bookId) => {
         try {
-            const bookToRemove = await AxiosInstance?.get(`/users/${Context?.userId}/books/${bookId}`);
+            const bookToRemove = await AxiosInstance?.delete(`/users/${Context?.userId}/books/${bookId}`);
             console.log(bookToRemove);
-            //Context?.setBookId("");
-            //navigation.navigate("HomeScreen");
+            Context?.setBookId("");
+            navigation.navigate("HomeScreen");
         } catch (e) {
             //console.log(e);
             alert("Não foi possivél remover o livro");
@@ -70,8 +70,7 @@ const Modal = (props) => {
                   <Text style={styles.name}>{`Título: ${book?.title}`}</Text>
                   <Text style={styles.listItem}>{`Genêro: ${book?.genre}`}</Text>
                   <Text style={styles.listItem}>{`Autor: ${book?.author}`}</Text>
-                  <Text style={styles.listItem}>{`Resumo: ${book?.resume}`}</Text>
-                  {/* <View style={{ flexDirection: "row", marginLeft: "65%"  }}> */}                
+                  <Text style={styles.listItem}>{`Resumo: ${book?.resume}`}</Text>                             
                     <View>
                       <View style={styles.panel}>                  
                         <View style={{flexDirection:'row', alignSelf: "center"}}>
@@ -88,108 +87,13 @@ const Modal = (props) => {
                           <Text style={styles.panelButtonTitle}>Sim</Text>
                           </TouchableOpacity>                       
                         </View>
-                      </View>
-                      {/* <TouchableOpacity
-                      onPress={openModal}
-                        // onPress={() => { 
-                        //   Context?.setBookId(book?.id);
-                        //   dispatch("Modal");
-                        // }}
-                      >
-                        <Icon
-                          name="trash"
-                          size={30}
-                          color="red"
-                          style={{
-                            opacity: 0.7,
-                            marginRight: 5,
-                            borderWidth: 1,
-                            borderColor: "#fff",
-                            borderRadius: 10,
-                            marginLeft: "90%"
-                          }}
-                        />
-                      </TouchableOpacity> */}
-                    </View>  
-                    {/* <Modalize ref={modalizeRef} snapPoint={360} modalHeight={360}>
-                      <View style={styles.panel}>
-                        <View style={{ alignItems: "center", marginTop: "25%" }}>
-                          <Text style={{ marginTop: 10, fontWeight: "bold", fontSize: 18, marginBottom: 5,}}>Excluir item?</Text>
-                        </View> 
-                        <View style={{flexDirection:'row', alignSelf: "center"}}>
-                        <TouchableOpacity
-                            onPress={closeModal}
-                            style={styles.panelButtonNo}
-                          >
-                            <Text style={styles.panelButtonTitle}>Não</Text>
-                         </TouchableOpacity>
-                        <TouchableOpacity
-                          onPress={() => {removeBookFromApiRest(Context?.bookId); }}           
-                          style={styles.panelButton}
-                          >
-                          <Text style={styles.panelButtonTitle}>Sim</Text>
-                          </TouchableOpacity>                        
-                        </View>
-                      </View>
-                    </Modalize>                  */}
-                {/* </View>                */}
+                      </View>                     
+                    </View>                                   
                 </View>
               </View>
             </View>     
       </View>    
     </ScrollView>
-
-
-
-        // <ScrollView>
-        //    <Text>{book?.title}</Text>
-        //    <Text>{book?.author}</Text>
-        //    <Text>{book?.genre}</Text>
-        //    <Text>{book?.resume}</Text>
-        //    <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")}>
-
-        //         <Text>Back</Text>
-        //     </TouchableOpacity>
-        //    <TouchableOpacity onPress={openModal}>
-        //         <Text>Remove</Text>
-        //     </TouchableOpacity>
-        //   <Modalize ref={modalizeRef} snapPoint={10} modalHeight={360}>
-        //   <View 
-        //       //style={styles.panel}
-        //   >
-        //     <View style={{ alignItems: "center", marginTop: "25%" }}>
-        //       <Text
-        //         style={{
-        //           marginTop: 10,
-        //           fontWeight: "bold",
-        //           fontSize: 18,
-        //           marginBottom: 5,
-        //         }}
-        //       >
-        //         Meta alcançada?
-        //       </Text>
-        //     </View>
-        //     <View style={{flexDirection:'row', alignSelf: "center"}}>
-        //       <TouchableOpacity
-        //       onPress={() => {removeBookFromApiRest(Context?.bookId); }}           
-        //       //style={styles.panelButton}
-        //       >
-        //         <Text 
-        //           //style={styles.panelButtonTitle}
-        //         >Sim</Text>
-        //       </TouchableOpacity>
-        //       <TouchableOpacity
-        //         onPress={closeModal}
-        //         //style={styles.panelButtonNo}
-        //       >
-        //         <Text 
-        //           //style={styles.panelButtonTitle}
-        //         >Ainda Não</Text>
-        //       </TouchableOpacity>
-        //     </View>
-        //   </View>
-        // </Modalize>   
-        // </ScrollView>
     );
 }
 
@@ -199,6 +103,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     width: "80%",
+    marginTop:"45%"
   },
   buttonContainer: {
     marginTop: 10,
