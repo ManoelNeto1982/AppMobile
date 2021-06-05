@@ -4,7 +4,7 @@
 
 * **Fábio Duarte - Responsável pelo CRUD de usuário [Git](https://github.com/FabioDuartte)**
 * **Manoel Neto -  Responsável pelo CRUD marcadores [Git](https://github.com/ManoelNeto1982)**
-* **Renato Santos -  Responsável pelo CRUD cadastro de livros [Git](https://github.com/NeeT-T)** 
+* **Renato Santos -  Responsável pelo CRUD de livros [Git](https://github.com/NeeT-T)** 
 
 **[Link do Vídeo](https://www.youtube.com/watch?v=fdRPm7vtBoA&ab_channel=F%C3%A1bio)**
 
