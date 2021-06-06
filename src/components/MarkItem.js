@@ -5,10 +5,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
+  CheckBox,
+  ScrollView
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import CustomButton from "./CustomButton/CustomButton";
-import { useGlobal } from "../../components/GlobalContext";
+import { useGlobal } from "../components/GlobalContext";
 
 const MarkItem = ({
   id,
@@ -18,6 +20,7 @@ const MarkItem = ({
   openModal,
   setEdditingMark,
 }) => {
+  const [isSelected, setSelected] = useState(false);
   const [text, setText] = useState("");
   const Context = useGlobal();
 
@@ -26,10 +29,11 @@ const MarkItem = ({
   }, [description]);
 
   return (
-    <TouchableOpacity
-      onPress={() => openModal({ markId: id })}
-      disabled={edditingMark == id}
-    >
+    // <TouchableOpacity
+    //   onPress={() => openModal({ markId: id })}
+    //   disabled={edditingMark == id}
+    // >   
+    <View>
       <View
         style={{
           width: 325,
@@ -38,9 +42,16 @@ const MarkItem = ({
           marginBottom: 10,
           backgroundColor: "white",
           borderRadius: 6,
-          borderColor: "rgba(0,0,0,0.1)",
+          borderColor: "rgba(0,0,0,0.1)", 
         }}
       >
+        {/* <View style={{flexDirection:"row"}} >
+         <CheckBox
+          value={isSelected}
+          onValueChange={() => setSelected(!isSelected)}
+          style={{ marginTop: 15, with: 15, height: 14 }}
+        /> */}
+        
         <View style={styles.form2}>
           {edditingMark == id ? (
             <>
@@ -52,9 +63,10 @@ const MarkItem = ({
               />
               <CustomButton
                 text={"Up"}
-                textSize={14}                
-                padding={14}  
-                margin={2}                            
+                textSize={14}             
+                padding={10}  
+                margin={2} 
+                marginTop={10}                           
                 textColor="white"            
                 onPress={() =>
                   upadateMark({
@@ -68,39 +80,44 @@ const MarkItem = ({
               />
             </>
           ) : (
+            <ScrollView>
             <Text
               style={{
                 marginRight: 50,
                 width: 190,
-                paddingTop: 3,
+                paddingTop: 18,
                 fontSize: 16,
                 fontWeight: "bold",
                 paddingRight: 10,
-                marginLeft: 10,
+                marginLeft: 10, 
               }}
             >
               {description}
             </Text>
+            </ScrollView>
           )}
+          {!isSelected ?
+          <View style={{flexDirection:"row"}}>
           <View>
             <TouchableOpacity
               onPress={() => {
                 openModal({ markId: id });
-              }}
-            >
+              }}            >
+
               <FontAwesome
                 name="trash"
                 size={30}
                 color="red"
                 style={{
                   opacity: 0.7,
-                  marginRight: 15,
+                  marginRight: 8,
                   borderWidth: 1,
                   borderColor: "#fff",
                   borderRadius: 10,
-                  marginTop: 4,
+                  marginTop: 15,
+                  
                 }}
-              />
+              />              
             </TouchableOpacity>
           </View>
           <View>
@@ -113,18 +130,30 @@ const MarkItem = ({
                 color="green"
                 style={{
                   opacity: 0.7,
-                  marginRight: 10,
+                  marginRight: 8,
                   borderWidth: 1,
                   borderColor: "#fff",
                   borderRadius: 10,
-                  marginTop: 5,
+                  marginTop: 15,
                 }}
               />
-            </TouchableOpacity>
+            </TouchableOpacity>            
           </View>
+          </View>
+          : null }
         </View>
+        </View>
+      <View style={{flexDirection:"row"}}>
+        <CheckBox
+        value={isSelected}
+        onValueChange={() => setSelected(!isSelected)}
+        style={{ marginTop: 5, with: 15, height: 14, marginLeft:22, marginBottom:25, placeholder:"Desabilidar excluir/editar" }}            
+      />
+        <Text style={{marginLeft:5, marginTop:4, fontSize:12, color:"#3C859E", fontWeight:"bold" }}>{isSelected ?  "Habilitar exclusão/edição " : "Desabilitar exclusão/edição"} </Text>
       </View>
-    </TouchableOpacity>
+      {/* </View> */}
+      </View>
+    // </TouchableOpacity>
   );
 };
 

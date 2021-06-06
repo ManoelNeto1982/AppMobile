@@ -3,16 +3,17 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
-  TextInput,
-  StatusBar,
+  TouchableOpacity, 
+  TextInput, 
+  StatusBar, 
   CheckBox,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { Feather, FontAwesome } from "@expo/vector-icons";
-
-import { useGlobal } from "../../../components/GlobalContext";
-import AxiosInstance from "../../../axios.config";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { Feather } from "@expo/vector-icons";
+import { useGlobal } from "../../components/GlobalContext";
+import { CommonActions } from "@react-navigation/native";
+import Request from "../../Service/request";
 
 const SignInScreen = ({ navigation }) => {
   const userData = {
@@ -29,12 +30,8 @@ const SignInScreen = ({ navigation }) => {
   const verifyItemInApiRest = useCallback(
     async ({ email, password }) => {
       try {
-        const userList = await AxiosInstance?.get(
-          `/users?filter=id&email=${email}&limit=1`
-        );
-        const userData = userList?.data?.find(
-          (user) => user?.email === email && user?.password === password
-        );
+        const userList = await Request?.getUsersByEmail(email);
+        const userData = userList?.data?.find((user) => user?.email === email && user?.password === password); 
         if (userData) {
           setContext(userData);
           navigation.navigate("HomeScreen");
@@ -56,8 +53,15 @@ const SignInScreen = ({ navigation }) => {
     Context?.setUserName(currentUser?.name);
   };
 
+  const dispatch = (screen) => {
+      navigation.dispatch(CommonActions.reset({
+          index: 0,
+          routes: [{ name: screen }], 
+      }));
+  }
+
   const handleChange = (field, value) => {
-    setLoginData({ [field]: value });
+    setLoginData({ ...loginData, [field]: value });
   };
 
   return (
@@ -140,7 +144,7 @@ const SignInScreen = ({ navigation }) => {
 
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("SignUpScreen");
+              dispatch("SignUpScreen");
             }}
             style={[
               styles.signIn,

@@ -5,18 +5,17 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  ScrollView,
+  ScrollView,  
 } from "react-native";
-import CustomButton from "../../component/CustomButton/CustomButton";
+import CustomButton from "../../components/CustomButton/CustomButton";
 import { Modalize } from "react-native-modalize";
-import { useGlobal } from "../../../components/GlobalContext";
+import { useGlobal } from "../../components/GlobalContext";
 import AxiosInstance from "../../../axios.config";
-import MarkItem from "../../component/MarkItem";
+import MarkItem from "../../components/MarkItem";
 
 const BookMarkScreen = ({ navigation }) => {
+  const [isSelected, setSelected] = useState(false);
   const Context = useGlobal();
-
-  //Eu preciso dos dados do livro e do id do usuário, mas initialbook não é chamado em nenhum lugar??
   const [mark, setMark] = useState("");
   const [currentMark, setCurrentMark] = useState(null);
   const [markList, setMarkList] = useState([]);
@@ -142,7 +141,7 @@ const BookMarkScreen = ({ navigation }) => {
             />
           </View>
         </View>
-        {markList.map(({ description, id }, key) => (
+        {markList.map(({ description, id }, key) => (          
           <MarkItem
             description={description}
             id={id}

@@ -1,11 +1,23 @@
-import React, { useRef } from "react";
-import { View, SafeAreaView, StyleSheet, TouchableOpacity } from "react-native";
-import { Title, Caption, Text, TouchableRipple } from "react-native-paper";
-import { MaterialCommunityIcons, Entypo, AntDesign } from "@expo/vector-icons";
+import React, {useRef} from "react";
+import { 
+  View,
+  SafeAreaView,
+  StyleSheet, 
+  TouchableOpacity
+} from "react-native";
+import { 
+  Title,
+  Caption,
+  Text,
+  TouchableRipple
+} from "react-native-paper";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
+import { CommonActions } from "@react-navigation/native";
+import { AntDesign } from "@expo/vector-icons";
 import { Modalize } from "react-native-modalize";
-
-import { useGlobal } from "../../../components/GlobalContext";
-import AxiosInstance from "../../../axios.config";
+import { useGlobal } from "../../components/GlobalContext";
+import Request from "../../Service/request";
 
 const ProfileScreen = ({ navigation }) => {
   const modalizeRef = useRef(null);
@@ -22,9 +34,13 @@ const ProfileScreen = ({ navigation }) => {
 
   const removeAccount = async () => {
     try {
-      const foo = await AxiosInstance?.delete(`/users/${Context?.userId}`);
+      const userId = Context?.userId;
+      const bookList = await Request?.getAllBooks(userId);
+      await removeBook(userId, bookList?.data);
+      const userRemoved = await Request?.deleteUser(userId);
+      console.log(userRemoved);
       setContext();
-      navigation.navigate("SignInScreen");
+      dispatch("SignInScreen");
     } catch (error) {
       console.log(error);
       throw alert(
@@ -33,23 +49,29 @@ const ProfileScreen = ({ navigation }) => {
     }
   };
 
+  const removeBook = (userId, bookList) => {
+    bookList?.map( async book => {
+      await Request?.deleteBook(userId, book?.id);
+    })
+  }
+
   const setContext = () => {
     Context?.setUserId("");
     Context?.setUserEmail("");
     Context?.setUserName("");
   };
 
+  const dispatch = (screen) => {
+      navigation.dispatch(CommonActions.reset({
+          index: 0,
+          routes: [{ name: screen }], 
+      }));
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.userInfoSection}>
         <View style={{ flexDirection: "row", marginTop: 15 }}>
-          {/* <Avatar.Image
-                        source={{
-                            uri:'https://scontent.fssa2-1.fna.fbcdn.net/v/t1.6435-1/p160x160/91588976_3412154335481357_848580981005746176_n.jpg?_nc_cat=108&ccb=1-3&_nc_sid=7206a8&_nc_ohc=DpGmMOWcfpkAX_3gYRI&_nc_ht=scontent.fssa2-1.fna&tp=6&oh=460904a6dfce27d1fea41c4f2f0d3af6&oe=60976151'
-                        }}
-                        size={80}
-                        marginTop={20}
-                    /> */}
           <View style={{ marginTop: 30 }}>
             <Title style={styles.title}>{`${Context?.userName}`}</Title>
           </View>
@@ -83,7 +105,7 @@ const ProfileScreen = ({ navigation }) => {
       <View style={styles.menuWrapper}>
         <TouchableRipple
           onPress={() => {
-            navigation.navigate("Editar Perfil");
+            dispatch("Editar Perfil");
           }}
         >
           <View style={styles.menuItem}>
@@ -101,8 +123,8 @@ const ProfileScreen = ({ navigation }) => {
             <Text style={styles.menuItemText}>Excluir Conta</Text>
           </View>
         </TouchableRipple>
-      </View>
-
+      </View>      
+      
       <Modalize ref={modalizeRef} snapPoint={180} modalHeight={180}>
         <View style={styles.panel}>
           <View style={{ alignItems: "center", marginTop: "2%" }}>

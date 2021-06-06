@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
 
-const AppContext = createContext();
+const AppContext = createContext(null);
 
 const AppProvider = ({ children }) => {
   const [id, setUserId] = useState("")

@@ -1,56 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
 import { Caption } from 'react-native-paper'
 import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { Foundation } from '@expo/vector-icons';
 import {Picker} from '@react-native-picker/picker';
-import {  useNavigation  } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useGlobal } from "../../../components/GlobalContext";
+import {  useNavigation, CommonActions } from "@react-navigation/native";
+import { useGlobal } from "../../components/GlobalContext";
+import Request from "../../Service/request";
 
 const EditProductScreen = () => {    
-    const [selectedValue, setSelectedValue] = useState('');
+
     const navigation = useNavigation();
 
-    const myContext = useGlobal();
+    const Context = useGlobal();
 
-    const initialNewBookState = {
-        title: "", 
+    const initialBook = {
+        id: Context?.bookId,
+        title: "",
         author: "",
-        sinopse: "",
-        owner: myContext.userEmail
-    }
+        resume: "",
+        genre: "",
+        owner: Context?.userId
+    };
 
-    const [bookData, setBookData] = useState(initialNewBookState);
+    const [bookData, setBookData] = useState(initialBook);
 
-    const saveNewBookOnAsyncStorage = async () => {
-        const bookList = JSON.parse(await AsyncStorage.getItem("books"));
-        const bookToEdit = JSON.parse(await AsyncStorage.getItem("bookToEdit"));
-        const newBooksList = bookList?.filter?.((book) => bookToEdit !== book?.title);
-        if (newBooksList?.length) {
-            await AsyncStorage.setItem("books", JSON.stringify([...newBooksList, bookData]));
-        } else {
-            await AsyncStorage.setItem("books", JSON.stringify([bookData]));
-        }
+    const updateBook = async ({ title, author, genre, resume, owner, id }) => {
+        const newBook = await Request?.updateBook(owner, id, { title, author, genre, resume });
+        Context?.setBookId("");
         navigation.navigate("HomeScreen");
     }
 
-    const handleChange = (field, value) => {
-        setBookData({...bookData, [field]: value})
-    }
+  const handleChange = useCallback((field, value) => {
+      setBookData({ ...bookData, [field]: value });
+    },
+    [bookData, setBookData],
+  );
 
     useEffect(() => {        
-        const getBookDataToEditFromAsyncStorage = async () => {
-            const bookTitle = JSON.parse(await AsyncStorage.getItem("bookToEdit"));
-            const bookList = JSON.parse(await AsyncStorage.getItem("books"));
-            const book = bookList?.find?.((book) => bookTitle === book?.title);
-            setBookData(book);
+        const getBookDataFromApiRest = async () => {
+            const book = await Request?.getBook(Context?.userId, Context?.bookId);
+            setBookData(book?.data);
         }
 
-        getBookDataToEditFromAsyncStorage();       
+        getBookDataFromApiRest();
     }, []);
-
 
     return (
         <View style={styles.container}>  
@@ -64,7 +59,7 @@ const EditProductScreen = () => {
                     <TextInput
                         placeholder='Alterar título do Livro'
                         placeholderTextColor="#666666"
-                        value={`${bookData.title}`}
+                        value={`${bookData?.title}`}
                         autoCorrect={false}                        
                         onChangeText={(text) => handleChange('title', text)}
                         style={styles.textInput}/>
@@ -74,7 +69,7 @@ const EditProductScreen = () => {
                     <TextInput
                         placeholder='Alterar Nome do autor'
                         placeholderTextColor="#666666"
-                        value={`${bookData.author}`}
+                        value={`${bookData?.author}`}
                         autoCorrect={false}
                         onChangeText={(text) => handleChange('author', text)}
                      
@@ -84,9 +79,9 @@ const EditProductScreen = () => {
                     <Foundation name="quote" size={24} color="black" />
                     <View>
                         <Picker        
-                            selectedValue={selectedValue}
+                            selectedValue={bookData?.genre}
                             style={{ height: 30, width: 280, marginLeft:10}}
-                            onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+                            onValueChange={(genre) => handleChange("genre", genre)}
                         >
                             <Picker.Item label="Selecione um gênero" value="" />
                             <Picker.Item label="Aventura" value="aventura" />
@@ -102,21 +97,22 @@ const EditProductScreen = () => {
                 <View style={styles.action}>
                     <FontAwesome name="pencil-square-o" size={20}/>
                     <TextInput
-                        placeholder='Alterar Sinopse'                       
+                        placeholder='Alterar resume'                       
                         placeholderTextColor="#666666"                        
-                        value={`${bookData.sinopse}`}
+                        value={`${bookData?.resume}`}
                         autoCorrect={false}
                         multiline={true}
                         numberOfLines={1}                       
-                        onChangeText={(text) => handleChange('sinopse', text)}
+                        onChangeText={(text) => handleChange('resume', text)}
+                        // @ts-ignore
                         style={[styles.textInput], { width:'90%', backgroundColor: '#CACACA', paddingBottom: 125, paddingLeft: 10, marginLeft: 5}}                     
                         />
                                             
                 </View>
                 <TouchableOpacity
                     onPress={() => {
-                        if(bookData?.title && bookData?.author && bookData?.sinopse) {
-                            saveNewBookOnAsyncStorage();
+                        if(bookData?.title && bookData?.author && bookData?.resume && bookData?.genre) {
+                            updateBook(bookData);
                         } else {
                             alert("Preencha todos os campos");
                         }
@@ -125,7 +121,7 @@ const EditProductScreen = () => {
                     <Text style={styles.panelButtonTitle}>Salvar Mudanças </Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {navigation.navigate('HomeScreen')}} style={styles.commandButton}>
-                    <Text style={styles.panelButtonTitle}>Voltar</Text>
+                    <Text style={styles.panelButtonTitle}>Cancelar</Text>
                 </TouchableOpacity>
             </View>
        
@@ -149,7 +145,6 @@ const styles = StyleSheet.create({
     panel: {
         padding: 20,
         backgroundColor: "#FFFFFF",
-        padding: 20,      
     },
     header: {
         backgroundColor: "#FFFFFF",

@@ -7,6 +7,7 @@ const CustomButton = (props) => {
       activeOpacity={0.5}
       onPress={props.onPress}
       disabled={props.disabled}    
+      marginTop={props.marginTop}
     >
       <View
         style={{

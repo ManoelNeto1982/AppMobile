@@ -14,8 +14,8 @@ import {
     Divider
 } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Feather } from '@expo/vector-icons';
-import { useGlobal } from "../../../components/GlobalContext";
+import { CommonActions } from "@react-navigation/native";
+import { useGlobal } from "../../components/GlobalContext";
 
 export function DrawerContent(props){
 
@@ -23,16 +23,24 @@ export function DrawerContent(props){
 
     const setContext = () => {
       Context.setUserId("");
+      Context.setBookId("");
       Context.setUserName("");
       Context.setUserEmail("");
     }
 
+  const dispatch = (screen) => {
+      props.navigation.dispatch(CommonActions.reset({
+          index: 0,
+          routes: [{ name: screen }], 
+      }));
+  }
+
     const signOut = () => {
         setContext();
-        props.navigation.navigate('SignInScreen');
+        dispatch('SignInScreen');
     }
 
-    return(
+    return (
         <View style={{flex:1}}>
             <DrawerContentScrollView {...props}>
                 <View style={styles.drawerContent}>
@@ -46,7 +54,9 @@ export function DrawerContent(props){
                         <Divider/>
                     </View>
                     <Drawer.Section style={styles.drawerSection}>
-                        <DrawerItem 
+                        <
+// @ts-ignore
+                        DrawerItem 
                             icon={({color, size}) => (
                                 <Icon
                                 name="home-outline"
@@ -58,7 +68,9 @@ export function DrawerContent(props){
                             onPress={() => {props.navigation.navigate('HomeScreen')}}
                             >
                         </DrawerItem>   
-                        <DrawerItem 
+                        <
+// @ts-ignore
+                        DrawerItem 
                             icon={({color, size}) => (
                                 <Icon
                                 name="account-outline"
@@ -67,10 +79,12 @@ export function DrawerContent(props){
                                 />                        
                             )}
                             label="Perfil"
-                            onPress={() => {props.navigation.navigate('Perfil')}}
+                            onPress={() => {dispatch('Perfil')}}
                             >
                         </DrawerItem>                
-                        <DrawerItem 
+                        <
+// @ts-ignore
+                        DrawerItem 
                             icon={({color, size}) => (
                                 <Icon
                                 name="book-outline"
@@ -79,37 +93,28 @@ export function DrawerContent(props){
                                 />                        
                             )}
                             label="Cadastrar Livro"
-                            onPress={() => {props.navigation.navigate('RegisterProductScreen')}}
+                            onPress={() => {dispatch('RegisterProductScreen')}}
                             >
                         </DrawerItem>
-                        <DrawerItem 
-                            icon={({color, size}) => (
-                                <Feather
-                                name="bookmark"
-                                color={color}
-                                size={size}
-                                />                        
-                            )}
-                            label="Meus Marcadores "
-                            onPress={() => {props.navigation.navigate('BookMarkScreen')}}
-                            >
-                        </DrawerItem>
+                     
                 </Drawer.Section>
 
 
                 </View>
                 </DrawerContentScrollView>
                 <Drawer.Section style={styles.bottomDrawerSection}>
-                    <DrawerItem 
+                    <
+// @ts-ignore
+                    DrawerItem 
                         icon={({color, size}) => (
                             <Icon
                             name="exit-to-app"
                             color={color}
                             size={size}
-                            />                        
+                            />
                         )}
                         label="Sign-out"
-                        onPress={() => { signOut(), window.location.reload()}}
+                        onPress={() => { signOut() }}
                         >
                     </DrawerItem>
 

@@ -1,7 +1,6 @@
-import React, { 
+import React, {
     useState,
     useEffect,
-    useRef,
     useCallback,    
 } from 'react';
 import {
@@ -11,66 +10,59 @@ import {
     Text,    
     StyleSheet,
 } from 'react-native';
-import { useGlobal } from "../../../components/GlobalContext";
-import AxiosInstance from "../../../axios.config";
+import { useGlobal } from "../../components/GlobalContext";
 import { useNavigation } from "@react-navigation/native";
-import Icon from "react-native-vector-icons/Ionicons";
-import { Ionicons } from '@expo/vector-icons';
-import { FontAwesome } from "@expo/vector-icons";
-import { Modalize } from "react-native-modalize";
+import Request from "../../Service/request";
 
-const Modal = (props) => {
+const Modal = () => {
+
     const Context = useGlobal();
 
     const navigation = useNavigation();
 
-    const [book, setBook] = useState();
+    const initialBook = {
+      id: Context?.bookId,
+      title: "",
+      author: "",
+      resume: "",
+      genre: "",
+      owner: Context?.userId
+    };
 
-    const modalizeRef = useRef(null);
-  
-    function openModal() {
-        modalizeRef.current?.open();
-    }
-
-    function closeModal() {
-        modalizeRef.current?.close();
-    }
+    const [book, setBook] = useState(initialBook);
 
     const getBookData = useCallback (
-        async () => {
-            const bookData = await AxiosInstance?.get(`/users/${Context?.userId}/books/${Context?.bookId}`);
+        async ({ id, owner }) => {
+            const bookData = await Request?.getBook(owner, id);
             setBook(bookData?.data);
-    })
+    }, [navigation]);
     
-    const removeBookFromApiRest = useCallback (
-        async (bookId) => {
+    const removeBookFromApiRest =  async ({ id, owner }) => {
         try {
-            const bookToRemove = await AxiosInstance?.delete(`/users/${Context?.userId}/books/${bookId}`);
-            console.log(bookToRemove);
+            const bookToRemove = await Request?.deleteBook(owner, id);
             Context?.setBookId("");
             navigation.navigate("HomeScreen");
         } catch (e) {
-            //console.log(e);
+            console.log(e);
             alert("Não foi possivél remover o livro");
         }
-    });
+    };
 
     useEffect(() => {
-       getBookData();
+       getBookData(book);
     }, [])
 
     return (
       <ScrollView>
       <View style={styles.container}>
-        <Text style={styles.title}>Deseja excluir o livro abaixo?</Text>      
-         
+        <Text style={styles.title1}>Deseja excluir o livro abaixo?</Text>      
             <View style={{ flexDirection: "row" }}>
               <View style={{ justifyContent: "center" }}>
                 <View style={styles.clienteListContainer}>
-                  <Text style={styles.name}>{`Título: ${book?.title}`}</Text>
-                  <Text style={styles.listItem}>{`Genêro: ${book?.genre}`}</Text>
-                  <Text style={styles.listItem}>{`Autor: ${book?.author}`}</Text>
-                  <Text style={styles.listItem}>{`Resumo: ${book?.resume}`}</Text>                             
+                  <Text style={styles.title}>{`Título: ${book?.title}`}</Text>
+                  <Text style={styles.name}>{`Genêro: ${book?.genre}`}</Text>
+                  <Text style={styles.name}>{`Autor: ${book?.author}`}</Text>
+                  <Text style={styles.name}>{`Resumo: ${book?.resume}`}</Text>                          
                     <View>
                       <View style={styles.panel}>                  
                         <View style={{flexDirection:'row', alignSelf: "center"}}>
@@ -81,14 +73,14 @@ const Modal = (props) => {
                           <Text style={styles.panelButtonTitle}>Não</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                          onPress={() => {removeBookFromApiRest(Context?.bookId); }}           
+                          onPress={() => {removeBookFromApiRest(book); }}           
                           style={styles.panelButton}
                           >
                           <Text style={styles.panelButtonTitle}>Sim</Text>
                           </TouchableOpacity>                       
                         </View>
-                      </View>                     
-                    </View>                                   
+                      </View>
+                    </View>  
                 </View>
               </View>
             </View>     
@@ -122,12 +114,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     fontSize: 16,
   },
+  title1: {
+    fontWeight: "bold",
+    fontSize: 20,
+    marginBottom: 20,
+    marginLeft:"10%",
+    marginTop: 20,    
+    width: 320, 
+  },
   title: {
     fontWeight: "bold",
     fontSize: 20,
     marginBottom: 20,
-    marginTop: 20,
-    marginLeft: "10%",
+    marginTop: 20,    
     width: 320, 
   },
   name: {
@@ -147,7 +146,6 @@ const styles = StyleSheet.create({
     borderColor: "rgba(0,0,0,0.1)",
     width: 320,
     marginLeft: 5,
-    marginBottom: 2,
   },
   panel: {
    
@@ -157,12 +155,11 @@ const styles = StyleSheet.create({
   panelButton: {
     padding: 13,
     borderRadius: 10,
-    backgroundColor: "#FF6347",
+    backgroundColor: "#00AF00",
     alignItems: "center",
     marginVertical: 7,
     marginHorizontal:5,
     width: 120,
-    backgroundColor: "green"
   },
   panelButtonNo:{
     padding: 13,

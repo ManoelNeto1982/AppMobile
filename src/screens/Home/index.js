@@ -17,11 +17,12 @@ import {
   useNavigation, 
   CommonActions 
 } from "@react-navigation/native";
-import { useGlobal } from "../../../components/GlobalContext";
-import AxiosInstance from "../../../axios.config";
+import { useGlobal } from "../../components/GlobalContext";
+import Request from "../../Service/request";
 
 
-const HomeScreen = (props) => {
+const HomeScreen = () => {
+  
   const navigation = useNavigation();
   
   const Context = useGlobal();
@@ -35,18 +36,13 @@ const HomeScreen = (props) => {
       }));
   }
 
-  const bookToEdit = async ({ bookId }) => {    
-    await AsyncStorage.setItem("bookToEdit", JSON.stringify(title));
-    dispatch('EditProductScreen');
-  }
-
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
 
       const fetchBooks = async () => {
         try {
-          const booksList = await AxiosInstance?.get(`/users/${Context?.userId}/books/`);
+          const booksList = await Request?.getAllBooks(Context?.userId);
           const books = booksList?.data;
           if (books?.length && isActive) {
             setUserBooks([...books]);
@@ -55,7 +51,7 @@ const HomeScreen = (props) => {
           }
         } catch (e) {
           console.log(e);
-          return alert("Erro ao pegar os dados dos usuarios para exibir os seus livros postados");
+          return alert("Erro ao pegar os dados dos usuários para exibir os seus livros postados");
         }
       };
 
@@ -74,13 +70,13 @@ const HomeScreen = (props) => {
         <Text style={styles.title}>Lista de Livros </Text>
         {userBooks.map((book) => {
           return (
-            <View style={{ flexDirection: "row" }}>
+            <View key={book?.id} style={{ flexDirection: "row" }}>
               <View style={{ justifyContent: "center" }}>
                 <View style={styles.clienteListContainer}>
                   <Text style={styles.name}>{`Título: ${book?.title}`}</Text>
-                  <Text style={styles.listItem}>{`Genêro: ${book?.genre}`}</Text>
-                  <Text style={styles.listItem}>{`Autor: ${book?.author}`}</Text>
-                  <Text style={styles.listItem}>{`Resumo: ${book?.resume}`}</Text>
+                  <Text >{`Genêro: ${book?.genre}`}</Text>
+                  <Text >{`Autor: ${book?.author}`}</Text>
+                  <Text >{`Resumo: ${book?.resume}`}</Text>
                   <View style={{ flexDirection: "row", marginLeft: "65%"  }}>
                     <View>
                       <TouchableOpacity
@@ -94,7 +90,6 @@ const HomeScreen = (props) => {
                             opacity: 0.7,
                             borderWidth: 1,
                             marginRight: 5,
-                            borderWidth:1,
                             borderColor: "#fff",
                             borderRadius: 10,
                           }}
@@ -125,7 +120,8 @@ const HomeScreen = (props) => {
                     <View>
                       <TouchableOpacity
                         onPress={() => {
-                          bookToEdit({bookId: book?.id});
+                          Context?.setBookId(book?.id);
+                          dispatch("EditProductScreen");
                         }}
                       >
                         <FontAwesome
@@ -184,7 +180,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 20,
     marginTop: 20,
-    marginLeft: "35%",
+    marginLeft: "31%",
   },
   name: {
     fontWeight: "bold",
@@ -203,7 +199,6 @@ const styles = StyleSheet.create({
     borderColor: "rgba(0,0,0,0.1)",
     width: 320,
     marginLeft: 5,
-    marginBottom: 2,
   },
   panel: {
     backgroundColor: "#FFFFFF",
